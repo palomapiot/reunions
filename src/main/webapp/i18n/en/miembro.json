@@ -1,0 +1,27 @@
+{
+    "reunionsApp": {
+        "miembro" : {
+            "home": {
+                "title": "Miembros",
+                "createLabel": "Create a new Miembro",
+                "createOrEditLabel": "Create or edit a Miembro",
+                "search": "Search for Miembro"
+            },
+            "created": "A new Miembro is created with identifier {{ param }}",
+            "updated": "A Miembro is updated with identifier {{ param }}",
+            "deleted": "A Miembro is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Miembro {{ id }}?"
+            },
+            "detail": {
+                "title": "Miembro"
+            },
+            "fechaAlta": "Fecha Alta",
+            "fechaBaja": "Fecha Baja",
+            "observaciones": "Observaciones",
+            "organo": "Organo",
+            "cargo": "Cargo",
+            "user": "User"
+        }
+    }
+}

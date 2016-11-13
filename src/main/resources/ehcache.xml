@@ -37,5 +37,45 @@
            timeToLiveSeconds="3600">
     </cache>
     
+    <cache name="es.udc.reunions.domain.Grupo"
+        timeToLiveSeconds="3600">
+    </cache>
+
+    <cache name="es.udc.reunions.domain.Grupo.organos"
+        timeToLiveSeconds="3600">
+    </cache>
+
+    <cache name="es.udc.reunions.domain.Organo"
+        timeToLiveSeconds="3600">
+    </cache>
+
+    <cache name="es.udc.reunions.domain.Organo.miembros"
+        timeToLiveSeconds="3600">
+    </cache>
+
+    <cache name="es.udc.reunions.domain.Organo.sesions"
+        timeToLiveSeconds="3600">
+    </cache>
+
+    <cache name="es.udc.reunions.domain.Sesion"
+        timeToLiveSeconds="3600">
+    </cache>
+
+    <cache name="es.udc.reunions.domain.Sesion.participantes"
+        timeToLiveSeconds="3600">
+    </cache>
+
+    <cache name="es.udc.reunions.domain.Miembro"
+        timeToLiveSeconds="3600">
+    </cache>
+
+    <cache name="es.udc.reunions.domain.Cargo"
+        timeToLiveSeconds="3600">
+    </cache>
+
+    <cache name="es.udc.reunions.domain.Participante"
+        timeToLiveSeconds="3600">
+    </cache>
+
     <!-- jhipster-needle-ehcache-add-entry -->
 </ehcache>

@@ -1,0 +1,26 @@
+{
+    "reunionsApp": {
+        "participante" : {
+            "home": {
+                "title": "Participantes",
+                "createLabel": "Crear nuevo Participante",
+                "createOrEditLabel": "Crear o editar Participante",
+                "search": "Search for Participante"
+            },
+            "created": "Un nuevo Participante ha sido creado con el identificador {{ param }}",
+            "updated": "Un Participante ha sido actualizado con el identificador {{ param }}",
+            "deleted": "Un Participante ha sido eliminado con el identificador {{ param }}",
+            "delete": {
+                "question": "¿Seguro que quiere eliminar Participante {{ id }}?"
+            },
+            "detail": {
+                "title": "Participante"
+            },
+            "asistencia": "Asistencia",
+            "observaciones": "Observaciones",
+            "sesion": "Sesion",
+            "cargo": "Cargo",
+            "user": "User"
+        }
+    }
+}

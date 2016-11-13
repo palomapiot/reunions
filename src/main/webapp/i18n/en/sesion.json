@@ -1,0 +1,28 @@
+{
+    "reunionsApp": {
+        "sesion" : {
+            "home": {
+                "title": "Sesions",
+                "createLabel": "Create a new Sesion",
+                "createOrEditLabel": "Create or edit a Sesion",
+                "search": "Search for Sesion"
+            },
+            "created": "A new Sesion is created with identifier {{ param }}",
+            "updated": "A Sesion is updated with identifier {{ param }}",
+            "deleted": "A Sesion is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Sesion {{ id }}?"
+            },
+            "detail": {
+                "title": "Sesion"
+            },
+            "numero": "Numero",
+            "primeraConvocatoria": "Primera Convocatoria",
+            "segundaConvocatoria": "Segunda Convocatoria",
+            "lugar": "Lugar",
+            "descripcion": "Descripcion",
+            "organo": "Organo",
+            "participante": "Participante"
+        }
+    }
+}

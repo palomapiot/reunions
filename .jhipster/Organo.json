@@ -1,0 +1,44 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipName": "grupo",
+            "otherEntityName": "grupo",
+            "relationshipType": "many-to-one",
+            "relationshipValidateRules": [
+                "required"
+            ],
+            "otherEntityField": "nombre"
+        },
+        {
+            "relationshipName": "miembro",
+            "otherEntityName": "miembro",
+            "relationshipType": "one-to-many",
+            "otherEntityRelationshipName": "organo"
+        },
+        {
+            "relationshipName": "sesion",
+            "otherEntityName": "sesion",
+            "relationshipType": "one-to-many",
+            "otherEntityRelationshipName": "organo"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "nombre",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "descripcion",
+            "fieldType": "String"
+        }
+    ],
+    "changelogDate": "20161113172248",
+    "dto": "no",
+    "service": "serviceClass",
+    "entityTableName": "organo",
+    "pagination": "pagination"
+}

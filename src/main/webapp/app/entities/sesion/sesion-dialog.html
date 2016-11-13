@@ -1,0 +1,102 @@
+
+<form name="editForm" role="form" novalidate ng-submit="vm.save()" show-validation>
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                ng-click="vm.clear()">&times;</button>
+        <h4 class="modal-title" id="mySesionLabel" data-translate="reunionsApp.sesion.home.createOrEditLabel">Create or edit a Sesion</h4>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="form-group" ng-show="vm.sesion.id">
+            <label for="id" data-translate="global.field.id">ID</label>
+            <input type="text" class="form-control" id="id" name="id"
+                    ng-model="vm.sesion.id" readonly />
+        </div>
+        <div class="form-group">
+            <label class="control-label" data-translate="reunionsApp.sesion.numero" for="field_numero">Numero</label>
+            <input type="number" class="form-control" name="numero" id="field_numero"
+                    ng-model="vm.sesion.numero"
+                    required />
+            <div ng-show="editForm.numero.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.numero.$error.required" data-translate="entity.validation.required">
+                    This field is required.
+                </p>
+                <p class="help-block"
+                    ng-show="editForm.numero.$error.number" data-translate="entity.validation.number">
+                    This field should be a number.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label" data-translate="reunionsApp.sesion.primeraConvocatoria" for="field_primeraConvocatoria">Primera Convocatoria</label>
+                <div class="input-group">
+                    <input id="field_primeraConvocatoria" type="text" class="form-control" name="primeraConvocatoria" datetime-picker="{{dateformat}}" ng-model="vm.sesion.primeraConvocatoria" is-open="vm.datePickerOpenStatus.primeraConvocatoria"
+                    required  />
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-click="vm.openCalendar('primeraConvocatoria')"><i class="glyphicon glyphicon-calendar"></i></button>
+                    </span>
+                </div>
+            <div ng-show="editForm.primeraConvocatoria.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.primeraConvocatoria.$error.required" data-translate="entity.validation.required">
+                    This field is required.
+                </p>
+                <p class="help-block"
+                    ng-show="editForm.primeraConvocatoria.$error.ZonedDateTimelocal" data-translate="entity.validation.ZonedDateTimelocal">
+                    This field should be a date and time.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label" data-translate="reunionsApp.sesion.segundaConvocatoria" for="field_segundaConvocatoria">Segunda Convocatoria</label>
+                <div class="input-group">
+                    <input id="field_segundaConvocatoria" type="text" class="form-control" name="segundaConvocatoria" datetime-picker="{{dateformat}}" ng-model="vm.sesion.segundaConvocatoria" is-open="vm.datePickerOpenStatus.segundaConvocatoria"
+                      />
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-click="vm.openCalendar('segundaConvocatoria')"><i class="glyphicon glyphicon-calendar"></i></button>
+                    </span>
+                </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label" data-translate="reunionsApp.sesion.lugar" for="field_lugar">Lugar</label>
+            <input type="text" class="form-control" name="lugar" id="field_lugar"
+                    ng-model="vm.sesion.lugar"
+                    required />
+            <div ng-show="editForm.lugar.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.lugar.$error.required" data-translate="entity.validation.required">
+                    This field is required.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label" data-translate="reunionsApp.sesion.descripcion" for="field_descripcion">Descripcion</label>
+            <input type="text" class="form-control" name="descripcion" id="field_descripcion"
+                    ng-model="vm.sesion.descripcion"
+                     />
+        </div>
+
+        <div class="form-group">
+            <label data-translate="reunionsApp.sesion.organo" for="field_organo">Organo</label>
+            <select class="form-control" id="field_organo" name="organo" ng-model="vm.sesion.organo" ng-options="organo as organo.nombre for organo in vm.organos track by organo.id" required>
+                <option value=""></option>
+            </select>
+        </div>
+        <div ng-show="editForm.organo.$invalid">
+            <p class="help-block"
+                ng-show="editForm.organo.$error.required" data-translate="entity.validation.required">
+                This field is required.
+            </p>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
+            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span data-translate="entity.action.cancel">Cancel</span>
+        </button>
+        <button type="submit" ng-disabled="editForm.$invalid || vm.isSaving" class="btn btn-primary">
+            <span class="glyphicon glyphicon-save"></span>&nbsp;<span data-translate="entity.action.save">Save</span>
+        </button>
+    </div>
+</form>

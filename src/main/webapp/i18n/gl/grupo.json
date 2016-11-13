@@ -1,0 +1,23 @@
+{
+    "reunionsApp": {
+        "grupo" : {
+            "home": {
+                "title": "Grupos",
+                "createLabel": "Crear novo Grupo",
+                "createOrEditLabel": "Crear ou editar Grupo",
+                "search": "Search for Grupo"
+            },
+            "created": "Un novo Grupo foi creado co identificador {{ param }}",
+            "updated": "Un Grupo foi actualizado co identificador {{ param }}",
+            "deleted": "Un Grupo foi eliminado co identificador {{ param }}",
+            "delete": {
+                "question": "Seguro que desexa eliminar Grupo {{ id }}?"
+            },
+            "detail": {
+                "title": "Grupo"
+            },
+            "nombre": "Nombre",
+            "organo": "Organo"
+        }
+    }
+}

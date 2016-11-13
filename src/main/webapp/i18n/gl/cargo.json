@@ -1,0 +1,22 @@
+{
+    "reunionsApp": {
+        "cargo" : {
+            "home": {
+                "title": "Cargos",
+                "createLabel": "Crear novo Cargo",
+                "createOrEditLabel": "Crear ou editar Cargo",
+                "search": "Search for Cargo"
+            },
+            "created": "Un novo Cargo foi creado co identificador {{ param }}",
+            "updated": "Un Cargo foi actualizado co identificador {{ param }}",
+            "deleted": "Un Cargo foi eliminado co identificador {{ param }}",
+            "delete": {
+                "question": "Seguro que desexa eliminar Cargo {{ id }}?"
+            },
+            "detail": {
+                "title": "Cargo"
+            },
+            "nombre": "Nombre"
+        }
+    }
+}

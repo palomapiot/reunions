@@ -1,0 +1,39 @@
+
+<div>
+    <h2><span data-translate="reunionsApp.participante.detail.title">Participante</span> {{vm.participante.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="dl-horizontal jh-entity-details">
+        <dt><span data-translate="reunionsApp.participante.asistencia">Asistencia</span></dt>
+        <dd>
+            <span data-translate="{{'reunionsApp.Asistencia.' + vm.participante.asistencia}}">{{vm.participante.asistencia}}</span>
+        </dd>
+        <dt><span data-translate="reunionsApp.participante.observaciones">Observaciones</span></dt>
+        <dd>
+            <span>{{vm.participante.observaciones}}</span>
+        </dd>
+        <dt><span data-translate="reunionsApp.participante.sesion">Sesion</span></dt>
+        <dd>
+            <a ui-sref="sesion-detail({id:vm.participante.sesion.id})">{{vm.participante.sesion.numero}}</a>
+        </dd>
+        <dt><span data-translate="reunionsApp.participante.cargo">Cargo</span></dt>
+        <dd>
+            <a ui-sref="cargo-detail({id:vm.participante.cargo.id})">{{vm.participante.cargo.nombre}}</a>
+        </dd>
+        <dt><span data-translate="reunionsApp.participante.user">User</span></dt>
+        <dd>
+            {{vm.participante.user.login}}
+        </dd>
+    </dl>
+
+    <button type="submit"
+            ui-sref="{{ vm.previousState }}"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span data-translate="entity.action.back"> Back</span>
+    </button>
+
+    <button type="button" ui-sref="participante-detail.edit({id:vm.participante.id})" class="btn btn-primary">
+        <span class="glyphicon glyphicon-pencil"></span>
+        <span class="hidden-xs hidden-sm" data-translate="entity.action.edit"> Edit</span>
+    </button>
+</div>

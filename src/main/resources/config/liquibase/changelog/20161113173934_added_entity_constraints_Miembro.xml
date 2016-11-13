@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <!--
+        Added the constraints for entity Miembro.
+    -->
+    <changeSet id="20161113173934-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="organo_id"
+                                 baseTableName="miembro"
+                                 constraintName="fk_miembro_organo_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="organo"/>
+
+        <addForeignKeyConstraint baseColumnNames="cargo_id"
+                                 baseTableName="miembro"
+                                 constraintName="fk_miembro_cargo_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="cargo"/>
+
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="miembro"
+                                 constraintName="fk_miembro_user_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="jhi_user"/>
+
+    </changeSet>
+</databaseChangeLog>

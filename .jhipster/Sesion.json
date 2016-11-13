@@ -1,0 +1,56 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipName": "organo",
+            "otherEntityName": "organo",
+            "relationshipType": "many-to-one",
+            "relationshipValidateRules": [
+                "required"
+            ],
+            "otherEntityField": "nombre"
+        },
+        {
+            "relationshipName": "participante",
+            "otherEntityName": "participante",
+            "relationshipType": "one-to-many",
+            "otherEntityRelationshipName": "sesion"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "numero",
+            "fieldType": "Long",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "primeraConvocatoria",
+            "fieldType": "ZonedDateTime",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "segundaConvocatoria",
+            "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldName": "lugar",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "descripcion",
+            "fieldType": "String"
+        }
+    ],
+    "changelogDate": "20161113173351",
+    "dto": "no",
+    "service": "serviceClass",
+    "entityTableName": "sesion",
+    "pagination": "pagination"
+}

@@ -1,0 +1,25 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipName": "organo",
+            "otherEntityName": "organo",
+            "relationshipType": "one-to-many",
+            "otherEntityRelationshipName": "grupo"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "nombre",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "changelogDate": "20161113171540",
+    "dto": "no",
+    "service": "no",
+    "entityTableName": "grupo",
+    "pagination": "no"
+}

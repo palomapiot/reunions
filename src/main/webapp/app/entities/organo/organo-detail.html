@@ -1,0 +1,31 @@
+
+<div>
+    <h2><span data-translate="reunionsApp.organo.detail.title">Organo</span> {{vm.organo.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="dl-horizontal jh-entity-details">
+        <dt><span data-translate="reunionsApp.organo.nombre">Nombre</span></dt>
+        <dd>
+            <span>{{vm.organo.nombre}}</span>
+        </dd>
+        <dt><span data-translate="reunionsApp.organo.descripcion">Descripcion</span></dt>
+        <dd>
+            <span>{{vm.organo.descripcion}}</span>
+        </dd>
+        <dt><span data-translate="reunionsApp.organo.grupo">Grupo</span></dt>
+        <dd>
+            <a ui-sref="grupo-detail({id:vm.organo.grupo.id})">{{vm.organo.grupo.nombre}}</a>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            ui-sref="{{ vm.previousState }}"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span data-translate="entity.action.back"> Back</span>
+    </button>
+
+    <button type="button" ui-sref="organo-detail.edit({id:vm.organo.id})" class="btn btn-primary">
+        <span class="glyphicon glyphicon-pencil"></span>
+        <span class="hidden-xs hidden-sm" data-translate="entity.action.edit"> Edit</span>
+    </button>
+</div>

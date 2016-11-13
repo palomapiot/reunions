@@ -1,0 +1,10 @@
+{
+    "reunionsApp": {
+        "Asistencia" : {
+            "null": "",
+            "asiste": "asiste",
+            "falta": "falta",
+            "disculpa": "disculpa"
+        }
+    }
+}
