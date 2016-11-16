@@ -134,6 +134,21 @@ public class MiembroResource {
     }
 
     /**
+     * GET  /organos/:id/miembrosAnteriores : get miembros anteriores from the "id" organo.
+     *
+     * @param id the id of the organo
+     * @return the ResponseEntity with status 200 (OK) and the list of miembros in body
+     */
+    @GetMapping("/organos/{id}/miembrosAnteriores")
+    @Timed
+    public ResponseEntity<List<Miembro>> getMiembrosByOrganoId( @PathVariable Long id) {
+        log.debug("REST request to get miembros anteriores from organo : {}", id);
+
+        List<Miembro> miembros = miembroService.findByOrganoId(id);
+        return new ResponseEntity<>(miembros, HttpStatus.OK);
+    }
+
+    /**
      * DELETE  /miembros/:id : delete the "id" miembro.
      *
      * @param id the id of the miembro to delete

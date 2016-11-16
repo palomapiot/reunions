@@ -18,4 +18,6 @@ public interface MiembroRepository extends JpaRepository<Miembro,Long> {
     List<Miembro> findByUserIsCurrentUser();
 
     Page<Miembro> findByOrganoId(Long organoId, Pageable pageable);
+
+    List<Miembro> findByOrganoId(Long organoId);
 }

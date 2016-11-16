@@ -3,14 +3,15 @@
 
     angular
         .module('reunionsApp', [
-            'ngStorage', 
+            'ngStorage',
             'tmh.dynamicLocale',
-            'pascalprecht.translate', 
+            'pascalprecht.translate',
             'ngResource',
             'ngCookies',
             'ngAria',
             'ngCacheBuster',
             'ngFileUpload',
+            'angularUtils.directives.dirPagination',
             'ui.bootstrap',
             'ui.bootstrap.datetimepicker',
             'ui.router',

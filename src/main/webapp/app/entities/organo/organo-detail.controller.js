@@ -20,6 +20,8 @@
         vm.previousState = previousState.name;
         vm.itemsPerPage = paginationConstants.itemsPerPage;
         vm.loadMiembros = loadMiembros;
+        vm.miembrosAnteriores = Organo.miembrosAnteriores({
+            id : $stateParams.id});
 
         loadMiembros();
 

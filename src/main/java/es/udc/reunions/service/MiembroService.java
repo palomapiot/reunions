@@ -73,6 +73,19 @@ public class MiembroService {
     }
 
     /**
+     *  Get all the miembros anteriores from an organo
+     *
+     *  @param organoId the organo id
+     *  @return the list of entities
+     */
+    @Transactional(readOnly = true)
+    public List<Miembro> findByOrganoId(Long organoId) {
+        log.debug("Request to get all Miembros anteriores from Organo " + organoId);
+        List<Miembro> result = miembroRepository.findByOrganoId(organoId);
+        return result;
+    }
+
+    /**
      *  Get one miembro by id.
      *
      *  @param id the id of the entity
