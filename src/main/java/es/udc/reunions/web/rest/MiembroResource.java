@@ -33,7 +33,7 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 public class MiembroResource {
 
     private final Logger log = LoggerFactory.getLogger(MiembroResource.class);
-        
+
     @Inject
     private MiembroService miembroService;
 
@@ -115,6 +115,25 @@ public class MiembroResource {
     }
 
     /**
+     * GET  /organos/:id/miembros : get miembros from the "id" organo.
+     *
+     * @param id the id of the organo
+     * @param pageable the pagination information
+     * @return the ResponseEntity with status 200 (OK) and the list of miembros in body
+     * @throws URISyntaxException if there is an error to generate the pagination HTTP headers
+     */
+    @GetMapping("/organos/{id}/miembros")
+    @Timed
+    public ResponseEntity<List<Miembro>> getMiembrosByOrganoId( @PathVariable Long id, Pageable pageable)
+        throws URISyntaxException {
+        log.debug("REST request to get miembros from organo : {}", id);
+
+        Page<Miembro> page = miembroService.findByOrganoId(id, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/organos/" + id + "/miembros");
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
+    /**
      * DELETE  /miembros/:id : delete the "id" miembro.
      *
      * @param id the id of the miembro to delete
@@ -132,7 +151,7 @@ public class MiembroResource {
      * SEARCH  /_search/miembros?query=:query : search for the miembro corresponding
      * to the query.
      *
-     * @param query the query of the miembro search 
+     * @param query the query of the miembro search
      * @param pageable the pagination information
      * @return the result of the search
      * @throws URISyntaxException if there is an error to generate the pagination HTTP headers

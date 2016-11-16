@@ -11,6 +11,7 @@
 
         return $resource(resourceUrl, {}, {
             'query': { method: 'GET', isArray: true},
+            'miembros': { method: 'GET', isArray: true, url: 'api/organos/:id/miembros'},
             'get': {
                 method: 'GET',
                 transformResponse: function (data) {

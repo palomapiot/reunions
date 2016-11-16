@@ -25,7 +25,7 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 public class MiembroService {
 
     private final Logger log = LoggerFactory.getLogger(MiembroService.class);
-    
+
     @Inject
     private MiembroRepository miembroRepository;
 
@@ -47,14 +47,28 @@ public class MiembroService {
 
     /**
      *  Get all the miembros.
-     *  
+     *
      *  @param pageable the pagination information
      *  @return the list of entities
      */
-    @Transactional(readOnly = true) 
+    @Transactional(readOnly = true)
     public Page<Miembro> findAll(Pageable pageable) {
         log.debug("Request to get all Miembros");
         Page<Miembro> result = miembroRepository.findAll(pageable);
+        return result;
+    }
+
+    /**
+     *  Get all the miembros from an organo
+     *
+     *  @param organoId the organo id
+     *  @param pageable the pagination information
+     *  @return the list of entities
+     */
+    @Transactional(readOnly = true)
+    public Page<Miembro> findByOrganoId(Long organoId, Pageable pageable) {
+        log.debug("Request to get all Miembros from Organo " + organoId);
+        Page<Miembro> result = miembroRepository.findByOrganoId(organoId, pageable);
         return result;
     }
 
@@ -64,7 +78,7 @@ public class MiembroService {
      *  @param id the id of the entity
      *  @return the entity
      */
-    @Transactional(readOnly = true) 
+    @Transactional(readOnly = true)
     public Miembro findOne(Long id) {
         log.debug("Request to get Miembro : {}", id);
         Miembro miembro = miembroRepository.findOne(id);

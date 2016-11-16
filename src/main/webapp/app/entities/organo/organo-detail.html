@@ -1,13 +1,9 @@
 
 <div>
-    <h2><span data-translate="reunionsApp.organo.detail.title">Organo</span> {{vm.organo.id}}</h2>
+    <h2>{{vm.organo.nombre}}</h2>
     <hr>
     <jhi-alert-error></jhi-alert-error>
     <dl class="dl-horizontal jh-entity-details">
-        <dt><span data-translate="reunionsApp.organo.nombre">Nombre</span></dt>
-        <dd>
-            <span>{{vm.organo.nombre}}</span>
-        </dd>
         <dt><span data-translate="reunionsApp.organo.descripcion">Descripcion</span></dt>
         <dd>
             <span>{{vm.organo.descripcion}}</span>
@@ -17,6 +13,52 @@
             <a ui-sref="grupo-detail({id:vm.organo.grupo.id})">{{vm.organo.grupo.nombre}}</a>
         </dd>
     </dl>
+
+    <div class="table-responsive">
+        <table class="jh-table table table-striped">
+            <thead>
+            <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
+                <th jh-sort-by="id"><span data-translate="global.field.id">ID</span> <span class="glyphicon glyphicon-sort"></span></th>
+                <th jh-sort-by="user.login"><span data-translate="reunionsApp.miembro.user">User</span> <span class="glyphicon glyphicon-sort"></span></th>
+                <th jh-sort-by="cargo.nombre"><span data-translate="reunionsApp.miembro.cargo">Cargo</span> <span class="glyphicon glyphicon-sort"></span></th>
+                <th jh-sort-by="fechaAlta"><span data-translate="reunionsApp.miembro.fechaAlta">Fecha Alta</span> <span class="glyphicon glyphicon-sort"></span></th>
+                <th jh-sort-by="fechaBaja"><span data-translate="reunionsApp.miembro.fechaBaja">Fecha Baja</span> <span class="glyphicon glyphicon-sort"></span></th>
+                <th jh-sort-by="observaciones"><span data-translate="reunionsApp.miembro.observaciones">Observaciones</span> <span class="glyphicon glyphicon-sort"></span></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="miembro in vm.miembros track by miembro.id">
+                <td><a ui-sref="miembro-detail({id:miembro.id})">{{miembro.id}}</a></td>
+                <td>
+                    {{miembro.user.login}}
+                </td>
+                <td>
+                    {{miembro.cargo.nombre}}
+                </td>
+                <td>{{miembro.fechaAlta | date:'mediumDate'}}</td>
+                <td>{{miembro.fechaBaja | date:'mediumDate'}}</td>
+                <td>{{miembro.observaciones}}</td>
+                <td class="text-right">
+                    <div class="btn-group flex-btn-group-container">
+                        <button type="submit"
+                                ui-sref="miembro.edit({id:miembro.id})"
+                                class="btn btn-primary btn-sm">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                            <span class="hidden-xs hidden-sm" data-translate="entity.action.edit"></span>
+                        </button>
+                        <button type="submit"
+                                ui-sref="miembro.delete({id:miembro.id})"
+                                class="btn btn-danger btn-sm">
+                            <span class="glyphicon glyphicon-remove-circle"></span>
+                            <span class="hidden-xs hidden-sm" data-translate="entity.action.delete"></span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 
     <button type="submit"
             ui-sref="{{ vm.previousState }}"
