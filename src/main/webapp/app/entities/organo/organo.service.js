@@ -13,6 +13,7 @@
             'query': { method: 'GET', isArray: true},
             'miembros': { method: 'GET', isArray: true, url: 'api/organos/:id/miembros'},
             'miembrosAnteriores': { method: 'GET', isArray: true, url:'api/organos/:id/miembrosAnteriores'},
+            'getAll': { method: 'GET', isArray: true, url:'api/organos'},
             'get': {
                 method: 'GET',
                 transformResponse: function (data) {

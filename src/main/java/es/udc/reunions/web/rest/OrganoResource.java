@@ -33,7 +33,7 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 public class OrganoResource {
 
     private final Logger log = LoggerFactory.getLogger(OrganoResource.class);
-        
+
     @Inject
     private OrganoService organoService;
 
@@ -82,18 +82,14 @@ public class OrganoResource {
     /**
      * GET  /organos : get all the organos.
      *
-     * @param pageable the pagination information
      * @return the ResponseEntity with status 200 (OK) and the list of organos in body
-     * @throws URISyntaxException if there is an error to generate the pagination HTTP headers
      */
     @GetMapping("/organos")
     @Timed
-    public ResponseEntity<List<Organo>> getAllOrganos(Pageable pageable)
-        throws URISyntaxException {
+    public ResponseEntity<List<Organo>> getAllOrganos() {
         log.debug("REST request to get a page of Organos");
-        Page<Organo> page = organoService.findAll(pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/organos");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        List<Organo> organos = organoService.findAll();
+        return new ResponseEntity<>(organos, HttpStatus.OK);
     }
 
     /**
@@ -132,7 +128,7 @@ public class OrganoResource {
      * SEARCH  /_search/organos?query=:query : search for the organo corresponding
      * to the query.
      *
-     * @param query the query of the organo search 
+     * @param query the query of the organo search
      * @param pageable the pagination information
      * @return the result of the search
      * @throws URISyntaxException if there is an error to generate the pagination HTTP headers

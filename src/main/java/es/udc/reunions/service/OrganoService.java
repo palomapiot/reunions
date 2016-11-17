@@ -25,7 +25,7 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 public class OrganoService {
 
     private final Logger log = LoggerFactory.getLogger(OrganoService.class);
-    
+
     @Inject
     private OrganoRepository organoRepository;
 
@@ -47,14 +47,13 @@ public class OrganoService {
 
     /**
      *  Get all the organos.
-     *  
-     *  @param pageable the pagination information
+     *
      *  @return the list of entities
      */
-    @Transactional(readOnly = true) 
-    public Page<Organo> findAll(Pageable pageable) {
+    @Transactional(readOnly = true)
+    public List<Organo> findAll() {
         log.debug("Request to get all Organos");
-        Page<Organo> result = organoRepository.findAll(pageable);
+        List<Organo> result = organoRepository.findAll();
         return result;
     }
 
@@ -64,7 +63,7 @@ public class OrganoService {
      *  @param id the id of the entity
      *  @return the entity
      */
-    @Transactional(readOnly = true) 
+    @Transactional(readOnly = true)
     public Organo findOne(Long id) {
         log.debug("Request to get Organo : {}", id);
         Organo organo = organoRepository.findOne(id);

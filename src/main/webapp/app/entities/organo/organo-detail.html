@@ -76,7 +76,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr dir-paginate="miembro in vm.miembrosAnteriores | itemsPerPage: 3">
+            <tr dir-paginate="miembro in vm.miembrosAnteriores | itemsPerPage: 10">
                 <td><a ui-sref="miembro-detail({id:miembro.id})">{{miembro.id}}</a></td>
                 <td>
                     {{miembro.user.login}}
