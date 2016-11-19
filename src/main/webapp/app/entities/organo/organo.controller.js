@@ -5,9 +5,9 @@
         .module('reunionsApp')
         .controller('OrganoController', OrganoController);
 
-    OrganoController.$inject = ['$scope', '$state', 'Organo', 'OrganoSearch', 'ParseLinks', 'AlertService', 'pagingParams', 'paginationConstants'];
+    OrganoController.$inject = ['$scope', '$state', 'Organo', 'OrganoSearch', 'ParseLinks', 'AlertService'];
 
-    function OrganoController ($scope, $state, Organo, OrganoSearch, ParseLinks, AlertService, pagingParams, paginationConstants) {
+    function OrganoController ($scope, $state, Organo, OrganoSearch, ParseLinks, AlertService) {
         var vm = this;
 
 //        vm.loadPage = loadPage;

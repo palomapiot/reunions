@@ -15,7 +15,6 @@
         vm.datePickerOpenStatus = {};
         vm.openCalendar = openCalendar;
         vm.save = save;
-        vm.organos = Organo.query();
         vm.cargos = Cargo.query();
         vm.users = User.query();
 

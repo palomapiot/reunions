@@ -14,31 +14,48 @@
         </dd>
     </dl>
 
+
+    <h3><span data-translate="reunionsApp.organo.miembros">Miembros actuales</span></h3>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-4 no-padding-left">
+                <button class="btn btn-primary" ui-sref="miembro.new({organo:vm.organo})" >
+                    <span class="glyphicon glyphicon-plus"></span>
+                    <span class="hidden-xs"  data-translate="reunionsApp.miembro.home.createLabel">
+                    Add new miembro
+                </span>
+                </button>
+            </div>
+            <div class="col-xs-8 no-padding-right">
+                <form name="searchForm" class="form-inline">
+                    <div class="input-group pull-right" >
+                        <input type="text" ng-model="q" id="search" class="form-control" placeholder="{{ 'reunionsApp.miembro.home.search' | translate }}">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <br/>
     <div class="table-responsive">
-        <h3><span data-translate="reunionsApp.organo.miembros">Miembros</span></h3>
         <table class="jh-table table table-striped">
             <thead>
-            <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
-                <th jh-sort-by="id"><span data-translate="global.field.id">ID</span> <span class="glyphicon glyphicon-sort"></span></th>
-                <th jh-sort-by="user.login"><span data-translate="reunionsApp.miembro.user">User</span> <span class="glyphicon glyphicon-sort"></span></th>
-                <th jh-sort-by="cargo.nombre"><span data-translate="reunionsApp.miembro.cargo">Cargo</span> <span class="glyphicon glyphicon-sort"></span></th>
-                <th jh-sort-by="fechaAlta"><span data-translate="reunionsApp.miembro.fechaAlta">Fecha Alta</span> <span class="glyphicon glyphicon-sort"></span></th>
-                <th jh-sort-by="fechaBaja"><span data-translate="reunionsApp.miembro.fechaBaja">Fecha Baja</span> <span class="glyphicon glyphicon-sort"></span></th>
-                <th jh-sort-by="observaciones"><span data-translate="reunionsApp.miembro.observaciones">Observaciones</span> <span class="glyphicon glyphicon-sort"></span></th>
+            <tr>
+                <th><span data-translate="reunionsApp.miembro.user">User</span> <span class="glyphicon glyphicon-sort"></span></th>
+                <th><span data-translate="reunionsApp.miembro.cargo">Cargo</span> <span class="glyphicon glyphicon-sort"></span></th>
+                <th><span data-translate="reunionsApp.miembro.fechaAlta">Fecha Alta</span> <span class="glyphicon glyphicon-sort"></span></th>
+                <th><span data-translate="reunionsApp.miembro.observaciones">Observaciones</span> <span class="glyphicon glyphicon-sort"></span></th>
                 <th></th>
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="miembro in vm.miembros track by miembro.id">
-                <td><a ui-sref="miembro-detail({id:miembro.id})">{{miembro.id}}</a></td>
+            <tr dir-paginate="miembro in vm.miembros | orderBy:'user.lastName' | filter:q | itemsPerPage: 10">
                 <td>
-                    {{miembro.user.login}}
+                    {{miembro.user.lastName}}, {{miembro.user.firstName}}
                 </td>
                 <td>
                     {{miembro.cargo.nombre}}
                 </td>
                 <td>{{miembro.fechaAlta | date:'mediumDate'}}</td>
-                <td>{{miembro.fechaBaja | date:'mediumDate'}}</td>
                 <td>{{miembro.observaciones}}</td>
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
@@ -60,26 +77,42 @@
             </tbody>
         </table>
     </div>
+    <div class="text-center">
+        <dir-pagination-controls></dir-pagination-controls>
+    </div>
 
+    <hr>
+
+    <h3><span data-translate="reunionsApp.organo.miembrosAnteriores">Miembros anteriores</span></h3>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-4 no-padding-left">
+            </div>
+            <div class="col-xs-8 no-padding-right">
+                <form name="searchForm" class="form-inline">
+                    <div class="input-group pull-right" >
+                        <input type="text" ng-model="qa" id="searchAnt" class="form-control" placeholder="{{ 'reunionsApp.miembro.home.search' | translate }}">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <br/>
     <div class="table-responsive">
-        <h3><span data-translate="reunionsApp.organo.miembrosAnteriores">Miembros anteriores</span></h3>
         <table class="jh-table table table-striped">
             <thead>
-            <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
-                <th jh-sort-by="id"><span data-translate="global.field.id">ID</span> <span class="glyphicon glyphicon-sort"></span></th>
-                <th jh-sort-by="user.login"><span data-translate="reunionsApp.miembro.user">User</span> <span class="glyphicon glyphicon-sort"></span></th>
-                <th jh-sort-by="cargo.nombre"><span data-translate="reunionsApp.miembro.cargo">Cargo</span> <span class="glyphicon glyphicon-sort"></span></th>
-                <th jh-sort-by="fechaAlta"><span data-translate="reunionsApp.miembro.fechaAlta">Fecha Alta</span> <span class="glyphicon glyphicon-sort"></span></th>
-                <th jh-sort-by="fechaBaja"><span data-translate="reunionsApp.miembro.fechaBaja">Fecha Baja</span> <span class="glyphicon glyphicon-sort"></span></th>
-                <th jh-sort-by="observaciones"><span data-translate="reunionsApp.miembro.observaciones">Observaciones</span> <span class="glyphicon glyphicon-sort"></span></th>
-                <th></th>
+            <tr>
+                <th><span data-translate="reunionsApp.miembro.user">User</span> <span class="glyphicon glyphicon-sort"></span></th>
+                <th><span data-translate="reunionsApp.miembro.cargo">Cargo</span> <span class="glyphicon glyphicon-sort"></span></th>
+                <th><span data-translate="reunionsApp.miembro.fechaAlta">Fecha Alta</span> <span class="glyphicon glyphicon-sort"></span></th>
+                <th><span data-translate="reunionsApp.miembro.fechaBaja">Fecha Baja</span> <span class="glyphicon glyphicon-sort"></span></th>
+                <th><span data-translate="reunionsApp.miembro.observaciones">Observaciones</span> <span class="glyphicon glyphicon-sort"></span></th>
             </tr>
             </thead>
             <tbody>
-            <tr dir-paginate="miembro in vm.miembrosAnteriores | itemsPerPage: 10">
-                <td><a ui-sref="miembro-detail({id:miembro.id})">{{miembro.id}}</a></td>
+            <tr dir-paginate="miembro in vm.miembrosAnteriores | orderBy:'user.lastName' | filter:qa | itemsPerPage: 10">
                 <td>
-                    {{miembro.user.login}}
+                    {{miembro.user.lastName}}, {{miembro.user.firstName}}
                 </td>
                 <td>
                     {{miembro.cargo.nombre}}
@@ -87,25 +120,11 @@
                 <td>{{miembro.fechaAlta | date:'mediumDate'}}</td>
                 <td>{{miembro.fechaBaja | date:'mediumDate'}}</td>
                 <td>{{miembro.observaciones}}</td>
-                <td class="text-right">
-                    <div class="btn-group flex-btn-group-container">
-                        <button type="submit"
-                                ui-sref="miembro.edit({id:miembro.id})"
-                                class="btn btn-primary btn-sm">
-                            <span class="glyphicon glyphicon-pencil"></span>
-                            <span class="hidden-xs hidden-sm" data-translate="entity.action.edit"></span>
-                        </button>
-                        <button type="submit"
-                                ui-sref="miembro.delete({id:miembro.id})"
-                                class="btn btn-danger btn-sm">
-                            <span class="glyphicon glyphicon-remove-circle"></span>
-                            <span class="hidden-xs hidden-sm" data-translate="entity.action.delete"></span>
-                        </button>
-                    </div>
-                </td>
             </tr>
             </tbody>
         </table>
+    </div>
+    <div class="text-center">
         <dir-pagination-controls></dir-pagination-controls>
     </div>
 

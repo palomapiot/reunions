@@ -118,19 +118,15 @@ public class MiembroResource {
      * GET  /organos/:id/miembros : get miembros from the "id" organo.
      *
      * @param id the id of the organo
-     * @param pageable the pagination information
      * @return the ResponseEntity with status 200 (OK) and the list of miembros in body
-     * @throws URISyntaxException if there is an error to generate the pagination HTTP headers
      */
     @GetMapping("/organos/{id}/miembros")
     @Timed
-    public ResponseEntity<List<Miembro>> getMiembrosByOrganoId( @PathVariable Long id, Pageable pageable)
-        throws URISyntaxException {
+    public ResponseEntity<List<Miembro>> getMiembrosByOrganoIdAndFechaBajaIsNull( @PathVariable Long id) {
         log.debug("REST request to get miembros from organo : {}", id);
 
-        Page<Miembro> page = miembroService.findByOrganoId(id, pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/organos/" + id + "/miembros");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        List<Miembro> miembros = miembroService.findByOrganoIdAndFechaBajaIsNull(id);
+        return new ResponseEntity<>(miembros, HttpStatus.OK);
     }
 
     /**
@@ -141,10 +137,10 @@ public class MiembroResource {
      */
     @GetMapping("/organos/{id}/miembrosAnteriores")
     @Timed
-    public ResponseEntity<List<Miembro>> getMiembrosByOrganoId( @PathVariable Long id) {
+    public ResponseEntity<List<Miembro>> getMiembrosByOrganoIdAndFechaBajaIsNotNull( @PathVariable Long id) {
         log.debug("REST request to get miembros anteriores from organo : {}", id);
 
-        List<Miembro> miembros = miembroService.findByOrganoId(id);
+        List<Miembro> miembros = miembroService.findByOrganoIdAndFechaBajaIsNotNull(id);
         return new ResponseEntity<>(miembros, HttpStatus.OK);
     }
 

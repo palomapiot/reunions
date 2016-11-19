@@ -84,7 +84,7 @@
             }
         })
         .state('miembro-detail.edit', {
-            parent: 'miembro-detail',
+            parent: 'organo-detail',
             url: '/detail/edit',
             data: {
                 authorities: ['ROLE_USER']
@@ -109,7 +109,7 @@
             }]
         })
         .state('miembro.new', {
-            parent: 'miembro',
+            parent: 'organo-detail',
             url: '/new',
             data: {
                 authorities: ['ROLE_USER']
@@ -122,14 +122,15 @@
                     backdrop: 'static',
                     size: 'lg',
                     resolve: {
-                        entity: function () {
+                        entity: ['Organo', function (Organo) {
                             return {
-                                fechaAlta: null,
+                                fechaAlta: new Date(),
                                 fechaBaja: null,
                                 observaciones: null,
-                                id: null
+                                id: null,
+                                organo: Organo.get({id : $stateParams.id})
                             };
-                        }
+                        }]
                     }
                 }).result.then(function() {
                     $state.go('miembro', null, { reload: 'miembro' });

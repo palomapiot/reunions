@@ -16,10 +16,10 @@
         <div class="form-group">
             <label class="control-label" data-translate="reunionsApp.miembro.fechaAlta" for="field_fechaAlta">Fecha Alta</label>
                 <div class="input-group">
-                    <input id="field_fechaAlta" type="text" class="form-control" name="fechaAlta" uib-datepicker-popup="{{dateformat}}" ng-model="vm.miembro.fechaAlta" is-open="vm.datePickerOpenStatus.fechaAlta"
+                    <input id="field_fechaAlta" disabled="true" type="text" class="form-control" name="fechaAlta" uib-datepicker-popup="{{dateformat}}" ng-model="vm.miembro.fechaAlta" is-open="vm.datePickerOpenStatus.fechaAlta"
                     required/>
                     <span class="input-group-btn">
-                        <button type="button" class="btn btn-default" ng-click="vm.openCalendar('fechaAlta')"><i class="glyphicon glyphicon-calendar"></i></button>
+                        <button type="button" disabled="true" class="btn btn-default" ng-click="vm.openCalendar('fechaAlta')"><i class="glyphicon glyphicon-calendar"></i></button>
                     </span>
                 </div>
             <div ng-show="editForm.fechaAlta.$invalid">
@@ -29,13 +29,13 @@
                 </p>
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group" hidden>
             <label class="control-label" data-translate="reunionsApp.miembro.fechaBaja" for="field_fechaBaja">Fecha Baja</label>
                 <div class="input-group">
-                    <input id="field_fechaBaja" type="text" class="form-control" name="fechaBaja" uib-datepicker-popup="{{dateformat}}" ng-model="vm.miembro.fechaBaja" is-open="vm.datePickerOpenStatus.fechaBaja"
+                    <input id="field_fechaBaja" disabled type="text" class="form-control" name="fechaBaja" uib-datepicker-popup="{{dateformat}}" ng-model="vm.miembro.fechaBaja" is-open="vm.datePickerOpenStatus.fechaBaja"
                     />
                     <span class="input-group-btn">
-                        <button type="button" class="btn btn-default" ng-click="vm.openCalendar('fechaBaja')"><i class="glyphicon glyphicon-calendar"></i></button>
+                        <button type="button" disabled class="btn btn-default" ng-click="vm.openCalendar('fechaBaja')"><i class="glyphicon glyphicon-calendar"></i></button>
                     </span>
                 </div>
         </div>
@@ -48,8 +48,8 @@
 
         <div class="form-group">
             <label data-translate="reunionsApp.miembro.organo" for="field_organo">Organo</label>
-            <select class="form-control" id="field_organo" name="organo" ng-model="vm.miembro.organo" ng-options="organo as organo.nombre for organo in vm.organos track by organo.id" required>
-                <option value=""></option>
+            <select class="form-control" id="field_organo" name="organo" ng-model="vm.miembro.organo" disabled required>
+                <option label="{{vm.miembro.organo.nombre}}" value="{{vm.miembro.organo.id}}" selected="selected">{{vm.miembro.organo.nombre}}</option>
             </select>
         </div>
         <div ng-show="editForm.organo.$invalid">

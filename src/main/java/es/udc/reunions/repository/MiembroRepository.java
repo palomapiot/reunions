@@ -17,7 +17,7 @@ public interface MiembroRepository extends JpaRepository<Miembro,Long> {
     @Query("select miembro from Miembro miembro where miembro.user.login = ?#{principal.username}")
     List<Miembro> findByUserIsCurrentUser();
 
-    Page<Miembro> findByOrganoId(Long organoId, Pageable pageable);
+    List<Miembro> findByOrganoIdAndFechaBajaIsNull(Long organoId);
 
-    List<Miembro> findByOrganoId(Long organoId);
+    List<Miembro> findByOrganoIdAndFechaBajaIsNotNull(Long organoId);
 }

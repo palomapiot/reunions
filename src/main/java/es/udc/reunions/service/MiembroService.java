@@ -59,16 +59,15 @@ public class MiembroService {
     }
 
     /**
-     *  Get all the miembros from an organo
+     *  Get all the miembros actuales from an organo
      *
      *  @param organoId the organo id
-     *  @param pageable the pagination information
      *  @return the list of entities
      */
     @Transactional(readOnly = true)
-    public Page<Miembro> findByOrganoId(Long organoId, Pageable pageable) {
-        log.debug("Request to get all Miembros from Organo " + organoId);
-        Page<Miembro> result = miembroRepository.findByOrganoId(organoId, pageable);
+    public List<Miembro> findByOrganoIdAndFechaBajaIsNull(Long organoId) {
+        log.debug("Request to get all miembros actuales from Organo " + organoId);
+        List<Miembro> result = miembroRepository.findByOrganoIdAndFechaBajaIsNull(organoId);
         return result;
     }
 
@@ -79,9 +78,9 @@ public class MiembroService {
      *  @return the list of entities
      */
     @Transactional(readOnly = true)
-    public List<Miembro> findByOrganoId(Long organoId) {
+    public List<Miembro> findByOrganoIdAndFechaBajaIsNotNull(Long organoId) {
         log.debug("Request to get all Miembros anteriores from Organo " + organoId);
-        List<Miembro> result = miembroRepository.findByOrganoId(organoId);
+        List<Miembro> result = miembroRepository.findByOrganoIdAndFechaBajaIsNotNull(organoId);
         return result;
     }
 

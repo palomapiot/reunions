@@ -20,7 +20,9 @@
             "descripcion": "Descripcion",
             "grupo": "Grupo",
             "miembro": "Miembro",
-            "sesion": "Sesion"
+            "sesion": "Sesion",
+            "miembros": "Miembros actuales",
+            "miembrosAnteriores": "Miembros anteriores"
         }
     }
 }
