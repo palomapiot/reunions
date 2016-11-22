@@ -3,7 +3,8 @@
         "home": {
             "title": "Users",
             "createLabel": "Create a new user",
-            "createOrEditLabel": "Create or edit a user"
+            "createOrEditLabel": "Create or edit a user",
+            "search": "Search people"
         },
         "created": "A new user is created with identifier {{ param }}",
         "updated": "An user is updated with identifier {{ param }}",

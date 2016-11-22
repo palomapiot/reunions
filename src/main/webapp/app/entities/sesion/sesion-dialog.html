@@ -17,7 +17,7 @@
             <label class="control-label" data-translate="reunionsApp.sesion.numero" for="field_numero">Numero</label>
             <input type="number" class="form-control" name="numero" id="field_numero"
                     ng-model="vm.sesion.numero"
-                    required />
+                    required disabled/>
             <div ng-show="editForm.numero.$invalid">
                 <p class="help-block"
                     ng-show="editForm.numero.$error.required" data-translate="entity.validation.required">
@@ -80,7 +80,7 @@
 
         <div class="form-group">
             <label data-translate="reunionsApp.sesion.organo" for="field_organo">Organo</label>
-            <select class="form-control" id="field_organo" name="organo" ng-model="vm.sesion.organo" ng-options="organo as organo.nombre for organo in vm.organos track by organo.id" required>
+            <select disabled class="form-control" id="field_organo" name="organo" ng-model="vm.sesion.organo" ng-options="organo as organo.nombre for organo in vm.organos track by organo.id" required>
                 <option value=""></option>
             </select>
         </div>

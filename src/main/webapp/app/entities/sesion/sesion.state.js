@@ -109,8 +109,8 @@
             }]
         })
         .state('sesion.new', {
-            parent: 'sesion',
-            url: '/new',
+            parent: 'organo-detail',
+            url: '/nuevaSesion',
             data: {
                 authorities: ['ROLE_USER']
             },
@@ -122,27 +122,28 @@
                     backdrop: 'static',
                     size: 'lg',
                     resolve: {
-                        entity: function () {
+                        entity: ['Organo', function (Organo) {
                             return {
                                 numero: null,
                                 primeraConvocatoria: null,
                                 segundaConvocatoria: null,
                                 lugar: null,
                                 descripcion: null,
-                                id: null
+                                id: null,
+                                organo: Organo.get({id : $stateParams.id})
                             };
-                        }
+                        }]
                     }
                 }).result.then(function() {
-                    $state.go('sesion', null, { reload: 'sesion' });
+                    $state.go('^', {}, { reload: 'organo-detail' });
                 }, function() {
-                    $state.go('sesion');
+                    $state.go('^');
                 });
             }]
         })
         .state('sesion.edit', {
-            parent: 'sesion',
-            url: '/{id}/edit',
+            parent: 'organo-detail',
+            url: '/{ids}/edit',
             data: {
                 authorities: ['ROLE_USER']
             },
@@ -155,11 +156,11 @@
                     size: 'lg',
                     resolve: {
                         entity: ['Sesion', function(Sesion) {
-                            return Sesion.get({id : $stateParams.id}).$promise;
+                            return Sesion.get({id : $stateParams.ids}).$promise;
                         }]
                     }
                 }).result.then(function() {
-                    $state.go('sesion', null, { reload: 'sesion' });
+                    $state.go('^', {}, { reload: 'organo-detail' });
                 }, function() {
                     $state.go('^');
                 });

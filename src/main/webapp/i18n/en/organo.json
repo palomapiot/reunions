@@ -22,7 +22,8 @@
             "miembro": "Miembro",
             "sesion": "Sesion",
             "miembros": "Miembros actuales",
-            "miembrosAnteriores": "Miembros anteriores"
+            "miembrosAnteriores": "Miembros anteriores",
+            "sesiones": "Sesiones"
         }
     }
 }

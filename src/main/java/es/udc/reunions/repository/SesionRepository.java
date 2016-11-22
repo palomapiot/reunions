@@ -12,4 +12,7 @@ import java.util.List;
 @SuppressWarnings("unused")
 public interface SesionRepository extends JpaRepository<Sesion,Long> {
 
+    List<Sesion> findByOrganoId(Long organoId);
+
+    Sesion findTopByOrganoIdOrderByNumeroDesc(Long organoId);
 }

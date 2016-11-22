@@ -25,7 +25,7 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 public class SesionService {
 
     private final Logger log = LoggerFactory.getLogger(SesionService.class);
-    
+
     @Inject
     private SesionRepository sesionRepository;
 
@@ -47,11 +47,11 @@ public class SesionService {
 
     /**
      *  Get all the sesions.
-     *  
+     *
      *  @param pageable the pagination information
      *  @return the list of entities
      */
-    @Transactional(readOnly = true) 
+    @Transactional(readOnly = true)
     public Page<Sesion> findAll(Pageable pageable) {
         log.debug("Request to get all Sesions");
         Page<Sesion> result = sesionRepository.findAll(pageable);
@@ -64,10 +64,36 @@ public class SesionService {
      *  @param id the id of the entity
      *  @return the entity
      */
-    @Transactional(readOnly = true) 
+    @Transactional(readOnly = true)
     public Sesion findOne(Long id) {
         log.debug("Request to get Sesion : {}", id);
         Sesion sesion = sesionRepository.findOne(id);
+        return sesion;
+    }
+
+    /**
+     *  Get all the sesiones from an organo
+     *
+     *  @param organoId the organo id
+     *  @return the list of entities
+     */
+    @Transactional(readOnly = true)
+    public List<Sesion> findByOrganoId(Long organoId) {
+        log.debug("Request to get all miembros actuales from organo " + organoId);
+        List<Sesion> result = sesionRepository.findByOrganoId(organoId);
+        return result;
+    }
+
+    /**
+     *  Get the last sesion for an organo
+     *
+     *  @param organoId the organo id
+     *  @return the last sesion
+     */
+    @Transactional(readOnly = true)
+    public Sesion lastSesion(Long organoId) {
+        log.debug("Request to get last sesion for organo " + organoId);
+        Sesion sesion = sesionRepository.findTopByOrganoIdOrderByNumeroDesc(organoId);
         return sesion;
     }
 

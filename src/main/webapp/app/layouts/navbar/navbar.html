@@ -8,7 +8,7 @@
                 <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand logo" href="#/" ng-click="vm.collapseNavbar()">
-                <img class="logo-img" src="content/images/logo-jhipster.png"/>
+                <!--<img class="logo-img" src="content/images/logo-jhipster.png"/>-->
                 <span data-translate="global.title">Reunions</span> <span class="navbar-version">v{{VERSION}}</span>
             </a>
         </div>
@@ -24,6 +24,12 @@
                     <a ui-sref="organo" ng-click="vm.collapseNavbar()">
                         <span class="glyphicon glyphicon-globe"></span>
                         <span class="hidden-sm" data-translate="global.menu.organos">Organos</span>
+                    </a>
+                </li>
+                <li ui-sref-active="active">
+                    <a ui-sref="user-management" ng-click="vm.collapseNavbar()">
+                        <span class="glyphicon glyphicon-user"></span>
+                        <span class="hidden-sm" data-translate="global.menu.personal">Personal</span>
                     </a>
                 </li>
                 <!-- jhipster-needle-add-element-to-menu - JHipster will add new menu items here -->

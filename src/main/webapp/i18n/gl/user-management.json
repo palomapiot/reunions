@@ -3,7 +3,8 @@
         "home": {
             "title": "Usuarios",
             "createLabel": "Crear un novo usuario",
-            "createOrEditLabel": "Crear ou editar un usuario"
+            "createOrEditLabel": "Crear ou editar un usuario",
+            "search": "Buscar persoal"
         },
         "created": "A new user is created with identifier {{ param }}",
         "updated": "An user is updated with identifier {{ param }}",

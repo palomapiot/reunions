@@ -11,6 +11,14 @@
         var vm = this;
 
         vm.sesion = entity;
+
+        if (vm.sesion.numero === null) {
+            vm.lastSesion = Organo.getLastSesion({id : $stateParams.id});
+            vm.lastSesion.$promise.then(function(data) {
+                vm.sesion.numero = data.numero + 1;
+            });
+        }
+
         vm.clear = clear;
         vm.datePickerOpenStatus = {};
         vm.openCalendar = openCalendar;

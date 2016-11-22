@@ -110,7 +110,7 @@
         })
         .state('miembro.new', {
             parent: 'organo-detail',
-            url: '/new',
+            url: '/nuevoMiembro',
             data: {
                 authorities: ['ROLE_USER']
             },
@@ -133,15 +133,15 @@
                         }]
                     }
                 }).result.then(function() {
-                    $state.go('miembro', null, { reload: 'miembro' });
+                    $state.go('^', {}, { reload: 'organo-detail' });
                 }, function() {
-                    $state.go('miembro');
+                    $state.go('^');
                 });
             }]
         })
         .state('miembro.edit', {
-            parent: 'miembro',
-            url: '/{id}/edit',
+            parent: 'organo-detail',
+            url: '/{idm}/edit',
             data: {
                 authorities: ['ROLE_USER']
             },
@@ -154,19 +154,19 @@
                     size: 'lg',
                     resolve: {
                         entity: ['Miembro', function(Miembro) {
-                            return Miembro.get({id : $stateParams.id}).$promise;
+                            return Miembro.get({id : $stateParams.idm}).$promise;
                         }]
                     }
                 }).result.then(function() {
-                    $state.go('miembro', null, { reload: 'miembro' });
+                    $state.go('^', {}, { reload: 'organo-detail' });
                 }, function() {
                     $state.go('^');
                 });
             }]
         })
         .state('miembro.delete', {
-            parent: 'miembro',
-            url: '/{id}/delete',
+            parent: 'organo-detail',
+            url: '/{idm}/delete',
             data: {
                 authorities: ['ROLE_USER']
             },
@@ -178,11 +178,11 @@
                     size: 'md',
                     resolve: {
                         entity: ['Miembro', function(Miembro) {
-                            return Miembro.get({id : $stateParams.id}).$promise;
+                            return Miembro.get({id : $stateParams.idm}).$promise;
                         }]
                     }
                 }).result.then(function() {
-                    $state.go('miembro', null, { reload: 'miembro' });
+                    $state.go('^', {}, { reload: 'organo-detail' });
                 }, function() {
                     $state.go('^');
                 });

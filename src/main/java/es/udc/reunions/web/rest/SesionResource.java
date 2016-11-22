@@ -33,7 +33,7 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 public class SesionResource {
 
     private final Logger log = LoggerFactory.getLogger(SesionResource.class);
-        
+
     @Inject
     private SesionService sesionService;
 
@@ -132,7 +132,7 @@ public class SesionResource {
      * SEARCH  /_search/sesions?query=:query : search for the sesion corresponding
      * to the query.
      *
-     * @param query the query of the sesion search 
+     * @param query the query of the sesion search
      * @param pageable the pagination information
      * @return the result of the search
      * @throws URISyntaxException if there is an error to generate the pagination HTTP headers
@@ -147,5 +147,37 @@ public class SesionResource {
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
+    /**
+     * GET  /organos/:id/sesiones : get sesiones from the "id" organo.
+     *
+     * @param id the id of the organo
+     * @return the ResponseEntity with status 200 (OK) and the list of sesiones in body
+     */
+    @GetMapping("/organos/{id}/sesiones")
+    @Timed
+    public ResponseEntity<List<Sesion>> getSesionesByOrganoId( @PathVariable Long id) {
+        log.debug("REST request to get sesiones from organo : {}", id);
 
+        List<Sesion> sesiones = sesionService.findByOrganoId(id);
+        return new ResponseEntity<>(sesiones, HttpStatus.OK);
+    }
+
+    /**
+     * GET  /organos/:id/lastSesion : get last sesion for the "id" organo.
+     *
+     * @param id the id of the organo
+     * @return the ResponseEntity with status 200 (OK) and the last sesion in body
+     */
+    @GetMapping("/organos/{id}/lastSesion")
+    @Timed
+    public ResponseEntity<Sesion> getLastSesionByOrganoId( @PathVariable Long id) {
+        log.debug("REST request to get last sesion for organo : {}", id);
+
+        Sesion lastSesion = sesionService.lastSesion(id);
+        return Optional.ofNullable(lastSesion)
+            .map(result -> new ResponseEntity<>(
+                result,
+                HttpStatus.OK))
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
 }
