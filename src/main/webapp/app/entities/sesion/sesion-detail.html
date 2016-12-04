@@ -1,6 +1,6 @@
 
 <div>
-    <h2><span data-translate="reunionsApp.sesion.detail.title">Sesion</span> {{vm.sesion.id}}</h2>
+    <h2><span data-translate="reunionsApp.sesion.detail.title">Sesion</span> {{vm.sesion.numero}} - {{vm.sesion.organo.nombre}}</h2>
     <hr>
     <jhi-alert-error></jhi-alert-error>
     <dl class="dl-horizontal jh-entity-details">
@@ -29,6 +29,88 @@
             <a ui-sref="organo-detail({id:vm.sesion.organo.id})">{{vm.sesion.organo.nombre}}</a>
         </dd>
     </dl>
+
+    <h3><span data-translate="reunionsApp.sesion.participantes">Participantes</span></h3>
+    <div class="container-fluid">
+        <div class="row">
+
+            <div class="col-xs-8 no-padding-left">
+                <button class="btn btn-primary" ui-sref="participante.new({sesion:vm.sesion})" >
+                    <span class="glyphicon glyphicon-plus"></span>
+                    <span class="hidden-xs"  data-translate="reunionsApp.participante.home.createLabel">
+                    Add new participante
+                </span>
+                </button>
+
+                <button class="btn btn-info" ng-click="vm.notificar(vm.sesion.id)">
+                    <span class="glyphicon glyphicon-share"></span>
+                    <span class="hidden-xs"  data-translate="reunionsApp.sesion.notificar">
+                    Notificar participantes
+                </span>
+                </button>
+
+                <button class="btn btn-info" ng-click="vm.exportar()">
+                    <span class="glyphicon glyphicon-plus"></span>
+                    <span class="hidden-xs"  data-translate="reunionsApp.sesion.exportar">
+                    Exportar participación
+                    </span>
+                </button>
+            </div>
+
+            <div class="col-xs-4 no-padding-right">
+                <form name="searchForm" class="form-inline">
+                    <div class="input-group pull-right" >
+                        <input type="text" ng-model="q" id="search" class="form-control" placeholder="{{ 'reunionsApp.participante.home.search' | translate }}">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <br/>
+    <div class="table-responsive">
+        <table class="jh-table table table-striped">
+            <thead>
+            <tr>
+                <th><span data-translate="reunionsApp.participante.user">User</span> <span class="glyphicon glyphicon-sort"></span></th>
+                <th><span data-translate="reunionsApp.participante.cargo">Cargo</span> <span class="glyphicon glyphicon-sort"></span></th>
+                <th><span data-translate="reunionsApp.participante.asistencia">Asistencia</span> <span class="glyphicon glyphicon-sort"></span></th>
+                <th><span data-translate="reunionsApp.participante.observaciones">Observaciones</span> <span class="glyphicon glyphicon-sort"></span></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr dir-paginate="participante in vm.participantes | orderBy:'user.lastName' | filter:q | itemsPerPage: 10">
+                <td>
+                    <a ui-sref="user-management-detail({login:participante.user.login})">{{participante.user.lastName}}, {{participante.user.firstName}}</a>
+                </td>
+                <td>
+                    {{participante.cargo.nombre}}
+                </td>
+                <td>{{participante.asistencia}}</td>
+                <td>{{participante.observaciones}}</td>
+                <td class="text-right">
+                    <div class="btn-group flex-btn-group-container">
+                        <button type="submit"
+                                ui-sref="participante.edit({idp:participante.id})"
+                                class="btn btn-primary btn-sm">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                            <span class="hidden-xs hidden-sm" data-translate="entity.action.edit"></span>
+                        </button>
+                        <button type="submit"
+                                ui-sref="participante.delete({idp:participante.id})"
+                                class="btn btn-danger btn-sm">
+                            <span class="glyphicon glyphicon-remove-circle"></span>
+                            <span class="hidden-xs hidden-sm" data-translate="entity.action.delete"></span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="text-center">
+        <dir-pagination-controls></dir-pagination-controls>
+    </div>
 
     <button type="submit"
             ui-sref="{{ vm.previousState }}"

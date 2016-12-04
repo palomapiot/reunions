@@ -1,13 +1,17 @@
 package es.udc.reunions.service;
 
 import es.udc.reunions.domain.Authority;
+import es.udc.reunions.domain.Organo;
+import es.udc.reunions.domain.Participante;
 import es.udc.reunions.domain.User;
 import es.udc.reunions.repository.AuthorityRepository;
+import es.udc.reunions.repository.ParticipanteRepository;
 import es.udc.reunions.repository.PersistentTokenRepository;
 import es.udc.reunions.repository.UserRepository;
 import es.udc.reunions.repository.search.UserSearchRepository;
 import es.udc.reunions.security.AuthoritiesConstants;
 import es.udc.reunions.security.SecurityUtils;
+import es.udc.reunions.service.dto.LineaResumen;
 import es.udc.reunions.service.util.RandomUtil;
 import es.udc.reunions.web.rest.vm.ManagedUserVM;
 import org.slf4j.Logger;
@@ -45,6 +49,46 @@ public class UserService {
 
     @Inject
     private AuthorityRepository authorityRepository;
+
+    @Inject
+    private ParticipanteRepository participanteRepository;
+
+    /**
+     *  Get cuadro resumen de usuario.
+     *  @param login the id of the usuario
+     *  @return the list of entities
+     */
+    @Transactional(readOnly = true)
+    public List<LineaResumen> getResumenDePersona(String login) {
+        HashMap resumen = new HashMap();
+        Long id = userRepository.findOneByLogin(login).get().getId();
+        String curso, key;
+        Organo organo;
+        Calendar fecha;
+        for (Participante p : participanteRepository.findByUserId(id)) {
+            fecha = GregorianCalendar.from(p.getSesion().getPrimeraConvocatoria());
+            if (fecha.get(Calendar.MONTH) < Calendar.SEPTEMBER) {
+                curso = Integer.toString(fecha.get(Calendar.YEAR) - 1)
+                    + "/"
+                    + Integer.toString(fecha.get(Calendar.YEAR));
+            } else {
+                curso = Integer.toString(fecha.get(Calendar.YEAR))
+                    + "/"
+                    + Integer.toString(fecha.get(Calendar.YEAR) + 1);
+            }
+            organo = p.getSesion().getOrgano();
+            if (!resumen.containsKey(curso + organo.getNombre())) {
+                LineaResumen lineaResumen = new LineaResumen(curso, organo);
+                lineaResumen.add(p.getAsistencia());
+                resumen.put(curso + organo.getNombre(), lineaResumen);
+            } else {
+                LineaResumen lineaResumen =
+                    (LineaResumen) resumen.get(curso + organo.getNombre());
+                lineaResumen.add(p.getAsistencia());
+            }
+        }
+        return new ArrayList<LineaResumen>(resumen.values());
+    }
 
     public Optional<User> activateRegistration(String key) {
         log.debug("Activating user for activation key {}", key);

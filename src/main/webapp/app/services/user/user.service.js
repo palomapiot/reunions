@@ -10,6 +10,7 @@
     function User ($resource) {
         var service = $resource('api/users/:login', {}, {
             'query': {method: 'GET', isArray: true},
+            'resumen': {method: 'GET', isArray: true, url: 'api/users/:login/resumen'},
             'get': {
                 method: 'GET',
                 transformResponse: function (data) {

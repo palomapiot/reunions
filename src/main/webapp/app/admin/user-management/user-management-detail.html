@@ -28,6 +28,58 @@
             </ul>
         </dd>
     </dl>
+
+    <h3><span data-translate="userManagement.resumen">Cuadro resumen</span></h3>
+    <div class="container-fluid">
+        <div class="row">
+
+            <div class="col-xs-8 no-padding-left">
+                <button class="btn btn-info" ng-click="vm.exportar()">
+                    <span class="glyphicon glyphicon-plus"></span>
+                    <span class="hidden-xs"  data-translate="userManagement.exportar">
+                    Exportar resumen
+                    </span>
+                </button>
+            </div>
+
+            <div class="col-xs-4 no-padding-right">
+                <form name="searchForm" class="form-inline">
+                    <div class="input-group pull-right" >
+                        <input type="text" ng-model="q" id="search" class="form-control" placeholder="{{ 'userManagement.search' | translate }}">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <br/>
+    <div class="table-responsive">
+        <table class="jh-table table table-striped">
+            <thead>
+            <tr>
+                <th><span data-translate="userManagement.curso">Curso</span> <span class="glyphicon glyphicon-sort"></span></th>
+                <th><span data-translate="userManagement.organo">Órgano</span> <span class="glyphicon glyphicon-sort"></span></th>
+                <th><span data-translate="userManagement.convocado">Convocado</span> <span class="glyphicon glyphicon-sort"></span></th>
+                <th><span data-translate="userManagement.asiste">Asiste</span> <span class="glyphicon glyphicon-sort"></span></th>
+                <th><span data-translate="userManagement.falta">Falta</span> <span class="glyphicon glyphicon-sort"></span></th>
+                <th><span data-translate="userManagement.disculpa">Disculpa</span> <span class="glyphicon glyphicon-sort"></span></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr dir-paginate="linea in vm.resumen | orderBy:'curso':true | filter:q | itemsPerPage: 10">
+                <td>{{linea.curso}}</td>
+                <td><a ui-sref="organo-detail({id:linea.organo.id})">{{linea.organo.nombre}}</a></td>
+                <td>{{linea.convocado}}</td>
+                <td>{{linea.asiste}}</td>
+                <td>{{linea.falta}}</td>
+                <td>{{linea.disculpa}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="text-center">
+        <dir-pagination-controls></dir-pagination-controls>
+    </div>
+
     <button type="submit"
             ui-sref="user-management"
             class="btn btn-info">

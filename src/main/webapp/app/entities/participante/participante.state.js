@@ -111,8 +111,8 @@
             }]
         })
         .state('participante.new', {
-            parent: 'participante',
-            url: '/new',
+            parent: 'sesion-detail',
+            url: '/nuevoParticipante',
             data: {
                 authorities: ['ROLE_USER']
             },
@@ -124,24 +124,25 @@
                     backdrop: 'static',
                     size: 'lg',
                     resolve: {
-                        entity: function () {
+                        entity: ['Sesion', function (Sesion) {
                             return {
                                 asistencia: null,
                                 observaciones: null,
-                                id: null
+                                id: null,
+                                sesion: Sesion.get({id : $stateParams.id})
                             };
-                        }
+                        }]
                     }
                 }).result.then(function() {
-                    $state.go('participante', null, { reload: 'participante' });
+                    $state.go('^', {}, { reload: 'sesion-detail' });
                 }, function() {
-                    $state.go('participante');
+                    $state.go('^');
                 });
             }]
         })
         .state('participante.edit', {
-            parent: 'participante',
-            url: '/{id}/edit',
+            parent: 'sesion-detail',
+            url: '/{idp}/editarParticipante',
             data: {
                 authorities: ['ROLE_USER']
             },
@@ -154,11 +155,11 @@
                     size: 'lg',
                     resolve: {
                         entity: ['Participante', function(Participante) {
-                            return Participante.get({id : $stateParams.id}).$promise;
+                            return Participante.get({id : $stateParams.idp}).$promise;
                         }]
                     }
                 }).result.then(function() {
-                    $state.go('participante', null, { reload: 'participante' });
+                    $state.go('^', {}, { reload: 'sesion-detail' });
                 }, function() {
                     $state.go('^');
                 });

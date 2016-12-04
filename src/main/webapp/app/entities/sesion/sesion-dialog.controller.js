@@ -13,10 +13,17 @@
         vm.sesion = entity;
 
         if (vm.sesion.numero === null) {
-            vm.lastSesion = Organo.getLastSesion({id : $stateParams.id});
-            vm.lastSesion.$promise.then(function(data) {
-                vm.sesion.numero = data.numero + 1;
-            });
+            vm.last = false;
+            vm.lastSesion = Organo.getLastSesion({id : $stateParams.id}, onLastSesionSuccess);
+        }
+
+        function onLastSesionSuccess (result) {
+            if (result.id) {
+                vm.sesion.numero = result.numero + 1;
+            } else {
+                vm.sesion.numero = 1;
+            }
+
         }
 
         vm.clear = clear;

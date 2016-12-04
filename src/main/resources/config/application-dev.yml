@@ -52,10 +52,23 @@ spring:
                   logs: target/elasticsearch/log
                   data: target/elasticsearch/data
     mail:
-        host: localhost
+        host: smtp.udc.es
         port: 25
-        username:
-        password:
+        username: d.lamas@udc.es
+        password: Charmander690
+        protocol: smtps
+        tls: false
+        auth: true
+        properties.mail.smtp:
+            port: 25
+            ssl.enable: true
+            socketFactory.class: javax.net.ssl.SSLSocketFactory
+            socketFactory.fallback: false
+            socketFactory.port: 25
+        properties.mail.smtps:
+            auth: true
+            host: smtp.udc.es
+        properties.mail.transport.protocol: smtps
     messages:
         cache-seconds: 1
     thymeleaf:

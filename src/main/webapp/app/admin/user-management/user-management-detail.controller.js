@@ -14,6 +14,7 @@
         vm.user = {};
 
         vm.load($stateParams.login);
+        vm.resumen = User.resumen({ login: $stateParams.login})
 
         function load (login) {
             User.get({login: login}, function(result) {

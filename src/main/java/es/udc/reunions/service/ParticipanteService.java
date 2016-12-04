@@ -25,7 +25,7 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 public class ParticipanteService {
 
     private final Logger log = LoggerFactory.getLogger(ParticipanteService.class);
-    
+
     @Inject
     private ParticipanteRepository participanteRepository;
 
@@ -47,11 +47,11 @@ public class ParticipanteService {
 
     /**
      *  Get all the participantes.
-     *  
+     *
      *  @param pageable the pagination information
      *  @return the list of entities
      */
-    @Transactional(readOnly = true) 
+    @Transactional(readOnly = true)
     public Page<Participante> findAll(Pageable pageable) {
         log.debug("Request to get all Participantes");
         Page<Participante> result = participanteRepository.findAll(pageable);
@@ -64,11 +64,24 @@ public class ParticipanteService {
      *  @param id the id of the entity
      *  @return the entity
      */
-    @Transactional(readOnly = true) 
+    @Transactional(readOnly = true)
     public Participante findOne(Long id) {
         log.debug("Request to get Participante : {}", id);
         Participante participante = participanteRepository.findOne(id);
         return participante;
+    }
+
+    /**
+     *  Get all the participantes from a sesion
+     *
+     *  @param sesionId the sesion id
+     *  @return the list of entities
+     */
+    @Transactional(readOnly = true)
+    public List<Participante> findBySesionId(Long sesionId) {
+        log.debug("Request to get all participantes from sesion " + sesionId);
+        List<Participante> result = participanteRepository.findBySesionId(sesionId);
+        return result;
     }
 
     /**

@@ -26,6 +26,15 @@
         "createdBy": "Creado por",
         "createdDate": "Fecha de creación",
         "lastModifiedBy": "Modificado por",
-        "lastModifiedDate": "Fecha de modificación"
+        "lastModifiedDate": "Fecha de modificación",
+        "resumen": "Cuadro resumen",
+        "exportar": "Exportar",
+        "curso": "Curso",
+        "organo": "Órgano",
+        "convocado": "Convocado",
+        "asiste": "Asiste",
+        "falta": "Falta",
+        "disculpa": "Disculpa",
+        "search": "Filtrar"
     }
 }

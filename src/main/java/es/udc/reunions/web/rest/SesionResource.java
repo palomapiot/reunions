@@ -1,7 +1,12 @@
 package es.udc.reunions.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import es.udc.reunions.domain.Miembro;
+import es.udc.reunions.domain.Participante;
 import es.udc.reunions.domain.Sesion;
+import es.udc.reunions.service.MailService;
+import es.udc.reunions.service.MiembroService;
+import es.udc.reunions.service.ParticipanteService;
 import es.udc.reunions.service.SesionService;
 import es.udc.reunions.web.rest.util.HeaderUtil;
 import es.udc.reunions.web.rest.util.PaginationUtil;
@@ -11,10 +16,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -37,6 +44,15 @@ public class SesionResource {
     @Inject
     private SesionService sesionService;
 
+    @Inject
+    private ParticipanteService participanteService;
+
+    @Inject
+    private MiembroService miembroService;
+
+    @Inject
+    private MailService mailService;
+
     /**
      * POST  /sesions : Create a new sesion.
      *
@@ -52,9 +68,42 @@ public class SesionResource {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("sesion", "idexists", "A new sesion cannot already have an ID")).body(null);
         }
         Sesion result = sesionService.save(sesion);
+        for (Miembro m : miembroService.findByOrganoIdAndFechaBajaIsNull(sesion.getOrgano().getId())) {
+            Participante p = new Participante();
+            p.setCargo(m.getCargo());
+            p.setSesion(result);
+            p.setUser(m.getUser());
+            participanteService.save(p);
+        }
         return ResponseEntity.created(new URI("/api/sesions/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert("sesion", result.getId().toString()))
             .body(result);
+    }
+
+    /**
+     * POST   /sesions/notificar : Send an e-mail to participantes of sesion
+     *
+     * @param sesion the sesion whose participantes to notify
+     * @param request the HTTP request
+     * @return the ResponseEntity with status 200 (OK) if the e-mail was sent, or status 400 (Bad Request) if the e-mail address is not registered
+     */
+    @PostMapping(path = "/sesions/notificar",
+        produces = MediaType.TEXT_PLAIN_VALUE)
+    @Timed
+    public ResponseEntity<?> notificar(@Valid @RequestBody Sesion sesion, HttpServletRequest request) {
+        sesionService.notificar(sesion, request);
+//        return userService.requestPasswordReset(mail)
+//            .map(user -> {
+//                String baseUrl = request.getScheme() +
+//                    "://" +
+//                    request.getServerName() +
+//                    ":" +
+//                    request.getServerPort() +
+//                    request.getContextPath();
+//                mailService.sendPasswordResetMail(user, baseUrl);
+//                return new ResponseEntity<>("e-mail was sent", HttpStatus.OK);
+//            }).orElse(new ResponseEntity<>("e-mail address not registered", HttpStatus.BAD_REQUEST));
+        return new ResponseEntity<>("notification sent", HttpStatus.OK);
     }
 
     /**
@@ -178,6 +227,6 @@ public class SesionResource {
             .map(result -> new ResponseEntity<>(
                 result,
                 HttpStatus.OK))
-                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+                .orElse(new ResponseEntity<>(HttpStatus.OK));
     }
 }

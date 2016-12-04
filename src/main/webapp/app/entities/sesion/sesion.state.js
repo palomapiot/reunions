@@ -68,6 +68,8 @@
             resolve: {
                 translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                     $translatePartialLoader.addPart('sesion');
+                    $translatePartialLoader.addPart('participante');
+                    $translatePartialLoader.addPart('asistencia');
                     return $translate.refresh();
                 }],
                 entity: ['$stateParams', 'Sesion', function($stateParams, Sesion) {
@@ -143,7 +145,7 @@
         })
         .state('sesion.edit', {
             parent: 'organo-detail',
-            url: '/{ids}/edit',
+            url: '/{ids}/editarSesion',
             data: {
                 authorities: ['ROLE_USER']
             },
@@ -167,8 +169,8 @@
             }]
         })
         .state('sesion.delete', {
-            parent: 'sesion',
-            url: '/{id}/delete',
+            parent: 'organo-detail',
+            url: '/{ids}/eliminarSesion',
             data: {
                 authorities: ['ROLE_USER']
             },
@@ -180,11 +182,11 @@
                     size: 'md',
                     resolve: {
                         entity: ['Sesion', function(Sesion) {
-                            return Sesion.get({id : $stateParams.id}).$promise;
+                            return Sesion.get({id : $stateParams.ids}).$promise;
                         }]
                     }
                 }).result.then(function() {
-                    $state.go('sesion', null, { reload: 'sesion' });
+                    $state.go('^', {}, { reload: 'organo-detail' });
                 }, function() {
                     $state.go('^');
                 });

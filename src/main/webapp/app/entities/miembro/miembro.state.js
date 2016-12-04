@@ -141,7 +141,7 @@
         })
         .state('miembro.edit', {
             parent: 'organo-detail',
-            url: '/{idm}/edit',
+            url: '/{idm}/editarMiembro',
             data: {
                 authorities: ['ROLE_USER']
             },
@@ -166,7 +166,7 @@
         })
         .state('miembro.delete', {
             parent: 'organo-detail',
-            url: '/{idm}/delete',
+            url: '/{idm}/eliminarMiembro',
             data: {
                 authorities: ['ROLE_USER']
             },

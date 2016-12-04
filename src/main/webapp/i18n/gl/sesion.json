@@ -22,7 +22,9 @@
             "lugar": "Lugar",
             "descripcion": "Descripcion",
             "organo": "Organo",
-            "participante": "Participante"
+            "participantes": "Participantes",
+            "notificar": "Notificar participantes",
+            "exportar": "Exportar participación"
         }
     }
 }

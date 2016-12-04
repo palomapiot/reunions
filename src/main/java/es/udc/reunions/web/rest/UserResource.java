@@ -8,6 +8,7 @@ import es.udc.reunions.repository.search.UserSearchRepository;
 import es.udc.reunions.security.AuthoritiesConstants;
 import es.udc.reunions.service.MailService;
 import es.udc.reunions.service.UserService;
+import es.udc.reunions.service.dto.LineaResumen;
 import es.udc.reunions.web.rest.vm.ManagedUserVM;
 import es.udc.reunions.web.rest.util.HeaderUtil;
 import es.udc.reunions.web.rest.util.PaginationUtil;
@@ -148,7 +149,7 @@ public class UserResource {
 
     /**
      * GET  /users : get all users.
-     * 
+     *
      * @param pageable the pagination information
      * @return the ResponseEntity with status 200 (OK) and with body all users
      * @throws URISyntaxException if the pagination headers couldn't be generated
@@ -166,6 +167,20 @@ public class UserResource {
     }
 
     /**
+     * GET  /users/:login/resumen : get the resumen of the user.
+     *
+     * @param login the login of the user whose resumen to get
+     * @return the ResponseEntity with status 200 (OK) and with body the resumen in body
+     */
+    @GetMapping("/users/{login:" + Constants.LOGIN_REGEX + "}/resumen")
+    @Timed
+    public ResponseEntity<List<LineaResumen>> getResumen(@PathVariable String login) {
+        log.debug("REST request to get resumen of user : {}", login);
+        List<LineaResumen> resumen = userService.getResumenDePersona(login);
+        return new ResponseEntity<>(resumen, HttpStatus.OK);
+    }
+
+    /**
      * GET  /users/:login : get the "login" user.
      *
      * @param login the login of the user to find
@@ -176,9 +191,9 @@ public class UserResource {
     public ResponseEntity<ManagedUserVM> getUser(@PathVariable String login) {
         log.debug("REST request to get User : {}", login);
         return userService.getUserWithAuthoritiesByLogin(login)
-                .map(ManagedUserVM::new)
-                .map(managedUserVM -> new ResponseEntity<>(managedUserVM, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+            .map(ManagedUserVM::new)
+            .map(managedUserVM -> new ResponseEntity<>(managedUserVM, HttpStatus.OK))
+            .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     /**

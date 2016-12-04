@@ -11,7 +11,17 @@
         <div class="form-group" ng-show="vm.participante.id">
             <label for="id" data-translate="global.field.id">ID</label>
             <input type="text" class="form-control" id="id" name="id"
-                    ng-model="vm.participante.id" readonly />
+                    ng-model="vm.participante.id" disabled />
+        </div>
+        <div class="form-group">
+            <label data-translate="reunionsApp.participante.user" for="field_user">User</label>
+            <input ng-disabled="vm.participante.id" type="text" id="field_user" name="user" ng-model="vm.participante.user" uib-typeahead="user as user.login for user in vm.users | filter:{login:$viewValue}" class="form-control" required typeahead-editable="false" autocomplete="off">
+        </div>
+        <div ng-show="editForm.user.$invalid">
+            <p class="help-block"
+               ng-show="editForm.user.$error.required" data-translate="entity.validation.required">
+                This field is required.
+            </p>
         </div>
         <div class="form-group">
             <label class="control-label" data-translate="reunionsApp.participante.asistencia" for="field_asistencia">Asistencia</label>
@@ -30,7 +40,7 @@
 
         <div class="form-group">
             <label data-translate="reunionsApp.participante.sesion" for="field_sesion">Sesion</label>
-            <select class="form-control" id="field_sesion" name="sesion" ng-model="vm.participante.sesion" ng-options="sesion as sesion.numero for sesion in vm.sesions track by sesion.id" required>
+            <select class="form-control" id="field_sesion" name="sesion" ng-model="vm.participante.sesion" ng-options="sesion as sesion.numero for sesion in vm.sesions track by sesion.id" required disabled>
                 <option value=""></option>
             </select>
         </div>
@@ -42,25 +52,13 @@
         </div>
         <div class="form-group">
             <label data-translate="reunionsApp.participante.cargo" for="field_cargo">Cargo</label>
-            <select class="form-control" id="field_cargo" name="cargo" ng-model="vm.participante.cargo" ng-options="cargo as cargo.nombre for cargo in vm.cargos track by cargo.id" required>
+            <select class="form-control" id="field_cargo" name="cargo" ng-model="vm.participante.cargo" ng-options="cargo as cargo.nombre for cargo in vm.cargos track by cargo.id" required ng-disabled="vm.participante.id">
                 <option value=""></option>
             </select>
         </div>
         <div ng-show="editForm.cargo.$invalid">
             <p class="help-block"
                 ng-show="editForm.cargo.$error.required" data-translate="entity.validation.required">
-                This field is required.
-            </p>
-        </div>
-        <div class="form-group">
-            <label data-translate="reunionsApp.participante.user" for="field_user">User</label>
-            <select class="form-control" id="field_user" name="user" ng-model="vm.participante.user" ng-options="user as user.login for user in vm.users track by user.id" required>
-                <option value=""></option>
-            </select>
-        </div>
-        <div ng-show="editForm.user.$invalid">
-            <p class="help-block"
-                ng-show="editForm.user.$error.required" data-translate="entity.validation.required">
                 This field is required.
             </p>
         </div>

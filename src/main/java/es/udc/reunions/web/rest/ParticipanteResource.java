@@ -33,7 +33,7 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 public class ParticipanteResource {
 
     private final Logger log = LoggerFactory.getLogger(ParticipanteResource.class);
-        
+
     @Inject
     private ParticipanteService participanteService;
 
@@ -115,6 +115,21 @@ public class ParticipanteResource {
     }
 
     /**
+     * GET  /esions/:id/participantes : get participantes from the "id" sesion.
+     *
+     * @param id the id of the sesion
+     * @return the ResponseEntity with status 200 (OK) and the list of participantes in body
+     */
+    @GetMapping("/sesions/{id}/participantes")
+    @Timed
+    public ResponseEntity<List<Participante>> getParticipantesBySesionId( @PathVariable Long id) {
+        log.debug("REST request to get participantes from sesion : {}", id);
+
+        List<Participante> participantes = participanteService.findBySesionId(id);
+        return new ResponseEntity<>(participantes, HttpStatus.OK);
+    }
+
+    /**
      * DELETE  /participantes/:id : delete the "id" participante.
      *
      * @param id the id of the participante to delete
@@ -132,7 +147,7 @@ public class ParticipanteResource {
      * SEARCH  /_search/participantes?query=:query : search for the participante corresponding
      * to the query.
      *
-     * @param query the query of the participante search 
+     * @param query the query of the participante search
      * @param pageable the pagination information
      * @return the result of the search
      * @throws URISyntaxException if there is an error to generate the pagination HTTP headers

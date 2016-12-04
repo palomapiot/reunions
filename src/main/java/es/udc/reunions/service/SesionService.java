@@ -1,5 +1,6 @@
 package es.udc.reunions.service;
 
+import com.sun.mail.smtp.SMTPTransport;
 import es.udc.reunions.domain.Sesion;
 import es.udc.reunions.repository.SesionRepository;
 import es.udc.reunions.repository.search.SesionSearchRepository;
@@ -11,7 +12,18 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import javax.servlet.http.HttpServletRequest;
+import java.security.Security;
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.Properties;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -119,5 +131,59 @@ public class SesionService {
         log.debug("Request to search for a page of Sesions for query {}", query);
         Page<Sesion> result = sesionSearchRepository.search(queryStringQuery(query), pageable);
         return result;
+    }
+
+    public void notificar(Sesion sesion, HttpServletRequest request) {
+        final Locale locale = request.getLocale();
+
+        final String username = "d.lamas";
+        final String password = "Charmander690";
+
+        Security.addProvider(new com.sun.net.ssl.internal.ssl.Provider());
+        final String SSL_FACTORY = "javax.net.ssl.SSLSocketFactory";
+
+        // Get a Properties object
+        Properties props = System.getProperties();
+        props.setProperty("mail.smtps.host", "smtp.udc.es");
+        props.setProperty("mail.smtp.socketFactory.class", SSL_FACTORY);
+        props.setProperty("mail.smtp.socketFactory.fallback", "false");
+        props.setProperty("mail.smtp.port", "25");
+        props.setProperty("mail.smtp.socketFactory.port", "25");
+        props.setProperty("mail.smtps.auth", "true");
+
+        Session session = Session.getInstance(props,
+            null);
+
+        try {
+            final MimeMessage msg = new MimeMessage(session);
+
+            msg.setFrom(new InternetAddress("reunions@udc.es"));
+            msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse("d.lamas@udc.es", false));
+            //
+            //        if (ccEmail.length() > 0) {
+            //            msg.setRecipients(Message.RecipientType.CC, InternetAddress.parse(ccEmail, false));
+            //        }
+
+            DateFormat df = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.SHORT, locale);
+            String[] orden = sesion.getDescripcion() != null ? sesion.getDescripcion().split(System.getProperty("line.separator")) : "".split(System.getProperty("line.separator"));
+            msg.setSubject(sesion.getOrgano().getNombre() + " - " + "Sesión " + sesion.getNumero(), "UTF-8");
+            String msgText = "<h1>" + sesion.getOrgano().getNombre() + "</h1>"
+                + "Nueva sesión convocada:"
+                + "<li>Lugar: " + sesion.getLugar() + "</li>"
+                + "<li>Orden del día: ";
+            for (String linea: orden) {
+                msgText += "<br/>&emsp;&emsp;" + linea;
+            }
+            msg.setContent(msgText, "text/html; charset=utf-8");
+            msg.setSentDate(new Date());
+
+            SMTPTransport t = (SMTPTransport)session.getTransport("smtps");
+
+            t.connect("smtp.udc.es", username, password);
+            t.sendMessage(msg, msg.getAllRecipients());
+            t.close();
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

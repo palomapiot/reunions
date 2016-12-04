@@ -11,6 +11,8 @@
 
         return $resource(resourceUrl, {}, {
             'query': { method: 'GET', isArray: true},
+            'participantes': { method: 'GET', isArray: true, url: 'api/sesions/:id/participantes'},
+            'notificar': { method: 'POST', url: 'api/sesions/notificar' },
             'get': {
                 method: 'GET',
                 transformResponse: function (data) {
