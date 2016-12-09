@@ -49,7 +49,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr dir-paginate="miembro in vm.miembros | orderBy:'user.lastName' | filter:q | itemsPerPage: 10">
+            <tr dir-paginate="miembro in vm.miembros | orderBy:'user.lastName' | filter:q | itemsPerPage: 40" pagination-id="actuales">
                 <td>
                     {{miembro.user.lastName}}, {{miembro.user.firstName}}
                 </td>
@@ -79,7 +79,7 @@
         </table>
     </div>
     <div class="text-center">
-        <dir-pagination-controls></dir-pagination-controls>
+        <dir-pagination-controls pagination-id="actuales"></dir-pagination-controls>
     </div>
 
     <hr>
@@ -111,7 +111,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr dir-paginate="miembro in vm.miembrosAnteriores | orderBy:'user.lastName' | filter:qa | itemsPerPage: 10">
+            <tr dir-paginate="miembro in vm.miembrosAnteriores | orderBy:'user.lastName' | filter:qa | itemsPerPage: 10" pagination-id="anteriores">
                 <td>
                     {{miembro.user.lastName}}, {{miembro.user.firstName}}
                 </td>
@@ -126,7 +126,7 @@
         </table>
     </div>
     <div class="text-center">
-        <dir-pagination-controls></dir-pagination-controls>
+        <dir-pagination-controls pagination-id="anteriores"></dir-pagination-controls>
     </div>
 
     <hr>
@@ -164,7 +164,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr dir-paginate="sesion in vm.sesiones | orderBy:'sesion.primeraConvocatoria' | filter:qs | itemsPerPage: 10">
+            <tr dir-paginate="sesion in vm.sesiones | orderBy:'sesion.primeraConvocatoria':true | filter:qs | itemsPerPage: 10" pagination-id="sesiones">
                 <td><a ui-sref="sesion-detail({id:sesion.id})">{{sesion.numero}}</a></td>
                 <td>{{sesion.primeraConvocatoria | date:'medium'}}</td>
                 <td>{{sesion.segundaConvocatoria | date:'medium'}}</td>
@@ -196,7 +196,7 @@
         </table>
     </div>
     <div class="text-center">
-        <dir-pagination-controls></dir-pagination-controls>
+        <dir-pagination-controls pagination-id="sesiones"></dir-pagination-controls>
     </div>
 
     <button type="submit"

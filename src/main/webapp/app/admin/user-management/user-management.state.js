@@ -65,6 +65,14 @@
                 translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                     $translatePartialLoader.addPart('user-management');
                     return $translate.refresh();
+                }],
+                previousState: ["$state", function ($state) {
+                    var currentStateData = {
+                        name: $state.current.name || 'user-management',
+                        params: $state.params,
+                        url: $state.href($state.current.name, $state.params)
+                    };
+                    return currentStateData;
                 }]
             }
         })
@@ -123,6 +131,31 @@
                 });
             }]
         })
+        .state('user-management-detail.edit', {
+                    parent: 'user-management-detail',
+                    url: '/detail/edit',
+                    data: {
+                        authorities: ['ROLE_ADMIN']
+                    },
+                    onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
+                        $uibModal.open({
+                            templateUrl: 'app/admin/user-management/user-management-dialog.html',
+                            controller: 'UserManagementDialogController',
+                            controllerAs: 'vm',
+                            backdrop: 'static',
+                            size: 'lg',
+                            resolve: {
+                                entity: ['User', function(User) {
+                                    return User.get({login : $stateParams.login});
+                                }]
+                            }
+                        }).result.then(function() {
+                            $state.go('^', {}, { reload: false });
+                        }, function() {
+                            $state.go('^');
+                        });
+                    }]
+                })
         .state('user-management.delete', {
             parent: 'user-management',
             url: '/{login}/delete',

@@ -15,6 +15,7 @@
                 "miembro": "Miembro",
                 "cargo": "Cargo",
                 "participante": "Participante",
+                "documento": "Documento",
                 "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {

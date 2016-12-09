@@ -166,8 +166,8 @@
             }]
         })
         .state('participante.delete', {
-            parent: 'participante',
-            url: '/{id}/delete',
+            parent: 'sesion-detail',
+            url: '/{idp}/eliminarParticipante',
             data: {
                 authorities: ['ROLE_USER']
             },
@@ -179,11 +179,11 @@
                     size: 'md',
                     resolve: {
                         entity: ['Participante', function(Participante) {
-                            return Participante.get({id : $stateParams.id}).$promise;
+                            return Participante.get({id : $stateParams.idp}).$promise;
                         }]
                     }
                 }).result.then(function() {
-                    $state.go('participante', null, { reload: 'participante' });
+                    $state.go('^', {}, { reload: 'sesion-detail' });
                 }, function() {
                     $state.go('^');
                 });

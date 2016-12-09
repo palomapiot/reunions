@@ -1,0 +1,24 @@
+{
+    "reunionsApp": {
+        "documento" : {
+            "home": {
+                "title": "Documentos",
+                "createLabel": "Crear nuevo Documento",
+                "createOrEditLabel": "Crear o editar Documento",
+                "search": "Search for Documento"
+            },
+            "created": "Un nuevo Documento ha sido creado con el identificador {{ param }}",
+            "updated": "Un Documento ha sido actualizado con el identificador {{ param }}",
+            "deleted": "Un Documento ha sido eliminado con el identificador {{ param }}",
+            "delete": {
+                "question": "¿Seguro que quiere eliminar Documento {{ id }}?"
+            },
+            "detail": {
+                "title": "Documento"
+            },
+            "nombre": "Nombre",
+            "archivo": "Archivo",
+            "sesion": "Sesion"
+        }
+    }
+}

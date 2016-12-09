@@ -20,7 +20,8 @@
             "observaciones": "Observaciones",
             "sesion": "Sesion",
             "cargo": "Cargo",
-            "user": "User"
+            "user": "User",
+            "email": "E-mail"
         }
     }
 }

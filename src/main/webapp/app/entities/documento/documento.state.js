@@ -9,76 +9,53 @@
 
     function stateConfig($stateProvider) {
         $stateProvider
-        .state('sesion', {
+        .state('documento', {
             parent: 'entity',
-            url: '/sesion?page&sort&search',
+            url: '/documento',
             data: {
                 authorities: ['ROLE_USER'],
-                pageTitle: 'reunionsApp.sesion.home.title'
+                pageTitle: 'reunionsApp.documento.home.title'
             },
             views: {
                 'content@': {
-                    templateUrl: 'app/entities/sesion/sesions.html',
-                    controller: 'SesionController',
+                    templateUrl: 'app/entities/documento/documentos.html',
+                    controller: 'DocumentoController',
                     controllerAs: 'vm'
                 }
             },
-            params: {
-                page: {
-                    value: '1',
-                    squash: true
-                },
-                sort: {
-                    value: 'id,asc',
-                    squash: true
-                },
-                search: null
-            },
             resolve: {
-                pagingParams: ['$stateParams', 'PaginationUtil', function ($stateParams, PaginationUtil) {
-                    return {
-                        page: PaginationUtil.parsePage($stateParams.page),
-                        sort: $stateParams.sort,
-                        predicate: PaginationUtil.parsePredicate($stateParams.sort),
-                        ascending: PaginationUtil.parseAscending($stateParams.sort),
-                        search: $stateParams.search
-                    };
-                }],
                 translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-                    $translatePartialLoader.addPart('sesion');
+                    $translatePartialLoader.addPart('documento');
                     $translatePartialLoader.addPart('global');
                     return $translate.refresh();
                 }]
             }
         })
-        .state('sesion-detail', {
+        .state('documento-detail', {
             parent: 'entity',
-            url: '/sesion/{id}',
+            url: '/documento/{id}',
             data: {
                 authorities: ['ROLE_USER'],
-                pageTitle: 'reunionsApp.sesion.detail.title'
+                pageTitle: 'reunionsApp.documento.detail.title'
             },
             views: {
                 'content@': {
-                    templateUrl: 'app/entities/sesion/sesion-detail.html',
-                    controller: 'SesionDetailController',
+                    templateUrl: 'app/entities/documento/documento-detail.html',
+                    controller: 'DocumentoDetailController',
                     controllerAs: 'vm'
                 }
             },
             resolve: {
                 translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-                    $translatePartialLoader.addPart('sesion');
-                    $translatePartialLoader.addPart('participante');
-                    $translatePartialLoader.addPart('asistencia');
                     $translatePartialLoader.addPart('documento');
                     return $translate.refresh();
                 }],
-                entity: ['$stateParams', 'Sesion', function($stateParams, Sesion) {
-                    return Sesion.get({id : $stateParams.id}).$promise;
+                entity: ['$stateParams', 'Documento', function($stateParams, Documento) {
+                    return Documento.get({id : $stateParams.id}).$promise;
                 }],
                 previousState: ["$state", function ($state) {
                     var currentStateData = {
-                        name: $state.current.name || 'sesion',
+                        name: $state.current.name || 'documento',
                         params: $state.params,
                         url: $state.href($state.current.name, $state.params)
                     };
@@ -86,22 +63,22 @@
                 }]
             }
         })
-        .state('sesion-detail.edit', {
-            parent: 'sesion-detail',
+        .state('documento-detail.edit', {
+            parent: 'documento-detail',
             url: '/detail/edit',
             data: {
                 authorities: ['ROLE_USER']
             },
             onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                 $uibModal.open({
-                    templateUrl: 'app/entities/sesion/sesion-dialog.html',
-                    controller: 'SesionDialogController',
+                    templateUrl: 'app/entities/documento/documento-dialog.html',
+                    controller: 'DocumentoDialogController',
                     controllerAs: 'vm',
                     backdrop: 'static',
                     size: 'lg',
                     resolve: {
-                        entity: ['Sesion', function(Sesion) {
-                            return Sesion.get({id : $stateParams.id}).$promise;
+                        entity: ['Documento', function(Documento) {
+                            return Documento.get({id : $stateParams.id}).$promise;
                         }]
                     }
                 }).result.then(function() {
@@ -111,83 +88,81 @@
                 });
             }]
         })
-        .state('sesion.new', {
-            parent: 'organo-detail',
-            url: '/nuevaSesion',
+        .state('documento.new', {
+            parent: 'sesion-detail',
+            url: '/nuevoDocumento',
             data: {
                 authorities: ['ROLE_USER']
             },
             onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                 $uibModal.open({
-                    templateUrl: 'app/entities/sesion/sesion-dialog.html',
-                    controller: 'SesionDialogController',
+                    templateUrl: 'app/entities/documento/documento-dialog.html',
+                    controller: 'DocumentoDialogController',
                     controllerAs: 'vm',
                     backdrop: 'static',
                     size: 'lg',
                     resolve: {
-                        entity: ['Organo', function (Organo) {
+                        entity: ['Sesion', function (Sesion) {
                             return {
-                                numero: null,
-                                primeraConvocatoria: null,
-                                segundaConvocatoria: null,
-                                lugar: null,
-                                descripcion: null,
+                                nombre: null,
+                                archivo: null,
+                                archivoContentType: null,
                                 id: null,
-                                organo: Organo.get({id : $stateParams.id})
+                                sesion: Sesion.get({id : $stateParams.id})
                             };
                         }]
                     }
                 }).result.then(function() {
-                    $state.go('^', {}, { reload: 'organo-detail' });
+                    $state.go('^', {}, { reload: 'sesion-detail' });
                 }, function() {
                     $state.go('^');
                 });
             }]
         })
-        .state('sesion.edit', {
-            parent: 'organo-detail',
-            url: '/{ids}/editarSesion',
+        .state('documento.edit', {
+            parent: 'documento',
+            url: '/{id}/edit',
             data: {
                 authorities: ['ROLE_USER']
             },
             onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                 $uibModal.open({
-                    templateUrl: 'app/entities/sesion/sesion-dialog.html',
-                    controller: 'SesionDialogController',
+                    templateUrl: 'app/entities/documento/documento-dialog.html',
+                    controller: 'DocumentoDialogController',
                     controllerAs: 'vm',
                     backdrop: 'static',
                     size: 'lg',
                     resolve: {
-                        entity: ['Sesion', function(Sesion) {
-                            return Sesion.get({id : $stateParams.ids}).$promise;
+                        entity: ['Documento', function(Documento) {
+                            return Documento.get({id : $stateParams.id}).$promise;
                         }]
                     }
                 }).result.then(function() {
-                    $state.go('^', {}, { reload: 'organo-detail' });
+                    $state.go('documento', null, { reload: 'documento' });
                 }, function() {
                     $state.go('^');
                 });
             }]
         })
-        .state('sesion.delete', {
-            parent: 'organo-detail',
-            url: '/{ids}/eliminarSesion',
+        .state('documento.delete', {
+            parent: 'sesion-detail',
+            url: '/{idd}/eliminarDocumento',
             data: {
                 authorities: ['ROLE_USER']
             },
             onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                 $uibModal.open({
-                    templateUrl: 'app/entities/sesion/sesion-delete-dialog.html',
-                    controller: 'SesionDeleteController',
+                    templateUrl: 'app/entities/documento/documento-delete-dialog.html',
+                    controller: 'DocumentoDeleteController',
                     controllerAs: 'vm',
                     size: 'md',
                     resolve: {
-                        entity: ['Sesion', function(Sesion) {
-                            return Sesion.get({id : $stateParams.ids}).$promise;
+                        entity: ['Documento', function(Documento) {
+                            return Documento.get({id : $stateParams.idd}).$promise;
                         }]
                     }
                 }).result.then(function() {
-                    $state.go('^', {}, { reload: 'organo-detail' });
+                    $state.go('^', {}, { reload: 'sesion-detail' });
                 }, function() {
                     $state.go('^');
                 });

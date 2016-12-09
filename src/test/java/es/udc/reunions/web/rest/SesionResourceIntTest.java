@@ -30,7 +30,6 @@ import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -49,13 +48,13 @@ public class SesionResourceIntTest {
     private static final Long DEFAULT_NUMERO = 1L;
     private static final Long UPDATED_NUMERO = 2L;
 
-    private static final ZonedDateTime DEFAULT_PRIMERA_CONVOCATORIA = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
+    private static final ZonedDateTime DEFAULT_PRIMERA_CONVOCATORIA = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneId.systemDefault());
     private static final ZonedDateTime UPDATED_PRIMERA_CONVOCATORIA = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
-    private static final String DEFAULT_PRIMERA_CONVOCATORIA_STR = DateTimeFormatter.ISO_INSTANT.format(DEFAULT_PRIMERA_CONVOCATORIA);
+    private static final String DEFAULT_PRIMERA_CONVOCATORIA_STR = DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(DEFAULT_PRIMERA_CONVOCATORIA);
 
-    private static final ZonedDateTime DEFAULT_SEGUNDA_CONVOCATORIA = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
+    private static final ZonedDateTime DEFAULT_SEGUNDA_CONVOCATORIA = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneId.systemDefault());
     private static final ZonedDateTime UPDATED_SEGUNDA_CONVOCATORIA = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
-    private static final String DEFAULT_SEGUNDA_CONVOCATORIA_STR = DateTimeFormatter.ISO_INSTANT.format(DEFAULT_SEGUNDA_CONVOCATORIA);
+    private static final String DEFAULT_SEGUNDA_CONVOCATORIA_STR = DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(DEFAULT_SEGUNDA_CONVOCATORIA);
 
     private static final String DEFAULT_LUGAR = "AAAAA";
     private static final String UPDATED_LUGAR = "BBBBB";

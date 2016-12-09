@@ -55,6 +55,11 @@ public class Sesion implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Participante> participantes = new HashSet<>();
 
+    @OneToMany(mappedBy = "sesion")
+    @JsonIgnore
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<Documento> documentos = new HashSet<>();
+
     public Long getId() {
         return id;
     }
@@ -164,6 +169,31 @@ public class Sesion implements Serializable {
 
     public void setParticipantes(Set<Participante> participantes) {
         this.participantes = participantes;
+    }
+
+    public Set<Documento> getDocumentos() {
+        return documentos;
+    }
+
+    public Sesion documentos(Set<Documento> documentos) {
+        this.documentos = documentos;
+        return this;
+    }
+
+    public Sesion addDocumento(Documento documento) {
+        documentos.add(documento);
+        documento.setSesion(this);
+        return this;
+    }
+
+    public Sesion removeDocumento(Documento documento) {
+        documentos.remove(documento);
+        documento.setSesion(null);
+        return this;
+    }
+
+    public void setDocumentos(Set<Documento> documentos) {
+        this.documentos = documentos;
     }
 
     @Override

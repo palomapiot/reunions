@@ -115,7 +115,7 @@ public class ParticipanteResource {
     }
 
     /**
-     * GET  /esions/:id/participantes : get participantes from the "id" sesion.
+     * GET  /sesions/:id/participantes : get participantes from the "id" sesion.
      *
      * @param id the id of the sesion
      * @return the ResponseEntity with status 200 (OK) and the list of participantes in body

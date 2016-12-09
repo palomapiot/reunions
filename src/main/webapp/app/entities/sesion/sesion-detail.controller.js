@@ -5,16 +5,19 @@
         .module('reunionsApp')
         .controller('SesionDetailController', SesionDetailController);
 
-    SesionDetailController.$inject = ['$scope', '$rootScope', '$stateParams', 'previousState', 'entity', 'Sesion', 'Organo', 'Participante'];
+    SesionDetailController.$inject = ['$scope', '$rootScope', '$stateParams', 'previousState', 'DataUtils', 'entity', 'Sesion', 'Organo', 'Participante', 'Documento'];
 
-    function SesionDetailController($scope, $rootScope, $stateParams, previousState, entity, Sesion, Organo, Participante) {
+    function SesionDetailController($scope, $rootScope, $stateParams, previousState, DataUtils, entity, Sesion, Organo, Participante, Documento) {
         var vm = this;
 
         vm.sesion = entity;
+        vm.openFile = DataUtils.openFile;
+        vm.byteSize = DataUtils.byteSize;
         vm.notificar = notificar;
         vm.exportar = exportar;
         vm.previousState = previousState.name;
 
+        vm.documentos = Sesion.documentos({ id: $stateParams.id })
         vm.participantes = Sesion.participantes({ id: $stateParams.id });
 
         function exportar () {

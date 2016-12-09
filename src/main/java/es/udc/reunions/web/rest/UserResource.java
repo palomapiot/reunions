@@ -2,6 +2,7 @@ package es.udc.reunions.web.rest;
 
 import es.udc.reunions.config.Constants;
 import com.codahale.metrics.annotation.Timed;
+import es.udc.reunions.domain.Documento;
 import es.udc.reunions.domain.User;
 import es.udc.reunions.repository.UserRepository;
 import es.udc.reunions.repository.search.UserSearchRepository;
@@ -12,20 +13,27 @@ import es.udc.reunions.service.dto.LineaResumen;
 import es.udc.reunions.web.rest.vm.ManagedUserVM;
 import es.udc.reunions.web.rest.util.HeaderUtil;
 import es.udc.reunions.web.rest.util.PaginationUtil;
+import org.apache.commons.io.IOUtils;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
+import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -224,5 +232,31 @@ public class UserResource {
         return StreamSupport
             .stream(userSearchRepository.search(queryStringQuery(query)).spliterator(), false)
             .collect(Collectors.toList());
+    }
+
+    /**
+     * GET  /users/:login/excel : get the excel of the "login" user.
+     *
+     * @param login the login of the user to find
+     */
+    @GetMapping(value = "/users/{login:" + Constants.LOGIN_REGEX + "}/excel")
+    @Timed
+    public ResponseEntity<Documento> getExcel(@PathVariable String login) throws IOException {
+
+        log.debug("REST request to get excel of user : {}", login);
+
+        XSSFWorkbook excel = userService.generateExcel(login);
+
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        try {
+            excel.write(bos);
+        } finally {
+            bos.close();
+        }
+        Documento documento = new Documento();
+        documento.setArchivo(bos.toByteArray());
+        documento.setArchivoContentType("application/vnd.ms-excel");
+        ResponseEntity<Documento> response = new ResponseEntity<Documento>(documento, HttpStatus.OK);
+        return response;
     }
 }

@@ -1,0 +1,78 @@
+
+<form name="editForm" role="form" novalidate ng-submit="vm.save()" show-validation>
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                ng-click="vm.clear()">&times;</button>
+        <h4 class="modal-title" id="myDocumentoLabel" data-translate="reunionsApp.documento.home.createOrEditLabel">Create or edit a Documento</h4>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="form-group" ng-show="vm.documento.id">
+            <label for="id" data-translate="global.field.id">ID</label>
+            <input type="text" class="form-control" id="id" name="id"
+                    ng-model="vm.documento.id" readonly />
+        </div>
+        <div class="form-group">
+            <label class="control-label" data-translate="reunionsApp.documento.nombre" for="field_nombre">Nombre</label>
+            <input type="text" class="form-control" name="nombre" id="field_nombre"
+                    ng-model="vm.documento.nombre"
+                    required />
+            <div ng-show="editForm.nombre.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.nombre.$error.required" data-translate="entity.validation.required">
+                    This field is required.
+                </p>
+            </div>
+        </div>
+        <div class="form-group" ngf-drop ngf-change="vm.setArchivo($file, vm.documento)">
+            <label class="control-label" data-translate="reunionsApp.documento.archivo" for="field_archivo">Archivo</label>
+            <div>
+                <div ng-if="vm.documento.archivo" class="help-block clearfix">
+                    <a class="pull-left" ng-click="vm.openFile(vm.documento.archivoContentType, vm.documento.archivo)" data-translate="entity.action.open">open</a><br>
+                    <span class="pull-left">{{vm.documento.archivoContentType}}, {{vm.byteSize(vm.documento.archivo)}}</span>
+                    <button type="button" ng-click="vm.documento.archivo=null;vm.documento.archivoContentType=null;"
+                            class="btn btn-default btn-xs pull-right">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                </div>
+                <button type="button" ngf-select class="btn btn-default btn-block"
+                        ngf-change="vm.setArchivo($file, vm.documento)" data-translate="entity.action.addblob">
+                    Add blob
+                </button>
+            </div>
+            <input type="hidden" class="form-control" name="archivo" id="field_archivo"
+                    ng-model="vm.documento.archivo"
+                    required />
+            <input type="hidden" class="form-control" name="archivoContentType" id="field_archivoContentType"
+                    ng-model="vm.documento.archivoContentType" />
+            <div ng-show="editForm.archivo.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.archivo.$error.required" data-translate="entity.validation.required">
+                    This field is required.
+                </p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label data-translate="reunionsApp.documento.sesion" for="field_sesion">Sesion</label>
+            <select disabled class="form-control" id="field_sesion" name="sesion" ng-model="vm.documento.sesion" ng-options="sesion as sesion.numero for sesion in vm.sesions track by sesion.id" required>
+                <option value=""></option>
+            </select>
+        </div>
+        <div ng-show="editForm.sesion.$invalid">
+            <p class="help-block"
+                ng-show="editForm.sesion.$error.required" data-translate="entity.validation.required">
+                This field is required.
+            </p>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
+            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span data-translate="entity.action.cancel">Cancel</span>
+        </button>
+        <button type="submit" ng-disabled="editForm.$invalid || vm.isSaving" class="btn btn-primary">
+            <span class="glyphicon glyphicon-save"></span>&nbsp;<span data-translate="entity.action.save">Save</span>
+        </button>
+    </div>
+</form>

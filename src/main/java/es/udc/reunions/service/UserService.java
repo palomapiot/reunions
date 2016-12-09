@@ -4,6 +4,7 @@ import es.udc.reunions.domain.Authority;
 import es.udc.reunions.domain.Organo;
 import es.udc.reunions.domain.Participante;
 import es.udc.reunions.domain.User;
+import es.udc.reunions.domain.enumeration.Asistencia;
 import es.udc.reunions.repository.AuthorityRepository;
 import es.udc.reunions.repository.ParticipanteRepository;
 import es.udc.reunions.repository.PersistentTokenRepository;
@@ -14,17 +15,29 @@ import es.udc.reunions.security.SecurityUtils;
 import es.udc.reunions.service.dto.LineaResumen;
 import es.udc.reunions.service.util.RandomUtil;
 import es.udc.reunions.web.rest.vm.ManagedUserVM;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFColor;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.awt.*;
+import java.awt.Color;
+import java.io.*;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import javax.inject.Inject;
 import java.util.*;
+import java.util.List;
 
 /**
  * Service class for managing users.
@@ -52,6 +65,100 @@ public class UserService {
 
     @Inject
     private ParticipanteRepository participanteRepository;
+
+    /**
+     *  Get resumen excel de usuario.
+     *  @param login the login of the usuario
+     *  @return the excel
+     */
+    @Transactional(readOnly = true)
+    public XSSFWorkbook generateExcel(String login) throws IOException {
+        XSSFWorkbook workbook = new XSSFWorkbook();
+        XSSFSheet sheet = workbook.createSheet("Resumen");
+        sheet.setDefaultColumnWidth(20*256);
+
+        int rowCount = 0;
+
+        // Cabecera
+        Row row = sheet.createRow(rowCount++);
+        String[] cabecera = { "Dni", "Apelidos", "Nome", "Órganos, comisións en que participou",
+            "Se na columna anterior marcou Outras, especifique o nome.", "Cursos académicos", "En calidade de:",
+            "Nº de reunións que tiveron lugar", "Nº de reunións as que asistiu", "Nº de ausencias xustificadas" };
+        int columnCount = 0;
+        for (String c : cabecera) {
+            Cell cell = row.createCell(columnCount++);
+            cell.setCellValue(c);
+        }
+        XSSFCellStyle stylecabecera = workbook.createCellStyle();
+        stylecabecera.setFillBackgroundColor(new XSSFColor(new java.awt.Color(51, 51, 153)));
+        stylecabecera.setFillPattern(FillPatternType.BIG_SPOTS);
+        stylecabecera.setAlignment(HorizontalAlignment.CENTER);
+        Font font = workbook.createFont();
+        font.setBold(true);
+        font.setFontName("Arial");
+        font.setFontHeightInPoints((short)10);
+        stylecabecera.setLocked(true);
+        stylecabecera.setVerticalAlignment(VerticalAlignment.CENTER);
+        stylecabecera.setWrapText(true);
+        stylecabecera.setFont(font);
+        row.setRowStyle(stylecabecera);
+
+        HashMap resumen = new HashMap();
+        Long id = userRepository.findOneByLogin(login).get().getId();
+        String curso;
+        Organo organo;
+        Calendar fecha;
+        for (Participante p : participanteRepository.findByUserId(id)) {
+            fecha = GregorianCalendar.from(p.getSesion().getPrimeraConvocatoria());
+            if (fecha.get(Calendar.MONTH) < Calendar.SEPTEMBER) {
+                curso = Integer.toString(fecha.get(Calendar.YEAR) - 1)
+                    + "/"
+                    + Integer.toString(fecha.get(Calendar.YEAR));
+            } else {
+                curso = Integer.toString(fecha.get(Calendar.YEAR))
+                    + "/"
+                    + Integer.toString(fecha.get(Calendar.YEAR) + 1);
+            }
+            organo = p.getSesion().getOrgano();
+            if (!resumen.containsKey(curso + organo.getNombre() + p.getCargo().getNombre())) {
+                Row fila = sheet.createRow(rowCount++);
+                fila.createCell(0).setCellValue(p.getUser().getLogin());
+                fila.createCell(1).setCellValue(p.getUser().getLastName());
+                fila.createCell(2).setCellValue(p.getUser().getFirstName());
+                fila.createCell(3).setCellValue(p.getSesion().getOrgano().getGrupo().getNombre());
+                fila.createCell(4).setCellValue(p.getSesion().getOrgano().getNombre());
+                fila.createCell(5).setCellValue(curso);
+                fila.createCell(6).setCellValue(p.getCargo().getNombre());
+                fila.createCell(7, CellType.NUMERIC).setCellValue(0);
+                fila.createCell(8, CellType.NUMERIC).setCellValue(0);
+                fila.createCell(9, CellType.NUMERIC).setCellValue(0);
+                marcarAsistencia(fila, p.getAsistencia());
+                resumen.put(curso + organo.getNombre() + p.getCargo().getNombre(), fila);
+            } else {
+                Row fila =
+                    (Row) resumen.get(curso + organo.getNombre() + p.getCargo().getNombre());
+                marcarAsistencia(fila, p.getAsistencia());
+            }
+        }
+
+        sheet.createFreezePane(0,1);
+
+        return workbook;
+    }
+
+    private void marcarAsistencia(Row fila, Asistencia asistencia) {
+        fila.getCell(7).setCellValue(fila.getCell(7).getNumericCellValue() + 1);
+        switch (asistencia) {
+            case asiste:
+                fila.getCell(8).setCellValue(fila.getCell(8).getNumericCellValue() + 1);
+                break;
+            case falta:
+                break;
+            case disculpa:
+                fila.getCell(9).setCellValue(fila.getCell(9).getNumericCellValue() + 1);
+                break;
+        }
+    }
 
     /**
      *  Get cuadro resumen de usuario.

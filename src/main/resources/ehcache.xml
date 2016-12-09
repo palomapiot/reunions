@@ -77,5 +77,13 @@
         timeToLiveSeconds="3600">
     </cache>
 
+    <cache name="es.udc.reunions.domain.Sesion.documentos"
+        timeToLiveSeconds="3600">
+    </cache>
+
+    <cache name="es.udc.reunions.domain.Documento"
+        timeToLiveSeconds="3600">
+    </cache>
+
     <!-- jhipster-needle-ehcache-add-entry -->
 </ehcache>

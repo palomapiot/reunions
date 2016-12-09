@@ -24,7 +24,8 @@
             "organo": "Organo",
             "participantes": "Participantes",
             "notificar": "Notificar participantes",
-            "exportar": "Exportar participación"
+            "exportar": "Exportar participación",
+            "documentos": "Documentos"
         }
     }
 }

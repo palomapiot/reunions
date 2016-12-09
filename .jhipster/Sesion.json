@@ -15,6 +15,12 @@
             "otherEntityName": "participante",
             "relationshipType": "one-to-many",
             "otherEntityRelationshipName": "sesion"
+        },
+        {
+            "relationshipName": "documento",
+            "otherEntityName": "documento",
+            "relationshipType": "one-to-many",
+            "otherEntityRelationshipName": "sesion"
         }
     ],
     "fields": [

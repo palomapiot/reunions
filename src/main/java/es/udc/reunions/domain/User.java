@@ -39,6 +39,10 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @Column(length = 50, unique = true, nullable = false)
     private String login;
 
+    @Size(max = 15)
+    @Column(length = 15)
+    private String dni;
+
     @JsonIgnore
     @NotNull
     @Size(min = 60, max = 60)
@@ -107,6 +111,14 @@ public class User extends AbstractAuditingEntity implements Serializable {
     //Lowercase the login before saving it in database
     public void setLogin(String login) {
         this.login = login.toLowerCase(Locale.ENGLISH);
+    }
+
+    public String getDni() {
+        return dni;
+    }
+
+    public void setDni(String dni) {
+        this.dni = dni;
     }
 
     public String getPassword() {
@@ -224,6 +236,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
     public String toString() {
         return "User{" +
             "login='" + login + '\'' +
+            ", dni='" + dni + '\'' +
             ", firstName='" + firstName + '\'' +
             ", lastName='" + lastName + '\'' +
             ", email='" + email + '\'' +

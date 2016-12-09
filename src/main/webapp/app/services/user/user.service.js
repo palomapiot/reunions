@@ -11,6 +11,15 @@
         var service = $resource('api/users/:login', {}, {
             'query': {method: 'GET', isArray: true},
             'resumen': {method: 'GET', isArray: true, url: 'api/users/:login/resumen'},
+            'excel': {
+                method: 'GET',
+                transformResponse: function (data) {
+                    if (data) {
+                        data = angular.fromJson(data);
+                    }
+                    return data;
+                }, url: 'api/users/:login/excel'
+            },
             'get': {
                 method: 'GET',
                 transformResponse: function (data) {

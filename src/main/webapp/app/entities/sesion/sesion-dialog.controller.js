@@ -5,9 +5,9 @@
         .module('reunionsApp')
         .controller('SesionDialogController', SesionDialogController);
 
-    SesionDialogController.$inject = ['$timeout', '$scope', '$stateParams', '$uibModalInstance', 'entity', 'Sesion', 'Organo', 'Participante'];
+    SesionDialogController.$inject = ['$timeout', '$scope', '$stateParams', '$uibModalInstance', 'entity', 'Sesion', 'Organo', 'Participante', 'Documento'];
 
-    function SesionDialogController ($timeout, $scope, $stateParams, $uibModalInstance, entity, Sesion, Organo, Participante) {
+    function SesionDialogController ($timeout, $scope, $stateParams, $uibModalInstance, entity, Sesion, Organo, Participante, Documento) {
         var vm = this;
 
         vm.sesion = entity;
@@ -32,7 +32,7 @@
         vm.save = save;
         vm.organos = Organo.query();
         vm.participantes = Participante.query();
-
+p
         $timeout(function (){
             angular.element('.form-group:eq(1)>input').focus();
         });

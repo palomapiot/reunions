@@ -22,11 +22,38 @@
         </dd>
         <dt><span data-translate="reunionsApp.sesion.descripcion">Descripcion</span></dt>
         <dd>
-            <span>{{vm.sesion.descripcion}}</span>
+           <pre>{{vm.sesion.descripcion}}</pre>
         </dd>
         <dt><span data-translate="reunionsApp.sesion.organo">Organo</span></dt>
         <dd>
             <a ui-sref="organo-detail({id:vm.sesion.organo.id})">{{vm.sesion.organo.nombre}}</a>
+        </dd>
+        <dt><span data-translate="reunionsApp.sesion.documentos">Documentos</span></dt>
+        <dd>
+            <div class="row">
+                <div class="col-xs-8">
+                    <li ng-repeat="documento in vm.documentos">
+                        <a ng-if="documento.archivo" ng-click="vm.openFile(documento.archivoContentType, documento.archivo)">{{documento.nombre}}</a>
+                        <span ng-if="documento.archivo">{{documento.archivoContentType}}, {{vm.byteSize(documento.archivo)}}</span>
+                        <button type="submit"
+                                ui-sref="documento.delete({idd:documento.id})"
+                                class="btn btn-link btn-xs">
+                            <span class="glyphicon glyphicon-remove-circle"></span>
+                            <span class="hidden-xs hidden-sm" data-translate="entity.action.delete"></span>
+                        </button>
+                    </li>
+                </div>
+
+                <div class="col-xs-4 no-padding-right">
+                <button class="btn btn-primary" ui-sref="documento.new({sesion:vm.sesion})" >
+                    <span class="glyphicon glyphicon-plus"></span>
+                    <span class="hidden-xs"  data-translate="reunionsApp.documento.home.createLabel">
+                            Create new Documento
+                        </span>
+                </button>
+                </div>
+
+            </div>
         </dd>
     </dl>
 
@@ -72,6 +99,7 @@
             <thead>
             <tr>
                 <th><span data-translate="reunionsApp.participante.user">User</span> <span class="glyphicon glyphicon-sort"></span></th>
+                <th><span data-translate="reunionsApp.participante.email">E-mail</span> <span class="glyphicon glyphicon-sort"></span></th>
                 <th><span data-translate="reunionsApp.participante.cargo">Cargo</span> <span class="glyphicon glyphicon-sort"></span></th>
                 <th><span data-translate="reunionsApp.participante.asistencia">Asistencia</span> <span class="glyphicon glyphicon-sort"></span></th>
                 <th><span data-translate="reunionsApp.participante.observaciones">Observaciones</span> <span class="glyphicon glyphicon-sort"></span></th>
@@ -82,6 +110,9 @@
             <tr dir-paginate="participante in vm.participantes | orderBy:'user.lastName' | filter:q | itemsPerPage: 10">
                 <td>
                     <a ui-sref="user-management-detail({login:participante.user.login})">{{participante.user.lastName}}, {{participante.user.firstName}}</a>
+                </td>
+                <td>
+                    {{participante.user.email}}
                 </td>
                 <td>
                     {{participante.cargo.nombre}}
