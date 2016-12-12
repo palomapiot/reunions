@@ -122,7 +122,7 @@ public class UserService {
             organo = p.getSesion().getOrgano();
             if (!resumen.containsKey(curso + organo.getNombre() + p.getCargo().getNombre())) {
                 Row fila = sheet.createRow(rowCount++);
-                fila.createCell(0).setCellValue(p.getUser().getLogin());
+                fila.createCell(0).setCellValue(p.getUser().getDni());
                 fila.createCell(1).setCellValue(p.getUser().getLastName());
                 fila.createCell(2).setCellValue(p.getUser().getFirstName());
                 fila.createCell(3).setCellValue(p.getSesion().getOrgano().getGrupo().getNombre());
