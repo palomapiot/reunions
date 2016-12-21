@@ -25,6 +25,8 @@
             "participantes": "Participantes",
             "notificar": "Notificar participantes",
             "exportar": "Export participación",
+            "marcar": "Marcar asistencia",
+            "guardar": "Guardar asistencia",
             "documentos": "Documents"
         }
     }

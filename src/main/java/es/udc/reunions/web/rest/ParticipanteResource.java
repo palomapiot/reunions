@@ -2,6 +2,7 @@ package es.udc.reunions.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import es.udc.reunions.domain.Participante;
+import es.udc.reunions.security.AuthoritiesConstants;
 import es.udc.reunions.service.ParticipanteService;
 import es.udc.reunions.web.rest.util.HeaderUtil;
 import es.udc.reunions.web.rest.util.PaginationUtil;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
@@ -46,6 +48,7 @@ public class ParticipanteResource {
      */
     @PostMapping("/participantes")
     @Timed
+    @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity<Participante> createParticipante(@Valid @RequestBody Participante participante) throws URISyntaxException {
         log.debug("REST request to save Participante : {}", participante);
         if (participante.getId() != null) {
@@ -68,6 +71,7 @@ public class ParticipanteResource {
      */
     @PutMapping("/participantes")
     @Timed
+    @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity<Participante> updateParticipante(@Valid @RequestBody Participante participante) throws URISyntaxException {
         log.debug("REST request to update Participante : {}", participante);
         if (participante.getId() == null) {
@@ -137,6 +141,7 @@ public class ParticipanteResource {
      */
     @DeleteMapping("/participantes/{id}")
     @Timed
+    @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity<Void> deleteParticipante(@PathVariable Long id) {
         log.debug("REST request to delete Participante : {}", id);
         participanteService.delete(id);

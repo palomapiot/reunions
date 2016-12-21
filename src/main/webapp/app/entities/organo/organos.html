@@ -4,7 +4,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-xs-4 no-padding-left">
-                <button class="btn btn-primary" ui-sref="organo.new" >
+                <button class="btn btn-primary" ui-sref="organo.new" has-authority="ROLE_ADMIN">
                     <span class="glyphicon glyphicon-plus"></span>
                     <span class="hidden-xs"  data-translate="reunionsApp.organo.home.createLabel">
                         Create new Organo
@@ -30,7 +30,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr dir-paginate="organo in vm.organos | orderBy:'nombre' | filter:q | itemsPerPage: 10">
+                <tr dir-paginate="organo in vm.organos | orderBy:'(nombre|noAccents)' | filter:q:vm.qFn | itemsPerPage: 20">
                     <td><a ui-sref="organo-detail({id:organo.id})">{{organo.nombre}}</a></td>
                     <td class="text-right">
                         <div class="btn-group flex-btn-group-container">
@@ -42,13 +42,15 @@
                             </button>
                             <button type="submit"
                                     ui-sref="organo.edit({id:organo.id})"
-                                    class="btn btn-primary btn-sm">
+                                    class="btn btn-primary btn-sm"
+                                    has-authority="ROLE_ADMIN">
                                 <span class="glyphicon glyphicon-pencil"></span>
                                 <span class="hidden-xs hidden-sm" data-translate="entity.action.edit"></span>
                             </button>
                             <button type="submit"
                                     ui-sref="organo.delete({id:organo.id})"
-                                    class="btn btn-danger btn-sm">
+                                    class="btn btn-danger btn-sm"
+                                    has-authority="ROLE_ADMIN">
                                 <span class="glyphicon glyphicon-remove-circle"></span>
                                 <span class="hidden-xs hidden-sm" data-translate="entity.action.delete"></span>
                             </button>

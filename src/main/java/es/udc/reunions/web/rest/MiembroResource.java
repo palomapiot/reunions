@@ -2,6 +2,7 @@ package es.udc.reunions.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import es.udc.reunions.domain.Miembro;
+import es.udc.reunions.security.AuthoritiesConstants;
 import es.udc.reunions.service.MiembroService;
 import es.udc.reunions.web.rest.util.HeaderUtil;
 import es.udc.reunions.web.rest.util.PaginationUtil;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
@@ -46,6 +48,7 @@ public class MiembroResource {
      */
     @PostMapping("/miembros")
     @Timed
+    @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity<Miembro> createMiembro(@Valid @RequestBody Miembro miembro) throws URISyntaxException {
         log.debug("REST request to save Miembro : {}", miembro);
         if (miembro.getId() != null) {
@@ -68,6 +71,7 @@ public class MiembroResource {
      */
     @PutMapping("/miembros")
     @Timed
+    @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity<Miembro> updateMiembro(@Valid @RequestBody Miembro miembro) throws URISyntaxException {
         log.debug("REST request to update Miembro : {}", miembro);
         if (miembro.getId() == null) {
@@ -88,6 +92,7 @@ public class MiembroResource {
      */
     @GetMapping("/miembros")
     @Timed
+    @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity<List<Miembro>> getAllMiembros(Pageable pageable)
         throws URISyntaxException {
         log.debug("REST request to get a page of Miembros");
@@ -152,6 +157,7 @@ public class MiembroResource {
      */
     @DeleteMapping("/miembros/{id}")
     @Timed
+    @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity<Void> deleteMiembro(@PathVariable Long id) {
         log.debug("REST request to delete Miembro : {}", id);
         miembroService.delete(id);

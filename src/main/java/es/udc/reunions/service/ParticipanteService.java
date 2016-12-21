@@ -46,6 +46,19 @@ public class ParticipanteService {
     }
 
     /**
+     * Save a list of participantes.
+     *
+     * @param participantes the entities to save
+     * @return the persisted entities
+     */
+    public List<Participante> save(List<Participante> participantes) {
+        log.debug("Request to save Participantes : {}", participantes);
+        List<Participante> result = participanteRepository.save(participantes);
+        participanteSearchRepository.save(result);
+        return result;
+    }
+
+    /**
      *  Get all the participantes.
      *
      *  @param pageable the pagination information
@@ -105,6 +118,18 @@ public class ParticipanteService {
     public Page<Participante> search(String query, Pageable pageable) {
         log.debug("Request to search for a page of Participantes for query {}", query);
         Page<Participante> result = participanteSearchRepository.search(queryStringQuery(query), pageable);
+        return result;
+    }
+
+    /**
+     * Search for the participantes corresponding to the current user.
+     *
+     *  @return the list of entities
+     */
+    @Transactional(readOnly = true)
+    public List<Participante> findByUserIsCurrentUser() {
+        log.debug("Request to get Participantes of current user");
+        List<Participante> result = participanteRepository.findByUserIsCurrentUser();
         return result;
     }
 }

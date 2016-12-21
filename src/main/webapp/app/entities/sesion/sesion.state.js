@@ -13,7 +13,7 @@
             parent: 'entity',
             url: '/sesion?page&sort&search',
             data: {
-                authorities: ['ROLE_USER'],
+                authorities: ['ROLE_ADMIN'],
                 pageTitle: 'reunionsApp.sesion.home.title'
             },
             views: {
@@ -52,7 +52,7 @@
             }
         })
         .state('sesion-detail', {
-            parent: 'entity',
+            parent: 'organo',
             url: '/sesion/{id}',
             data: {
                 authorities: ['ROLE_USER'],
@@ -90,7 +90,7 @@
             parent: 'sesion-detail',
             url: '/detail/edit',
             data: {
-                authorities: ['ROLE_USER']
+                authorities: ['ROLE_ADMIN']
             },
             onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                 $uibModal.open({
@@ -115,7 +115,7 @@
             parent: 'organo-detail',
             url: '/nuevaSesion',
             data: {
-                authorities: ['ROLE_USER']
+                authorities: ['ROLE_ADMIN']
             },
             onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                 $uibModal.open({
@@ -148,7 +148,7 @@
             parent: 'organo-detail',
             url: '/{ids}/editarSesion',
             data: {
-                authorities: ['ROLE_USER']
+                authorities: ['ROLE_ADMIN']
             },
             onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                 $uibModal.open({
@@ -173,7 +173,7 @@
             parent: 'organo-detail',
             url: '/{ids}/eliminarSesion',
             data: {
-                authorities: ['ROLE_USER']
+                authorities: ['ROLE_ADMIN']
             },
             onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                 $uibModal.open({

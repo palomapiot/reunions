@@ -55,17 +55,17 @@
     <div class="table-responsive">
         <table class="jh-table table table-striped">
             <thead>
-            <tr>
-                <th><span data-translate="userManagement.curso">Curso</span> <span class="glyphicon glyphicon-sort"></span></th>
-                <th><span data-translate="userManagement.organo">Órgano</span> <span class="glyphicon glyphicon-sort"></span></th>
-                <th><span data-translate="userManagement.convocado">Convocado</span> <span class="glyphicon glyphicon-sort"></span></th>
-                <th><span data-translate="userManagement.asiste">Asiste</span> <span class="glyphicon glyphicon-sort"></span></th>
-                <th><span data-translate="userManagement.falta">Falta</span> <span class="glyphicon glyphicon-sort"></span></th>
-                <th><span data-translate="userManagement.disculpa">Disculpa</span> <span class="glyphicon glyphicon-sort"></span></th>
+            <tr jh-sort="vm.predicate" ascending="vm.reverse">
+                <th jh-sort-by="curso"><span data-translate="userManagement.curso">Curso</span> <span class="glyphicon glyphicon-sort"></span></th>
+                <th jh-sort-by="organo.nombre|noAccents"><span data-translate="userManagement.organo">Órgano</span> <span class="glyphicon glyphicon-sort"></span></th>
+                <th jh-sort-by="convocado"><span data-translate="userManagement.convocado">Convocado</span> <span class="glyphicon glyphicon-sort"></span></th>
+                <th jh-sort-by="asiste"><span data-translate="userManagement.asiste">Asiste</span> <span class="glyphicon glyphicon-sort"></span></th>
+                <th jh-sort-by="falta"><span data-translate="userManagement.falta">Falta</span> <span class="glyphicon glyphicon-sort"></span></th>
+                <th jh-sort-by="disculpa"><span data-translate="userManagement.disculpa">Disculpa</span> <span class="glyphicon glyphicon-sort"></span></th>
             </tr>
             </thead>
             <tbody>
-            <tr dir-paginate="linea in vm.resumen | orderBy:'curso':true | filter:q | itemsPerPage: 10">
+            <tr dir-paginate="linea in vm.resumen | orderBy:vm.predicate:!vm.reverse | filter:q:vm.qFn | itemsPerPage: 20">
                 <td>{{linea.curso}}</td>
                 <td><a ui-sref="organo-detail({id:linea.organo.id})">{{linea.organo.nombre}}</a></td>
                 <td>{{linea.convocado}}</td>
@@ -86,7 +86,7 @@
         <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span data-translate="entity.action.back"> Back</span>
     </button>
 
-    <button type="button" ui-sref="user-management-detail.edit({login:vm.user.login})" class="btn btn-primary">
+    <button type="button" ui-sref="user-management-detail.edit({login:vm.user.login})" class="btn btn-primary" has-authority="ROLE_ADMIN">
         <span class="glyphicon glyphicon-pencil"></span>
         <span class="hidden-xs hidden-sm" data-translate="entity.action.edit"> Edit</span>
     </button>

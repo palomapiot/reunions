@@ -2,6 +2,7 @@ package es.udc.reunions.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import es.udc.reunions.domain.Organo;
+import es.udc.reunions.security.AuthoritiesConstants;
 import es.udc.reunions.service.OrganoService;
 import es.udc.reunions.web.rest.util.HeaderUtil;
 import es.udc.reunions.web.rest.util.PaginationUtil;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
@@ -46,6 +48,7 @@ public class OrganoResource {
      */
     @PostMapping("/organos")
     @Timed
+    @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity<Organo> createOrgano(@Valid @RequestBody Organo organo) throws URISyntaxException {
         log.debug("REST request to save Organo : {}", organo);
         if (organo.getId() != null) {
@@ -68,6 +71,7 @@ public class OrganoResource {
      */
     @PutMapping("/organos")
     @Timed
+    @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity<Organo> updateOrgano(@Valid @RequestBody Organo organo) throws URISyntaxException {
         log.debug("REST request to update Organo : {}", organo);
         if (organo.getId() == null) {
@@ -118,6 +122,7 @@ public class OrganoResource {
      */
     @DeleteMapping("/organos/{id}")
     @Timed
+    @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity<Void> deleteOrgano(@PathVariable Long id) {
         log.debug("REST request to delete Organo : {}", id);
         organoService.delete(id);

@@ -14,6 +14,7 @@
             'participantes': { method: 'GET', isArray: true, url: 'api/sesions/:id/participantes'},
             'documentos': {method: 'GET', isArray: true, url: 'api/sesions/:id/documentos'},
             'notificar': { method: 'POST', url: 'api/sesions/notificar' },
+            'marcarAsistencia': { method: 'PUT', url: 'api/sesions/marcarAsistencia'},
             'get': {
                 method: 'GET',
                 transformResponse: function (data) {

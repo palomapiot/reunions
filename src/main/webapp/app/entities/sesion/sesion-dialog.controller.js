@@ -32,7 +32,7 @@
         vm.save = save;
         vm.organos = Organo.query();
         vm.participantes = Participante.query();
-p
+
         $timeout(function (){
             angular.element('.form-group:eq(1)>input').focus();
         });

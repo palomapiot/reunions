@@ -158,20 +158,16 @@ public class UserResource {
     /**
      * GET  /users : get all users.
      *
-     * @param pageable the pagination information
      * @return the ResponseEntity with status 200 (OK) and with body all users
-     * @throws URISyntaxException if the pagination headers couldn't be generated
      */
     @GetMapping("/users")
     @Timed
-    public ResponseEntity<List<ManagedUserVM>> getAllUsers(Pageable pageable)
-        throws URISyntaxException {
-        Page<User> page = userRepository.findAllWithAuthorities(pageable);
-        List<ManagedUserVM> managedUserVMs = page.getContent().stream()
+    public ResponseEntity<List<ManagedUserVM>> getAllUsers() {
+        List<User> users = userRepository.findAllWithAuthorities();
+        List<ManagedUserVM> managedUserVMs = users.stream()
             .map(ManagedUserVM::new)
             .collect(Collectors.toList());
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/users");
-        return new ResponseEntity<>(managedUserVMs, headers, HttpStatus.OK);
+        return new ResponseEntity<>(managedUserVMs, HttpStatus.OK);
     }
 
     /**

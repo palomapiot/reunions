@@ -5,12 +5,14 @@ import es.udc.reunions.domain.Cargo;
 
 import es.udc.reunions.repository.CargoRepository;
 import es.udc.reunions.repository.search.CargoSearchRepository;
+import es.udc.reunions.security.AuthoritiesConstants;
 import es.udc.reunions.web.rest.util.HeaderUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
@@ -32,7 +34,7 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 public class CargoResource {
 
     private final Logger log = LoggerFactory.getLogger(CargoResource.class);
-        
+
     @Inject
     private CargoRepository cargoRepository;
 
@@ -48,6 +50,7 @@ public class CargoResource {
      */
     @PostMapping("/cargos")
     @Timed
+    @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity<Cargo> createCargo(@Valid @RequestBody Cargo cargo) throws URISyntaxException {
         log.debug("REST request to save Cargo : {}", cargo);
         if (cargo.getId() != null) {
@@ -71,6 +74,7 @@ public class CargoResource {
      */
     @PutMapping("/cargos")
     @Timed
+    @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity<Cargo> updateCargo(@Valid @RequestBody Cargo cargo) throws URISyntaxException {
         log.debug("REST request to update Cargo : {}", cargo);
         if (cargo.getId() == null) {
@@ -122,6 +126,7 @@ public class CargoResource {
      */
     @DeleteMapping("/cargos/{id}")
     @Timed
+    @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity<Void> deleteCargo(@PathVariable Long id) {
         log.debug("REST request to delete Cargo : {}", id);
         cargoRepository.delete(id);
@@ -133,7 +138,7 @@ public class CargoResource {
      * SEARCH  /_search/cargos?query=:query : search for the cargo corresponding
      * to the query.
      *
-     * @param query the query of the cargo search 
+     * @param query the query of the cargo search
      * @return the result of the search
      */
     @GetMapping("/_search/cargos")

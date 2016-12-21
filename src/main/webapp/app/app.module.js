@@ -12,6 +12,7 @@
             'ngCacheBuster',
             'ngFileUpload',
             'angularUtils.directives.dirPagination',
+            'ui.calendar',
             'ui.bootstrap',
             'ui.bootstrap.datetimepicker',
             'ui.router',

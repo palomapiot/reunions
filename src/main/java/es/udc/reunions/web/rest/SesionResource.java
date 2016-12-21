@@ -4,12 +4,14 @@ import com.codahale.metrics.annotation.Timed;
 import es.udc.reunions.domain.Miembro;
 import es.udc.reunions.domain.Participante;
 import es.udc.reunions.domain.Sesion;
+import es.udc.reunions.security.AuthoritiesConstants;
 import es.udc.reunions.service.MailService;
 import es.udc.reunions.service.MiembroService;
 import es.udc.reunions.service.ParticipanteService;
 import es.udc.reunions.service.SesionService;
 import es.udc.reunions.web.rest.util.HeaderUtil;
 import es.udc.reunions.web.rest.util.PaginationUtil;
+import org.apache.poi.util.TempFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -18,6 +20,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
@@ -25,6 +28,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -62,6 +68,7 @@ public class SesionResource {
      */
     @PostMapping("/sesions")
     @Timed
+    @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity<Sesion> createSesion(@Valid @RequestBody Sesion sesion) throws URISyntaxException {
         log.debug("REST request to save Sesion : {}", sesion);
         if (sesion.getId() != null) {
@@ -90,6 +97,7 @@ public class SesionResource {
     @PostMapping(path = "/sesions/notificar",
         produces = MediaType.TEXT_PLAIN_VALUE)
     @Timed
+    @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity<?> notificar(@Valid @RequestBody Sesion sesion, HttpServletRequest request) {
         sesionService.notificar(sesion, request);
 //        return userService.requestPasswordReset(mail)
@@ -107,6 +115,32 @@ public class SesionResource {
     }
 
     /**
+     * PUT   /sesions/marcarAsistencia : Updates asistencia to sesion
+     *
+     * @param participantes whose participantes to notify
+     * @return the ResponseEntity with status 200 (OK) if the e-mail was sent, or status 400 (Bad Request) if the e-mail address is not registered
+     */
+    @PutMapping(path = "/sesions/marcarAsistencia",
+        produces = MediaType.TEXT_PLAIN_VALUE)
+    @Timed
+    @Secured(AuthoritiesConstants.ADMIN)
+    public ResponseEntity<?> marcarAsistencia(@Valid @RequestBody List<Participante> participantes) {
+        participanteService.save(participantes);
+//        return userService.requestPasswordReset(mail)
+//            .map(user -> {
+//                String baseUrl = request.getScheme() +
+//                    "://" +
+//                    request.getServerName() +
+//                    ":" +
+//                    request.getServerPort() +
+//                    request.getContextPath();
+//                mailService.sendPasswordResetMail(user, baseUrl);
+//                return new ResponseEntity<>("e-mail was sent", HttpStatus.OK);
+//            }).orElse(new ResponseEntity<>("e-mail address not registered", HttpStatus.BAD_REQUEST));
+        return new ResponseEntity<>("asistencia marcada", HttpStatus.OK);
+    }
+
+    /**
      * PUT  /sesions : Updates an existing sesion.
      *
      * @param sesion the sesion to update
@@ -117,6 +151,7 @@ public class SesionResource {
      */
     @PutMapping("/sesions")
     @Timed
+    @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity<Sesion> updateSesion(@Valid @RequestBody Sesion sesion) throws URISyntaxException {
         log.debug("REST request to update Sesion : {}", sesion);
         if (sesion.getId() == null) {
@@ -164,6 +199,23 @@ public class SesionResource {
     }
 
     /**
+     * GET  /users/events : get the events in current month for the current user.
+     *
+     * @return the ResponseEntity with status 200 (OK) and with body the events in body
+     */
+    @GetMapping("/users/events")
+    @Timed
+    public ResponseEntity<List<Sesion>> getEvents() {
+        log.debug("REST request to get events in current month for the current user");
+        List<Sesion> sesiones = new ArrayList<Sesion>();
+        for (Participante a : participanteService.findByUserIsCurrentUser()) {
+            if (a.getSesion().getPrimeraConvocatoria().isAfter(ZonedDateTime.now().minusMonths(1L)))
+            sesiones.add(a.getSesion());
+        }
+        return new ResponseEntity<>(sesiones, HttpStatus.OK);
+    }
+
+    /**
      * DELETE  /sesions/:id : delete the "id" sesion.
      *
      * @param id the id of the sesion to delete
@@ -171,6 +223,7 @@ public class SesionResource {
      */
     @DeleteMapping("/sesions/{id}")
     @Timed
+    @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity<Void> deleteSesion(@PathVariable Long id) {
         log.debug("REST request to delete Sesion : {}", id);
         sesionService.delete(id);

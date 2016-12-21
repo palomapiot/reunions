@@ -5,12 +5,14 @@ import es.udc.reunions.domain.Grupo;
 
 import es.udc.reunions.repository.GrupoRepository;
 import es.udc.reunions.repository.search.GrupoSearchRepository;
+import es.udc.reunions.security.AuthoritiesConstants;
 import es.udc.reunions.web.rest.util.HeaderUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
@@ -32,7 +34,7 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 public class GrupoResource {
 
     private final Logger log = LoggerFactory.getLogger(GrupoResource.class);
-        
+
     @Inject
     private GrupoRepository grupoRepository;
 
@@ -48,6 +50,7 @@ public class GrupoResource {
      */
     @PostMapping("/grupos")
     @Timed
+    @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity<Grupo> createGrupo(@Valid @RequestBody Grupo grupo) throws URISyntaxException {
         log.debug("REST request to save Grupo : {}", grupo);
         if (grupo.getId() != null) {
@@ -71,6 +74,7 @@ public class GrupoResource {
      */
     @PutMapping("/grupos")
     @Timed
+    @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity<Grupo> updateGrupo(@Valid @RequestBody Grupo grupo) throws URISyntaxException {
         log.debug("REST request to update Grupo : {}", grupo);
         if (grupo.getId() == null) {
@@ -122,6 +126,7 @@ public class GrupoResource {
      */
     @DeleteMapping("/grupos/{id}")
     @Timed
+    @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity<Void> deleteGrupo(@PathVariable Long id) {
         log.debug("REST request to delete Grupo : {}", id);
         grupoRepository.delete(id);
@@ -133,7 +138,7 @@ public class GrupoResource {
      * SEARCH  /_search/grupos?query=:query : search for the grupo corresponding
      * to the query.
      *
-     * @param query the query of the grupo search 
+     * @param query the query of the grupo search
      * @return the result of the search
      */
     @GetMapping("/_search/grupos")

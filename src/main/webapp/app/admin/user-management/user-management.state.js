@@ -10,10 +10,10 @@
     function stateConfig($stateProvider) {
         $stateProvider
         .state('user-management', {
-            parent: 'admin',
-            url: '/user-management?page&sort',
+            parent: 'app',
+            url: '/user-management',
             data: {
-                authorities: ['ROLE_ADMIN'],
+                authorities: ['ROLE_USER'],
                 pageTitle: 'userManagement.home.title'
             },
             views: {
@@ -22,36 +22,19 @@
                     controller: 'UserManagementController',
                     controllerAs: 'vm'
                 }
-            },            params: {
-                page: {
-                    value: '1',
-                    squash: true
-                },
-                sort: {
-                    value: 'id,asc',
-                    squash: true
-                }
             },
             resolve: {
-                pagingParams: ['$stateParams', 'PaginationUtil', function ($stateParams, PaginationUtil) {
-                    return {
-                        page: PaginationUtil.parsePage($stateParams.page),
-                        sort: $stateParams.sort,
-                        predicate: PaginationUtil.parsePredicate($stateParams.sort),
-                        ascending: PaginationUtil.parseAscending($stateParams.sort)
-                    };
-                }],
                 translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                     $translatePartialLoader.addPart('user-management');
                     return $translate.refresh();
                 }]
-
-            }        })
+            }
+        })
         .state('user-management-detail', {
-            parent: 'admin',
+            parent: 'user-management',
             url: '/user/:login',
             data: {
-                authorities: ['ROLE_ADMIN'],
+                authorities: ['ROLE_USER'],
                 pageTitle: 'user-management.detail.title'
             },
             views: {

@@ -186,12 +186,17 @@ public class UserService {
             organo = p.getSesion().getOrgano();
             if (!resumen.containsKey(curso + organo.getNombre())) {
                 LineaResumen lineaResumen = new LineaResumen(curso, organo);
-                lineaResumen.add(p.getAsistencia());
+                if (p.getAsistencia() != null) {
+                    lineaResumen.add(p.getAsistencia());
+                }
                 resumen.put(curso + organo.getNombre(), lineaResumen);
             } else {
-                LineaResumen lineaResumen =
-                    (LineaResumen) resumen.get(curso + organo.getNombre());
-                lineaResumen.add(p.getAsistencia());
+
+                if (p.getAsistencia() != null) {
+                    LineaResumen lineaResumen =
+                        (LineaResumen) resumen.get(curso + organo.getNombre());
+                    lineaResumen.add(p.getAsistencia());
+                }
             }
         }
         return new ArrayList<LineaResumen>(resumen.values());
