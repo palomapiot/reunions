@@ -5,6 +5,7 @@ import es.udc.reunions.domain.Miembro;
 import es.udc.reunions.domain.Participante;
 import es.udc.reunions.domain.Sesion;
 import es.udc.reunions.security.AuthoritiesConstants;
+import es.udc.reunions.security.SecurityUtils;
 import es.udc.reunions.service.MailService;
 import es.udc.reunions.service.MiembroService;
 import es.udc.reunions.service.ParticipanteService;
@@ -208,10 +209,15 @@ public class SesionResource {
     public ResponseEntity<List<Sesion>> getEvents() {
         log.debug("REST request to get events in current month for the current user");
         List<Sesion> sesiones = new ArrayList<Sesion>();
-        for (Participante a : participanteService.findByUserIsCurrentUser()) {
-            if (a.getSesion().getPrimeraConvocatoria().isAfter(ZonedDateTime.now().minusMonths(1L)))
-            sesiones.add(a.getSesion());
+        if (SecurityUtils.isAuthenticated()) {
+            for (Participante a : participanteService.findByUserIsCurrentUser()) {
+                if (a.getSesion().getPrimeraConvocatoria().isAfter(ZonedDateTime.now().minusMonths(1L)))
+                    sesiones.add(a.getSesion());
+            }
+        } else {
+            sesiones = sesionService.findByPrimeraConvocatoriaGreaterThan(ZonedDateTime.now().minusMonths(1L));
         }
+
         return new ResponseEntity<>(sesiones, HttpStatus.OK);
     }
 

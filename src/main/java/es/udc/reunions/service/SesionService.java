@@ -20,6 +20,7 @@ import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import java.security.Security;
 import java.text.DateFormat;
+import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -185,5 +186,11 @@ public class SesionService {
         } catch (MessagingException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public List<Sesion> findByPrimeraConvocatoriaGreaterThan(ZonedDateTime zonedDateTime) {
+        log.debug("Request to get sesions from last month and after");
+        List<Sesion> result = sesionRepository.findByPrimeraConvocatoriaGreaterThan(zonedDateTime);
+        return result;
     }
 }

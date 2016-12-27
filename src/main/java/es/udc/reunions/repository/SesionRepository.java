@@ -4,6 +4,7 @@ import es.udc.reunions.domain.Sesion;
 
 import org.springframework.data.jpa.repository.*;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 
 /**
@@ -15,4 +16,6 @@ public interface SesionRepository extends JpaRepository<Sesion,Long> {
     List<Sesion> findByOrganoId(Long organoId);
 
     Sesion findTopByOrganoIdOrderByNumeroDesc(Long organoId);
+
+    List<Sesion> findByPrimeraConvocatoriaGreaterThan(ZonedDateTime zonedDateTime);
 }

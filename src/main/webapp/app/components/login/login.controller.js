@@ -42,8 +42,9 @@
                 vm.authenticationError = false;
                 $uibModalInstance.close();
                 if ($state.current.name === 'register' || $state.current.name === 'activate' ||
-                    $state.current.name === 'finishReset' || $state.current.name === 'requestReset') {
-                    $state.go('home');
+                    $state.current.name === 'finishReset' || $state.current.name === 'requestReset' ||
+                    $state.current.name === 'home') {
+                    $state.go('home', {}, {reload: true});
                 }
 
                 $rootScope.$broadcast('authenticationSuccess');

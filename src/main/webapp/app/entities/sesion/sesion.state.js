@@ -55,7 +55,7 @@
             parent: 'organo',
             url: '/sesion/{id}',
             data: {
-                authorities: ['ROLE_USER'],
+                authorities: [],
                 pageTitle: 'reunionsApp.sesion.detail.title'
             },
             views: {

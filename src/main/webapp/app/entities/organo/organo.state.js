@@ -13,7 +13,7 @@
             parent: 'app',
             url: '/organo',
             data: {
-                authorities: ['ROLE_USER'],
+                authorities: [],
                 pageTitle: 'reunionsApp.organo.home.title'
             },
             views: {
@@ -35,7 +35,7 @@
             parent: 'organo',
             url: '/{id}',
             data: {
-                authorities: ['ROLE_USER'],
+                authorities: [],
                 pageTitle: 'reunionsApp.organo.detail.title'
             },
             views: {
