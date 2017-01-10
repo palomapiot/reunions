@@ -5,19 +5,43 @@
         .module('reunionsApp')
         .controller('SesionDetailController', SesionDetailController);
 
-    SesionDetailController.$inject = ['$scope', '$rootScope', '$stateParams', 'previousState', 'DataUtils', 'entity', 'Sesion', 'Organo', 'Participante', 'Documento'];
+    SesionDetailController.$inject = ['$scope', '$rootScope', '$stateParams', 'previousState', 'DataUtils', 'entity', 'Principal', 'Sesion', 'Organo', 'Participante', 'Documento'];
 
-    function SesionDetailController($scope, $rootScope, $stateParams, previousState, DataUtils, entity, Sesion, Organo, Participante, Documento) {
+    function SesionDetailController($scope, $rootScope, $stateParams, previousState, DataUtils, entity, Principal, Sesion, Organo, Participante, Documento) {
         var vm = this;
 
+        vm.account = null;
+        vm.isAuthenticated = null;
         vm.sesion = entity;
         vm.openFile = DataUtils.openFile;
         vm.byteSize = DataUtils.byteSize;
         vm.notificar = notificar;
         vm.exportar = exportar;
         vm.marcarAsistencia = marcarAsistencia;
+        vm.admin = false;
         vm.previousState = previousState.name;
         vm.marcando = false;
+
+        getAccount();
+
+        function getAccount() {
+            Principal.identity().then(function(account) {
+                vm.account = account;
+                vm.isAuthenticated = Principal.isAuthenticated;
+            });
+        }
+
+        Organo.miembros({ id : vm.sesion.organo.id }).$promise.then( function(data) {
+             if (vm.isAuthenticated) {
+                if (vm.account.authorities.includes("ROLE_ADMIN")) {
+                    vm.admin = true;
+                } else {
+                    data.forEach(function(element) {
+                         if (element.user.login == vm.account.login && element.cargo.id < 3) vm.admin = true;
+                    });
+                }
+             }
+        });
 
         vm.documentos = Sesion.documentos({ id: $stateParams.id })
         vm.participantes = Sesion.participantes({ id: $stateParams.id });

@@ -138,7 +138,7 @@
         <div class="row">
 
             <div class="col-xs-4 no-padding-left">
-                <button class="btn btn-primary" ui-sref="sesion.new({organo:vm.organo})" has-authority="ROLE_ADMIN">
+                <button class="btn btn-primary" ui-sref="sesion.new({organo:vm.organo})" ng-show="vm.admin">
                     <span class="glyphicon glyphicon-plus"></span>
                     <span class="hidden-xs"  data-translate="reunionsApp.sesion.home.createLabel">
                     Add new sesion

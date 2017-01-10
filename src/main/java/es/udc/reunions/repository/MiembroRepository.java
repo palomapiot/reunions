@@ -20,4 +20,6 @@ public interface MiembroRepository extends JpaRepository<Miembro,Long> {
     List<Miembro> findByOrganoIdAndFechaBajaIsNull(Long organoId);
 
     List<Miembro> findByOrganoIdAndFechaBajaIsNotNull(Long organoId);
+
+    Miembro findByOrganoIdAndUserIdAndFechaBajaIsNull(Long organoId, Long userId);
 }

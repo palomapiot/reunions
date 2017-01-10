@@ -38,7 +38,7 @@
                         <button type="submit"
                                 ui-sref="documento.delete({idd:documento.id})"
                                 class="btn btn-link btn-xs"
-                                has-authority="ROLE_ADMIN">
+                                ng-show="vm.admin">
                             <span class="glyphicon glyphicon-remove-circle"></span>
                             <span class="hidden-xs hidden-sm" data-translate="entity.action.delete"></span>
                         </button>
@@ -46,7 +46,7 @@
                 </div>
 
                 <div class="col-xs-4 no-padding-right">
-                <button class="btn btn-primary" ui-sref="documento.new({sesion:vm.sesion})" has-authority="ROLE_ADMIN">
+                <button class="btn btn-primary" ui-sref="documento.new({sesion:vm.sesion})" ng-show="vm.admin">
                     <span class="glyphicon glyphicon-plus"></span>
                     <span class="hidden-xs"  data-translate="reunionsApp.documento.home.createLabel">
                             Create new Documento

@@ -6,10 +6,7 @@ import es.udc.reunions.domain.Participante;
 import es.udc.reunions.domain.Sesion;
 import es.udc.reunions.security.AuthoritiesConstants;
 import es.udc.reunions.security.SecurityUtils;
-import es.udc.reunions.service.MailService;
-import es.udc.reunions.service.MiembroService;
-import es.udc.reunions.service.ParticipanteService;
-import es.udc.reunions.service.SesionService;
+import es.udc.reunions.service.*;
 import es.udc.reunions.web.rest.util.HeaderUtil;
 import es.udc.reunions.web.rest.util.PaginationUtil;
 import org.apache.poi.util.TempFile;
@@ -22,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.web.header.Header;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
@@ -60,6 +58,9 @@ public class SesionResource {
     @Inject
     private MailService mailService;
 
+    @Inject
+    private UserService userService;
+
     /**
      * POST  /sesions : Create a new sesion.
      *
@@ -69,11 +70,16 @@ public class SesionResource {
      */
     @PostMapping("/sesions")
     @Timed
-    @Secured(AuthoritiesConstants.ADMIN)
+    @Secured({AuthoritiesConstants.ADMIN, AuthoritiesConstants.USER})
     public ResponseEntity<Sesion> createSesion(@Valid @RequestBody Sesion sesion) throws URISyntaxException {
         log.debug("REST request to save Sesion : {}", sesion);
         if (sesion.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("sesion", "idexists", "A new sesion cannot already have an ID")).body(null);
+        }
+        if (!SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ADMIN)) {
+            Miembro miembro = miembroService.findByOrganoIdAndUserIdAndFechaBajaIsNull(sesion.getOrgano().getId(), userService.getUserWithAuthoritiesByLogin(SecurityUtils.getCurrentUserLogin()).get().getId());
+            if (miembro == null || miembro.getCargo().getId() > 2)
+                return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("sesion", "forbidden", "You are not allowed to create sessions")).body(null);
         }
         Sesion result = sesionService.save(sesion);
         for (Miembro m : miembroService.findByOrganoIdAndFechaBajaIsNull(sesion.getOrgano().getId())) {

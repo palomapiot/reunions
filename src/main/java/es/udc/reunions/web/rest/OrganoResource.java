@@ -1,13 +1,19 @@
 package es.udc.reunions.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import es.udc.reunions.config.JHipsterProperties;
+import es.udc.reunions.config.SecurityConfiguration;
+import es.udc.reunions.domain.Miembro;
 import es.udc.reunions.domain.Organo;
 import es.udc.reunions.security.AuthoritiesConstants;
+import es.udc.reunions.security.SecurityUtils;
+import es.udc.reunions.service.MiembroService;
 import es.udc.reunions.service.OrganoService;
 import es.udc.reunions.web.rest.util.HeaderUtil;
 import es.udc.reunions.web.rest.util.PaginationUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.actuate.autoconfigure.ManagementServerProperties;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -20,6 +26,7 @@ import javax.inject.Inject;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -38,6 +45,9 @@ public class OrganoResource {
 
     @Inject
     private OrganoService organoService;
+
+    @Inject
+    private MiembroService miembroService;
 
     /**
      * POST  /organos : Create a new organo.
@@ -147,6 +157,4 @@ public class OrganoResource {
         HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/organos");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
-
-
 }

@@ -70,6 +70,20 @@ public class MiembroService {
     }
 
     /**
+     *  Finds miembro by organo id and user id
+     *
+     *  @param organoId the organo id
+     *  @param userId the user id
+     *  @return the entity
+     */
+    @Transactional(readOnly = true)
+    public Miembro findByOrganoIdAndUserIdAndFechaBajaIsNull(Long organoId, Long userId) {
+        log.debug("Request to find member for user of organo " + organoId);
+        Miembro miembro = miembroRepository.findByOrganoIdAndUserIdAndFechaBajaIsNull(organoId, userId);
+        return miembro;
+    }
+
+    /**
      *  Get all the miembros anteriores from an organo
      *
      *  @param organoId the organo id

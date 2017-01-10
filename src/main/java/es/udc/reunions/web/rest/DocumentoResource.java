@@ -3,9 +3,13 @@ package es.udc.reunions.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import es.udc.reunions.domain.Documento;
 
+import es.udc.reunions.domain.Miembro;
 import es.udc.reunions.repository.DocumentoRepository;
 import es.udc.reunions.repository.search.DocumentoSearchRepository;
 import es.udc.reunions.security.AuthoritiesConstants;
+import es.udc.reunions.security.SecurityUtils;
+import es.udc.reunions.service.MiembroService;
+import es.udc.reunions.service.UserService;
 import es.udc.reunions.web.rest.util.HeaderUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,6 +45,12 @@ public class DocumentoResource {
     @Inject
     private DocumentoSearchRepository documentoSearchRepository;
 
+    @Inject
+    private MiembroService miembroService;
+
+    @Inject
+    private UserService userService;
+
     /**
      * POST  /documentos : Create a new documento.
      *
@@ -50,11 +60,16 @@ public class DocumentoResource {
      */
     @PostMapping("/documentos")
     @Timed
-    @Secured(AuthoritiesConstants.ADMIN)
+    @Secured({AuthoritiesConstants.ADMIN, AuthoritiesConstants.USER})
     public ResponseEntity<Documento> createDocumento(@Valid @RequestBody Documento documento) throws URISyntaxException {
         log.debug("REST request to save Documento : {}", documento);
         if (documento.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("documento", "idexists", "A new documento cannot already have an ID")).body(null);
+        }
+        if (!SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ADMIN)) {
+            Miembro miembro = miembroService.findByOrganoIdAndUserIdAndFechaBajaIsNull(documento.getSesion().getOrgano().getId(), userService.getUserWithAuthoritiesByLogin(SecurityUtils.getCurrentUserLogin()).get().getId());
+            if (miembro == null || miembro.getCargo().getId() > 2)
+                return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("documento", "forbidden", "You are not allowed to create documents in this session")).body(null);
         }
         Documento result = documentoRepository.save(documento);
         documentoSearchRepository.save(result);
@@ -141,9 +156,15 @@ public class DocumentoResource {
      */
     @DeleteMapping("/documentos/{id}")
     @Timed
-    @Secured(AuthoritiesConstants.ADMIN)
+    @Secured({AuthoritiesConstants.ADMIN, AuthoritiesConstants.USER})
     public ResponseEntity<Void> deleteDocumento(@PathVariable Long id) {
         log.debug("REST request to delete Documento : {}", id);
+        Documento documento = documentoRepository.findOne(id);
+        if (!SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ADMIN)) {
+            Miembro miembro = miembroService.findByOrganoIdAndUserIdAndFechaBajaIsNull(documento.getSesion().getOrgano().getId(), userService.getUserWithAuthoritiesByLogin(SecurityUtils.getCurrentUserLogin()).get().getId());
+            if (miembro == null || miembro.getCargo().getId() > 2)
+                return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("documento", "forbidden", "You are not allowed to delete documents in this session")).body(null);
+        }
         documentoRepository.delete(id);
         documentoSearchRepository.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("documento", id.toString())).build();

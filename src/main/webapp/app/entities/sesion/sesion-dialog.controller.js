@@ -5,12 +5,38 @@
         .module('reunionsApp')
         .controller('SesionDialogController', SesionDialogController);
 
-    SesionDialogController.$inject = ['$timeout', '$scope', '$stateParams', '$uibModalInstance', 'entity', 'Sesion', 'Organo', 'Participante', 'Documento'];
+    SesionDialogController.$inject = ['$timeout', '$scope', '$stateParams', '$uibModalInstance', 'entity', 'Principal', 'Sesion', 'Organo', 'Participante', 'Documento'];
 
-    function SesionDialogController ($timeout, $scope, $stateParams, $uibModalInstance, entity, Sesion, Organo, Participante, Documento) {
+    function SesionDialogController ($timeout, $scope, $stateParams, $uibModalInstance, entity, Principal, Sesion, Organo, Participante, Documento) {
         var vm = this;
 
+        vm.account = null;
+        vm.isAuthenticated = null;
+        vm.admin = false;
+
         vm.sesion = entity;
+
+        getAccount();
+
+        function getAccount() {
+            Principal.identity().then(function(account) {
+                vm.account = account;
+                vm.isAuthenticated = Principal.isAuthenticated;
+            });
+        }
+
+        Organo.miembros({ id : $stateParams.id }).$promise.then( function(data) {
+             if (vm.isAuthenticated) {
+                if (!vm.account.authorities.includes("ROLE_ADMIN")) {
+                    data.forEach(function(element) {
+                         if (element.user.login == vm.account.login && element.cargo.id < 3) vm.admin = true;
+                    });
+                    if (!vm.admin) {
+                        $uibModalInstance.dismiss('cancel');
+                    }
+                }
+             }
+        });
 
         if (vm.sesion.numero === null) {
             vm.last = false;
@@ -23,7 +49,6 @@
             } else {
                 vm.sesion.numero = 1;
             }
-
         }
 
         vm.clear = clear;
