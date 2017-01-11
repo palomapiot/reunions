@@ -104,8 +104,13 @@ public class SesionResource {
     @PostMapping(path = "/sesions/notificar",
         produces = MediaType.TEXT_PLAIN_VALUE)
     @Timed
-    @Secured(AuthoritiesConstants.ADMIN)
+    @Secured({AuthoritiesConstants.ADMIN, AuthoritiesConstants.USER})
     public ResponseEntity<?> notificar(@Valid @RequestBody Sesion sesion, HttpServletRequest request) {
+        if (!SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ADMIN)) {
+            Miembro miembro = miembroService.findByOrganoIdAndUserIdAndFechaBajaIsNull(sesion.getOrgano().getId(), userService.getUserWithAuthoritiesByLogin(SecurityUtils.getCurrentUserLogin()).get().getId());
+            if (miembro == null || miembro.getCargo().getId() > 2)
+                return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("sesion", "forbidden", "You are not allowed to notify this session")).body(null);
+        }
         sesionService.notificar(sesion, request);
 //        return userService.requestPasswordReset(mail)
 //            .map(user -> {
@@ -130,8 +135,13 @@ public class SesionResource {
     @PutMapping(path = "/sesions/marcarAsistencia",
         produces = MediaType.TEXT_PLAIN_VALUE)
     @Timed
-    @Secured(AuthoritiesConstants.ADMIN)
+    @Secured({AuthoritiesConstants.ADMIN, AuthoritiesConstants.USER})
     public ResponseEntity<?> marcarAsistencia(@Valid @RequestBody List<Participante> participantes) {
+        if (!SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ADMIN) && participantes.size() > 0) {
+            Miembro miembro = miembroService.findByOrganoIdAndUserIdAndFechaBajaIsNull(participantes.get(0).getSesion().getOrgano().getId(), userService.getUserWithAuthoritiesByLogin(SecurityUtils.getCurrentUserLogin()).get().getId());
+            if (miembro == null || miembro.getCargo().getId() > 2)
+                return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("sesion", "forbidden", "You are not allowed to notify this session")).body(null);
+        }
         participanteService.save(participantes);
 //        return userService.requestPasswordReset(mail)
 //            .map(user -> {
@@ -158,11 +168,16 @@ public class SesionResource {
      */
     @PutMapping("/sesions")
     @Timed
-    @Secured(AuthoritiesConstants.ADMIN)
+    @Secured({AuthoritiesConstants.ADMIN, AuthoritiesConstants.USER})
     public ResponseEntity<Sesion> updateSesion(@Valid @RequestBody Sesion sesion) throws URISyntaxException {
         log.debug("REST request to update Sesion : {}", sesion);
         if (sesion.getId() == null) {
             return createSesion(sesion);
+        }
+        if (!SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ADMIN)) {
+            Miembro miembro = miembroService.findByOrganoIdAndUserIdAndFechaBajaIsNull(sesion.getOrgano().getId(), userService.getUserWithAuthoritiesByLogin(SecurityUtils.getCurrentUserLogin()).get().getId());
+            if (miembro == null || miembro.getCargo().getId() > 2)
+                return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("sesion", "forbidden", "You are not allowed to notify this session")).body(null);
         }
         Sesion result = sesionService.save(sesion);
         return ResponseEntity.ok()
@@ -235,9 +250,15 @@ public class SesionResource {
      */
     @DeleteMapping("/sesions/{id}")
     @Timed
-    @Secured(AuthoritiesConstants.ADMIN)
+    @Secured({AuthoritiesConstants.ADMIN, AuthoritiesConstants.USER})
     public ResponseEntity<Void> deleteSesion(@PathVariable Long id) {
         log.debug("REST request to delete Sesion : {}", id);
+        Sesion sesion = sesionService.findOne(id);
+        if (!SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ADMIN)) {
+            Miembro miembro = miembroService.findByOrganoIdAndUserIdAndFechaBajaIsNull(sesion.getOrgano().getId(), userService.getUserWithAuthoritiesByLogin(SecurityUtils.getCurrentUserLogin()).get().getId());
+            if (miembro == null || miembro.getCargo().getId() > 2)
+                return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("sesion", "forbidden", "You are not allowed to notify this session")).body(null);
+        }
         sesionService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("sesion", id.toString())).build();
     }

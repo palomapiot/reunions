@@ -184,14 +184,14 @@
                         <button type="submit"
                                 ui-sref="sesion.edit({ids:sesion.id})"
                                 class="btn btn-primary btn-sm"
-                                has-authority="ROLE_ADMIN">
+                                ng-show="vm.admin">
                             <span class="glyphicon glyphicon-pencil"></span>
                             <span class="hidden-xs hidden-sm" data-translate="entity.action.edit"></span>
                         </button>
                         <button type="submit"
                                 ui-sref="sesion.delete({ids:sesion.id})"
                                 class="btn btn-danger btn-sm"
-                                has-authority="ROLE_ADMIN">
+                                ng-show="vm.admin">
                             <span class="glyphicon glyphicon-remove-circle"></span>
                             <span class="hidden-xs hidden-sm" data-translate="entity.action.delete"></span>
                         </button>

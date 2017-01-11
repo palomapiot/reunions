@@ -1,9 +1,13 @@
 package es.udc.reunions.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import es.udc.reunions.domain.Miembro;
 import es.udc.reunions.domain.Participante;
 import es.udc.reunions.security.AuthoritiesConstants;
+import es.udc.reunions.security.SecurityUtils;
+import es.udc.reunions.service.MiembroService;
 import es.udc.reunions.service.ParticipanteService;
+import es.udc.reunions.service.UserService;
 import es.udc.reunions.web.rest.util.HeaderUtil;
 import es.udc.reunions.web.rest.util.PaginationUtil;
 import org.slf4j.Logger;
@@ -39,6 +43,12 @@ public class ParticipanteResource {
     @Inject
     private ParticipanteService participanteService;
 
+    @Inject
+    private MiembroService miembroService;
+
+    @Inject
+    private UserService userService;
+
     /**
      * POST  /participantes : Create a new participante.
      *
@@ -48,11 +58,16 @@ public class ParticipanteResource {
      */
     @PostMapping("/participantes")
     @Timed
-    @Secured(AuthoritiesConstants.ADMIN)
+    @Secured({AuthoritiesConstants.ADMIN, AuthoritiesConstants.USER})
     public ResponseEntity<Participante> createParticipante(@Valid @RequestBody Participante participante) throws URISyntaxException {
         log.debug("REST request to save Participante : {}", participante);
         if (participante.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("participante", "idexists", "A new participante cannot already have an ID")).body(null);
+        }
+        if (!SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ADMIN)) {
+            Miembro miembro = miembroService.findByOrganoIdAndUserIdAndFechaBajaIsNull(participante.getSesion().getOrgano().getId(), userService.getUserWithAuthoritiesByLogin(SecurityUtils.getCurrentUserLogin()).get().getId());
+            if (miembro == null || miembro.getCargo().getId() > 2)
+                return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("sesion", "forbidden", "You are not allowed to create sessions")).body(null);
         }
         Participante result = participanteService.save(participante);
         return ResponseEntity.created(new URI("/api/participantes/" + result.getId()))
@@ -71,11 +86,16 @@ public class ParticipanteResource {
      */
     @PutMapping("/participantes")
     @Timed
-    @Secured(AuthoritiesConstants.ADMIN)
+    @Secured({AuthoritiesConstants.ADMIN, AuthoritiesConstants.USER})
     public ResponseEntity<Participante> updateParticipante(@Valid @RequestBody Participante participante) throws URISyntaxException {
         log.debug("REST request to update Participante : {}", participante);
         if (participante.getId() == null) {
             return createParticipante(participante);
+        }
+        if (!SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ADMIN)) {
+            Miembro miembro = miembroService.findByOrganoIdAndUserIdAndFechaBajaIsNull(participante.getSesion().getOrgano().getId(), userService.getUserWithAuthoritiesByLogin(SecurityUtils.getCurrentUserLogin()).get().getId());
+            if (miembro == null || miembro.getCargo().getId() > 2)
+                return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("sesion", "forbidden", "You are not allowed to create sessions")).body(null);
         }
         Participante result = participanteService.save(participante);
         return ResponseEntity.ok()
@@ -141,9 +161,15 @@ public class ParticipanteResource {
      */
     @DeleteMapping("/participantes/{id}")
     @Timed
-    @Secured(AuthoritiesConstants.ADMIN)
+    @Secured({AuthoritiesConstants.ADMIN, AuthoritiesConstants.USER})
     public ResponseEntity<Void> deleteParticipante(@PathVariable Long id) {
         log.debug("REST request to delete Participante : {}", id);
+        Participante participante = participanteService.findOne(id);
+        if (!SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ADMIN)) {
+            Miembro miembro = miembroService.findByOrganoIdAndUserIdAndFechaBajaIsNull(participante.getSesion().getOrgano().getId(), userService.getUserWithAuthoritiesByLogin(SecurityUtils.getCurrentUserLogin()).get().getId());
+            if (miembro == null || miembro.getCargo().getId() > 2)
+                return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("sesion", "forbidden", "You are not allowed to create sessions")).body(null);
+        }
         participanteService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("participante", id.toString())).build();
     }

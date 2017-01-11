@@ -63,14 +63,14 @@
         <div class="row">
 
             <div class="col-xs-9 no-padding-left">
-                <button class="btn btn-primary" ui-sref="participante.new({sesion:vm.sesion})" has-authority="ROLE_ADMIN" ng-disabled="vm.marcando">
+                <button class="btn btn-primary" ui-sref="participante.new({sesion:vm.sesion})" ng-show="vm.admin" ng-disabled="vm.marcando">
                     <span class="glyphicon glyphicon-plus"></span>
                     <span class="hidden-xs"  data-translate="reunionsApp.participante.home.createLabel">
                     Add new participante
                 </span>
                 </button>
 
-                <button class="btn btn-primary" ng-click="vm.marcarAsistencia()" has-authority="ROLE_ADMIN">
+                <button class="btn btn-primary" ng-click="vm.marcarAsistencia()" ng-show="vm.admin">
                     <span class="glyphicon glyphicon-edit"></span>
                     <span class="hidden-xs" data-translate="reunionsApp.sesion.marcar" ng-if="!vm.marcando">
                     Marcar asistencia
@@ -80,7 +80,7 @@
                     </span>
                 </button>
 
-                <button class="btn btn-info" ng-click="vm.notificar(vm.sesion.id)" has-authority="ROLE_ADMIN" ng-disabled="vm.marcando">
+                <button class="btn btn-info" ng-click="vm.notificar(vm.sesion.id)" ng-show="vm.admin" ng-disabled="vm.marcando">
                     <span class="glyphicon glyphicon-share"></span>
                     <span class="hidden-xs"  data-translate="reunionsApp.sesion.notificar">
                     Notificar
@@ -145,14 +145,14 @@
                         <button type="submit"
                                 ui-sref="participante.edit({idp:participante.id})"
                                 class="btn btn-primary btn-sm"
-                                has-authority="ROLE_ADMIN">
+                                ng-show="vm.admin">
                             <span class="glyphicon glyphicon-pencil"></span>
                             <span class="hidden-xs hidden-sm" data-translate="entity.action.edit"></span>
                         </button>
                         <button type="submit"
                                 ui-sref="participante.delete({idp:participante.id})"
                                 class="btn btn-danger btn-sm"
-                                has-authority="ROLE_ADMIN">
+                                ng-show="vm.admin">
                             <span class="glyphicon glyphicon-remove-circle"></span>
                             <span class="hidden-xs hidden-sm" data-translate="entity.action.delete"></span>
                         </button>
@@ -172,7 +172,7 @@
         <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span data-translate="entity.action.back"> Back</span>
     </button>
 
-    <button type="button" ng-disabled="vm.marcando" ui-sref="sesion-detail.edit({id:vm.sesion.id})" class="btn btn-primary" has-authority="ROLE_ADMIN">
+    <button type="button" ng-disabled="vm.marcando" ui-sref="sesion-detail.edit({id:vm.sesion.id})" class="btn btn-primary" ng-show="vm.admin">
         <span class="glyphicon glyphicon-pencil"></span>
         <span class="hidden-xs hidden-sm" data-translate="entity.action.edit"> Edit</span>
     </button>
