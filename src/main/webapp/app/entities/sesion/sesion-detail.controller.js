@@ -66,13 +66,19 @@
             }
         }
 
+        function byname (a, b) {
+            return a.user.lastName.localeCompare(b.user.lastName);
+
+        }
+
         function exportar () {
             var i;
             var cabecera = "Relación de asistentes a la sesión número " + vm.sesion.numero + " del órgano " + vm.sesion.organo.nombre;
             var asistentes = "\n\nAsiste:";
             var disculpas = "\n\nDisculpa:";
             var faltas = "\n\nFalta:";
-            for (i in vm.participantes) {
+            vm.copiaparticipantes = vm.participantes.slice(0);
+            for (i in vm.copiaparticipantes.sort(byname)) {
                 var p = vm.participantes[i];
                 if (p.asistencia == "asiste") {
                     asistentes += "\n\t" + p.user.lastName + ", " + p.user.firstName;
