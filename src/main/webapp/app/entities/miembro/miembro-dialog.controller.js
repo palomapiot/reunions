@@ -45,6 +45,17 @@
             vm.isSaving = false;
         }
 
+        vm.qFn = function(actual, expected) {
+            if (angular.isObject(actual)) return false;
+            function removeAccents(value) {
+              return value.toString().replace(/á/g, 'a').replace(/é/g, 'e').replace(/í/g, 'i').replace(/ó/g, 'o').replace(/ú/g, 'u').replace(/ñ/g, 'n');
+            }
+            actual = removeAccents(angular.lowercase('' + actual));
+            expected = removeAccents(angular.lowercase('' + expected));
+
+            return actual.indexOf(expected) !== -1;
+        }
+
         vm.datePickerOpenStatus.fechaAlta = false;
         vm.datePickerOpenStatus.fechaBaja = false;
 

@@ -72,7 +72,7 @@
         </div>
         <div class="form-group">
             <label data-translate="reunionsApp.miembro.user" for="field_user">User</label>
-            <input ng-disabled="vm.miembro.id" type="text" id="field_user" name="user" ng-model="vm.miembro.user" uib-typeahead="user as user.login for user in vm.users | filter:{login:$viewValue}" class="form-control" required typeahead-editable="false" autocomplete="off">
+            <input ng-disabled="vm.miembro.id" type="text" id="field_user" name="user" ng-model="vm.miembro.user" uib-typeahead="user as user.lastName + ', ' + user.firstName for user in vm.users | filter:$viewValue:vm.qFn | orderBy:('lastName|noAccents')" class="form-control" required typeahead-editable="false" autocomplete="off">
 
         </div>
         <div ng-show="editForm.user.$invalid">
