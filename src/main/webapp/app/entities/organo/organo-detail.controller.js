@@ -14,9 +14,12 @@
         vm.isAuthenticated = null;
         vm.organo = entity;
         vm.admin = false;
+        vm.predicate = 'user.lastName|noAccents';
+        vm.reverse = true;
+        vm.predicateAnteriores = 'user.lastName|noAccents';
+        vm.reverseAnteriores = true;
 
         vm.previousState = previousState.name;
-        console.log(previousState);
 
         getAccount();
 
@@ -24,7 +27,6 @@
             Principal.identity().then(function(account) {
                 vm.account = account;
                 vm.isAuthenticated = Principal.isAuthenticated;
-                console.log(vm.account);
             });
         }
 
@@ -36,8 +38,6 @@
                     vm.admin = true;
                 } else {
                     data.forEach(function(element) {
-                        console.log(element);
-                        console.log(vm.account.login);
                          if (element.user.login == vm.account.login && element.cargo.id < 3) vm.admin = true;
                     });
                 }

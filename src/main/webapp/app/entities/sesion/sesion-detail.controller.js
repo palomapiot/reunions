@@ -23,6 +23,8 @@
         vm.previousState = $previousState.get();
         console.log(previousState);
         vm.marcando = false;
+        vm.predicate = 'user.lastName|noAccents';
+        vm.reverse = true;
 
         getAccount();
 
