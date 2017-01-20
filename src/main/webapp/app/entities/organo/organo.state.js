@@ -92,7 +92,7 @@
         })
         .state('organo.new', {
             parent: 'organo',
-            url: '/new',
+            url: '',
             data: {
                 authorities: ['ROLE_ADMIN']
             },

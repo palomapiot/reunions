@@ -16,6 +16,7 @@
         vm.admin = false;
 
         vm.previousState = previousState.name;
+        console.log(previousState);
 
         getAccount();
 

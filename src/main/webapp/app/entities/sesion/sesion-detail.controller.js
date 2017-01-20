@@ -5,9 +5,9 @@
         .module('reunionsApp')
         .controller('SesionDetailController', SesionDetailController);
 
-    SesionDetailController.$inject = ['$scope', '$rootScope', '$stateParams', 'previousState', 'DataUtils', 'entity', 'Principal', 'Sesion', 'Organo', 'Participante', 'Documento'];
+    SesionDetailController.$inject = ['$scope', '$rootScope', '$stateParams', '$previousState', 'previousState', 'DataUtils', 'entity', 'Principal', 'Sesion', 'Organo', 'Participante', 'Documento'];
 
-    function SesionDetailController($scope, $rootScope, $stateParams, previousState, DataUtils, entity, Principal, Sesion, Organo, Participante, Documento) {
+    function SesionDetailController($scope, $rootScope, $stateParams, $previousState, previousState, DataUtils, entity, Principal, Sesion, Organo, Participante, Documento) {
         var vm = this;
 
         vm.account = null;
@@ -17,9 +17,11 @@
         vm.byteSize = DataUtils.byteSize;
         vm.notificar = notificar;
         vm.exportar = exportar;
+        vm.back = back;
         vm.marcarAsistencia = marcarAsistencia;
         vm.admin = false;
-        vm.previousState = previousState.name;
+        vm.previousState = $previousState.get();
+        console.log(previousState);
         vm.marcando = false;
 
         getAccount();
@@ -98,6 +100,10 @@
 
         function notificar () {
             Sesion.notificar(vm.sesion);
+        }
+
+        function back () {
+            $previousState.go();
         }
 
         var unsubscribe = $rootScope.$on('reunionsApp:sesionUpdate', function(event, result) {

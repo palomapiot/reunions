@@ -5,15 +5,15 @@
         .module('reunionsApp')
         .controller('UserManagementDetailController', UserManagementDetailController);
 
-    UserManagementDetailController.$inject = ['$stateParams', 'previousState', 'DataUtils', 'User'];
+    UserManagementDetailController.$inject = ['$stateParams', '$previousState', 'DataUtils', 'User'];
 
-    function UserManagementDetailController ($stateParams, previousState, DataUtils, User) {
+    function UserManagementDetailController ($stateParams, $previousState, DataUtils, User) {
         var vm = this;
 
-        vm.previousState = previousState.name;
         vm.load = load;
         vm.user = {};
         vm.exportar = exportar;
+        vm.back = back;
         vm.qFn = function(actual, expected) {
             if (angular.isObject(actual)) return false;
             function removeAccents(value) {
@@ -72,6 +72,10 @@
                 a.download = filename;
                 a.click();
             });
+        }
+
+        function back () {
+            $previousState.go();
         }
     }
 })();
