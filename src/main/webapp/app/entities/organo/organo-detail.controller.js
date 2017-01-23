@@ -5,9 +5,9 @@
         .module('reunionsApp')
         .controller('OrganoDetailController', OrganoDetailController);
 
-    OrganoDetailController.$inject = ['$scope', '$rootScope', '$stateParams', 'previousState', 'entity', 'Principal', 'Organo', 'Grupo', 'Miembro', 'Sesion', 'ParseLinks'];
+    OrganoDetailController.$inject = ['$location', '$anchorScroll', '$scope', '$rootScope', '$stateParams', 'previousState', 'entity', 'Principal', 'Organo', 'Grupo', 'Miembro', 'Sesion', 'ParseLinks'];
 
-    function OrganoDetailController($scope, $rootScope, $stateParams, previousState, entity, Principal, Organo, Grupo, Miembro, Sesion, ParseLinks) {
+    function OrganoDetailController($location, $anchorScroll, $scope, $rootScope, $stateParams, previousState, entity, Principal, Organo, Grupo, Miembro, Sesion, ParseLinks) {
         var vm = this;
 
         vm.account = null;
@@ -18,6 +18,13 @@
         vm.reverse = true;
         vm.predicateAnteriores = 'user.lastName|noAccents';
         vm.reverseAnteriores = true;
+        vm.goUp = function(id) {
+                          var old = $location.hash();
+                          $location.hash(id);
+                          $anchorScroll();
+                          //reset to old to keep any additional routing logic from kicking in
+                          $location.hash(old);
+                          };
 
         vm.previousState = previousState.name;
 

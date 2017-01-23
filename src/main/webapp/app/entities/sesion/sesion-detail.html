@@ -58,7 +58,7 @@
         </dd>
     </dl>
 
-    <h3><span data-translate="reunionsApp.sesion.participantes">Participantes</span></h3>
+    <h3><span data-translate="reunionsApp.sesion.participantes" id="titulo">Participantes</span></h3>
     <div class="container-fluid">
         <div class="row">
 
@@ -163,7 +163,7 @@
         </table>
     </div>
     <div class="text-center">
-        <dir-pagination-controls></dir-pagination-controls>
+        <dir-pagination-controls on-page-change="vm.goUp('titulo')"></dir-pagination-controls>
     </div>
 
     <button type="submit" ng-click="vm.back()"

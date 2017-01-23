@@ -1,5 +1,5 @@
 <div>
-    <h2 data-translate="userManagement.home.title">Users</h2>
+    <h2 data-translate="userManagement.home.title" id="titulo">Users</h2>
     <jhi-alert></jhi-alert>
     <div class="container-fluid">
         <div class="row">
@@ -61,6 +61,6 @@
         </table>
     </div>
     <div class="text-center">
-        <dir-pagination-controls></dir-pagination-controls>
+        <dir-pagination-controls on-page-change="vm.goUp('titulo')"></dir-pagination-controls>
     </div>
 </div>

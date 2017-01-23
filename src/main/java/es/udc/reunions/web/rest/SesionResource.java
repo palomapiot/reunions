@@ -188,18 +188,15 @@ public class SesionResource {
     /**
      * GET  /sesions : get all the sesions.
      *
-     * @param pageable the pagination information
      * @return the ResponseEntity with status 200 (OK) and the list of sesions in body
-     * @throws URISyntaxException if there is an error to generate the pagination HTTP headers
      */
     @GetMapping("/sesions")
     @Timed
-    public ResponseEntity<List<Sesion>> getAllSesions(Pageable pageable)
+    public ResponseEntity<List<Sesion>> getAllSesions()
         throws URISyntaxException {
         log.debug("REST request to get a page of Sesions");
-        Page<Sesion> page = sesionService.findAll(pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/sesions");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        List<Sesion> sesions = sesionService.findAll();
+        return new ResponseEntity<>(sesions, HttpStatus.OK);
     }
 
     /**

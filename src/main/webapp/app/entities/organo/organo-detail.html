@@ -16,7 +16,7 @@
     </dl>
 
 
-    <h3><span data-translate="reunionsApp.organo.miembros">Miembros actuales</span></h3>
+    <h3><span data-translate="reunionsApp.organo.miembros" id="tituloActuales">Miembros actuales</span></h3>
     <div class="container-fluid">
         <div class="row">
             <div class="col-xs-4 no-padding-left">
@@ -81,12 +81,12 @@
         </table>
     </div>
     <div class="text-center">
-        <dir-pagination-controls pagination-id="actuales"></dir-pagination-controls>
+        <dir-pagination-controls pagination-id="actuales" on-page-change="vm.goUp('tituloActuales')"></dir-pagination-controls>
     </div>
 
     <hr>
 
-    <h3><span data-translate="reunionsApp.organo.miembrosAnteriores">Miembros anteriores</span></h3>
+    <h3><span data-translate="reunionsApp.organo.miembrosAnteriores" id="tituloAnteriores">Miembros anteriores</span></h3>
     <div class="container-fluid">
         <div class="row">
             <div class="col-xs-4 no-padding-left">
@@ -128,12 +128,12 @@
         </table>
     </div>
     <div class="text-center">
-        <dir-pagination-controls pagination-id="anteriores"></dir-pagination-controls>
+        <dir-pagination-controls pagination-id="anteriores" on-page-change="vm.goUp('tituloAnteriores')"></dir-pagination-controls>
     </div>
 
     <hr>
 
-    <h3><span data-translate="reunionsApp.organo.sesiones">Sesiones</span></h3>
+    <h3><span data-translate="reunionsApp.organo.sesiones" id="tituloSesiones">Sesiones</span></h3>
     <div class="container-fluid">
         <div class="row">
 
@@ -202,7 +202,7 @@
         </table>
     </div>
     <div class="text-center">
-        <dir-pagination-controls pagination-id="sesiones"></dir-pagination-controls>
+        <dir-pagination-controls pagination-id="sesiones" on-page-change="vm.goUp('tituloSesiones')"></dir-pagination-controls>
     </div>
 
     <button type="submit"

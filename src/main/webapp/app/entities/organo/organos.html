@@ -1,5 +1,5 @@
 <div>
-    <h2 data-translate="reunionsApp.organo.home.title">Organos</h2>
+    <h2 data-translate="reunionsApp.organo.home.title" id="titulo">Organos</h2>
     <jhi-alert></jhi-alert>
     <div class="container-fluid">
         <div class="row">
@@ -61,6 +61,6 @@
         </table>
     </div>
     <div class="text-center">
-        <dir-pagination-controls></dir-pagination-controls>
+        <dir-pagination-controls on-page-change="vm.goUp('titulo')"></dir-pagination-controls>
     </div>
 </div>

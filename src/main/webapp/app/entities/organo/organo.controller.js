@@ -5,9 +5,9 @@
         .module('reunionsApp')
         .controller('OrganoController', OrganoController);
 
-    OrganoController.$inject = ['$scope', '$state', 'Organo', 'OrganoSearch', 'ParseLinks', 'AlertService'];
+    OrganoController.$inject = ['$scope', '$state', '$location', '$anchorScroll', 'Organo', 'OrganoSearch', 'ParseLinks', 'AlertService'];
 
-    function OrganoController ($scope, $state, Organo, OrganoSearch, ParseLinks, AlertService) {
+    function OrganoController ($scope, $state, $location, $anchorScroll, Organo, OrganoSearch, ParseLinks, AlertService) {
         var vm = this;
 
 //        vm.loadPage = loadPage;
@@ -17,6 +17,13 @@
 //        vm.itemsPerPage = paginationConstants.itemsPerPage;
 //        vm.clear = clear;
 //        vm.search = search;
+        vm.goUp = function(id) {
+                  var old = $location.hash();
+                  $location.hash(id);
+                  $anchorScroll();
+                  //reset to old to keep any additional routing logic from kicking in
+                  $location.hash(old);
+                  };
         vm.organos = Organo.getAll();
         vm.qFn = function(actual, expected) {
             if (angular.isObject(actual)) return false;

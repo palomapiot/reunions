@@ -5,9 +5,9 @@
         .module('reunionsApp')
         .controller('SesionDetailController', SesionDetailController);
 
-    SesionDetailController.$inject = ['$scope', '$rootScope', '$stateParams', '$previousState', 'previousState', 'DataUtils', 'entity', 'Principal', 'Sesion', 'Organo', 'Participante', 'Documento'];
+    SesionDetailController.$inject = ['$location', '$anchorScroll', '$scope', '$rootScope', '$stateParams', '$previousState', 'previousState', 'DataUtils', 'entity', 'Principal', 'Sesion', 'Organo', 'Participante', 'Documento'];
 
-    function SesionDetailController($scope, $rootScope, $stateParams, $previousState, previousState, DataUtils, entity, Principal, Sesion, Organo, Participante, Documento) {
+    function SesionDetailController($location, $anchorScroll, $scope, $rootScope, $stateParams, $previousState, previousState, DataUtils, entity, Principal, Sesion, Organo, Participante, Documento) {
         var vm = this;
 
         vm.account = null;
@@ -21,10 +21,17 @@
         vm.marcarAsistencia = marcarAsistencia;
         vm.admin = false;
         vm.previousState = $previousState.get();
-        console.log(previousState);
         vm.marcando = false;
         vm.predicate = 'user.lastName|noAccents';
         vm.reverse = true;
+
+        vm.goUp = function(id) {
+                          var old = $location.hash();
+                          $location.hash(id);
+                          $anchorScroll();
+                          //reset to old to keep any additional routing logic from kicking in
+                          $location.hash(old);
+                          };
 
         getAccount();
 

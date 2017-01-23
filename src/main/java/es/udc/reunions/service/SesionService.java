@@ -61,13 +61,12 @@ public class SesionService {
     /**
      *  Get all the sesions.
      *
-     *  @param pageable the pagination information
      *  @return the list of entities
      */
     @Transactional(readOnly = true)
-    public Page<Sesion> findAll(Pageable pageable) {
+    public List<Sesion> findAll() {
         log.debug("Request to get all Sesions");
-        Page<Sesion> result = sesionRepository.findAll(pageable);
+        List<Sesion> result = sesionRepository.findAll();
         return result;
     }
 

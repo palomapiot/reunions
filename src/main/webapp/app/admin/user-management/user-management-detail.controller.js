@@ -5,15 +5,22 @@
         .module('reunionsApp')
         .controller('UserManagementDetailController', UserManagementDetailController);
 
-    UserManagementDetailController.$inject = ['$stateParams', '$previousState', 'DataUtils', 'User'];
+    UserManagementDetailController.$inject = ['$location', '$anchorScroll', '$stateParams', '$previousState', 'DataUtils', 'User'];
 
-    function UserManagementDetailController ($stateParams, $previousState, DataUtils, User) {
+    function UserManagementDetailController ($location, $anchorScroll, $stateParams, $previousState, DataUtils, User) {
         var vm = this;
 
         vm.load = load;
         vm.user = {};
         vm.exportar = exportar;
         vm.back = back;
+        vm.goUp = function(id) {
+                                  var old = $location.hash();
+                                  $location.hash(id);
+                                  $anchorScroll();
+                                  //reset to old to keep any additional routing logic from kicking in
+                                  $location.hash(old);
+                                  };
         vm.qFn = function(actual, expected) {
             if (angular.isObject(actual)) return false;
             function removeAccents(value) {
