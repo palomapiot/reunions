@@ -143,6 +143,7 @@ public class AccountResourceIntTest {
         ManagedUserVM validUser = new ManagedUserVM(
             null,                   // id
             "joe",                  // login
+            "33554321N",                  // dni
             "password",             // password
             "Joe",                  // firstName
             "Shmoe",                // lastName
@@ -172,6 +173,7 @@ public class AccountResourceIntTest {
         ManagedUserVM invalidUser = new ManagedUserVM(
             null,                   // id
             "funky-log!n",          // login <-- invalid
+            "33554321N",                  // dni
             "password",             // password
             "Funky",                // firstName
             "One",                  // lastName
@@ -201,6 +203,7 @@ public class AccountResourceIntTest {
         ManagedUserVM invalidUser = new ManagedUserVM(
             null,               // id
             "bob",              // login
+            "33554321N",                  // dni
             "password",         // password
             "Bob",              // firstName
             "Green",            // lastName
@@ -230,6 +233,7 @@ public class AccountResourceIntTest {
         ManagedUserVM invalidUser = new ManagedUserVM(
             null,               // id
             "bob",              // login
+            "33554321N",                  // dni
             "123",              // password with only 3 digits
             "Bob",              // firstName
             "Green",            // lastName
@@ -260,6 +264,7 @@ public class AccountResourceIntTest {
         ManagedUserVM validUser = new ManagedUserVM(
             null,                   // id
             "alice",                // login
+            "33554321N",                  // dni
             "password",             // password
             "Alice",                // firstName
             "Something",            // lastName
@@ -274,7 +279,7 @@ public class AccountResourceIntTest {
         );
 
         // Duplicate login, different e-mail
-        ManagedUserVM duplicatedUser = new ManagedUserVM(validUser.getId(), validUser.getLogin(), validUser.getPassword(), validUser.getLogin(), validUser.getLastName(),
+        ManagedUserVM duplicatedUser = new ManagedUserVM(validUser.getId(), validUser.getLogin(), validUser.getDni(), validUser.getPassword(), validUser.getLogin(), validUser.getLastName(),
             "alicejr@example.com", true, validUser.getLangKey(), validUser.getAuthorities(), validUser.getCreatedBy(), validUser.getCreatedDate(), validUser.getLastModifiedBy(), validUser.getLastModifiedDate());
 
         // Good user
@@ -302,6 +307,7 @@ public class AccountResourceIntTest {
         ManagedUserVM validUser = new ManagedUserVM(
             null,                   // id
             "john",                 // login
+            "33554321N",                  // dni
             "password",             // password
             "John",                 // firstName
             "Doe",                  // lastName
@@ -316,7 +322,7 @@ public class AccountResourceIntTest {
         );
 
         // Duplicate e-mail, different login
-        ManagedUserVM duplicatedUser = new ManagedUserVM(validUser.getId(), "johnjr", validUser.getPassword(), validUser.getLogin(), validUser.getLastName(),
+        ManagedUserVM duplicatedUser = new ManagedUserVM(validUser.getId(), "johnjr", validUser.getDni(), validUser.getPassword(), validUser.getLogin(), validUser.getLastName(),
             validUser.getEmail(), true, validUser.getLangKey(), validUser.getAuthorities(), validUser.getCreatedBy(), validUser.getCreatedDate(), validUser.getLastModifiedBy(), validUser.getLastModifiedDate());
 
         // Good user
@@ -343,6 +349,7 @@ public class AccountResourceIntTest {
         ManagedUserVM validUser = new ManagedUserVM(
             null,                   // id
             "badguy",               // login
+            "33554321N",                  // dni
             "password",             // password
             "Bad",                  // firstName
             "Guy",                  // lastName
@@ -373,6 +380,7 @@ public class AccountResourceIntTest {
     public void testSaveInvalidLogin() throws Exception {
         UserDTO invalidUser = new UserDTO(
             "funky-log!n",          // login <-- invalid
+            "33554321N",                  // dni
             "Funky",                // firstName
             "One",                  // lastName
             "funky@example.com",    // e-mail

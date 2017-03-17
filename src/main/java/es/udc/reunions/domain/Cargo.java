@@ -25,7 +25,7 @@ public class Cargo implements Serializable {
     private Long id;
 
     @NotNull
-    @Column(name = "nombre", nullable = false)
+    @Column(name = "nombre", nullable = false, unique = true)
     private String nombre;
 
     public Long getId() {
