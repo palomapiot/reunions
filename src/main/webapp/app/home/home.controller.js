@@ -24,14 +24,19 @@
         vm.calendarConfig = {
             calendar: {
                 allDaySlot: false,
-                timezone: 'local',
+                //timezone: 'local',
                 editable: false,
-                lang: 'es',
+                //locale: 'es',
+                firstDay: 1,
                 header: {
                     left:   'title',
                     center: '',
-                    right:  ''
+                    right:  'today prev,next'
                 },
+                buttonText: {
+                    today: moment().format("DD/MM/YY")
+                },
+                timeFormat: 'HH:mm',
                 titleFormat: '[Sesiones de ] MMMM YYYY',
                 eventClick: vm.eventClick,
                 eventResizeStop: $scope.alertResize,
@@ -64,13 +69,26 @@
                         vm.events.push({
                             id: event.id,
                             title: event.organo.nombre,
-                            start: new Date(Date.parse(event.primeraConvocatoria))
+                            start: new Date(Date.parse(event.primeraConvocatoria)),
+                            color: event.numero == 1 ? '#c7007d' : 'grey'
                         });
                     });
+                    callback(vm.events);
+            });
 
-
-                        callback(vm.events);
-                });
+//            User.getOthersEvents($scope, function(response2) {
+//
+//                angular.forEach(response2,function(event2){
+//                    console.log(event2.primeraConvocatoria);
+//                    console.log(new Date(Date.parse(event2.primeraConvocatoria)));
+//                    vm.events.push({
+//                        id: 2,//event2.id,
+//                        title: "bla",//event2.organo.nombre,
+//                        start: new Date(Date.parse(event2.segundaConvocatoria))
+//                    });
+//                });
+//                callback(vm.events);
+//            });
 
         }
 

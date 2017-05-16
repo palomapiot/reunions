@@ -1,6 +1,7 @@
 package es.udc.reunions.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import es.udc.reunions.config.JHipsterProperties;
 import es.udc.reunions.domain.Miembro;
 import es.udc.reunions.domain.Participante;
 import es.udc.reunions.domain.Sesion;
@@ -218,22 +219,25 @@ public class SesionResource {
     }
 
     /**
-     * GET  /users/events : get the events in current month for the current user.
+     * GET  /users/events : get the future events and events in last 6 months
      *
      * @return the ResponseEntity with status 200 (OK) and with body the events in body
      */
     @GetMapping("/users/events")
     @Timed
     public ResponseEntity<List<Sesion>> getEvents() {
-        log.debug("REST request to get events in current month for the current user");
+        log.debug("REST request to get future events and events in last 6 months");
         List<Sesion> sesiones = new ArrayList<Sesion>();
-        if (SecurityUtils.isAuthenticated()) {
-            for (Participante a : participanteService.findByUserIsCurrentUser()) {
-                if (a.getSesion().getPrimeraConvocatoria().isAfter(ZonedDateTime.now().minusMonths(1L)))
-                    sesiones.add(a.getSesion());
+        Boolean autenticado = SecurityUtils.isAuthenticated();
+        Sesion sesion;
+        for (Sesion s : sesionService.findByPrimeraConvocatoriaGreaterThan(ZonedDateTime.now().minusMonths(6L))) {
+            sesion = s;
+            if (autenticado && participanteService.findBySesionId(sesion.getId()).stream().anyMatch(participante -> participante.getUser().getLogin().equals(SecurityUtils.getCurrentUserLogin()))) {
+                sesion.setNumero(1L); //1 -> usuario participa
+            } else {
+                sesion.setNumero(0L); //0 -> usuario no participa
             }
-        } else {
-            sesiones = sesionService.findByPrimeraConvocatoriaGreaterThan(ZonedDateTime.now().minusMonths(1L));
+            sesiones.add(sesion);
         }
 
         return new ResponseEntity<>(sesiones, HttpStatus.OK);
@@ -252,7 +256,9 @@ public class SesionResource {
         log.debug("REST request to delete Sesion : {}", id);
         Sesion sesion = sesionService.findOne(id);
         if (!SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ADMIN)) {
-            Miembro miembro = miembroService.findByOrganoIdAndUserIdAndFechaBajaIsNull(sesion.getOrgano().getId(), userService.getUserWithAuthoritiesByLogin(SecurityUtils.getCurrentUserLogin()).get().getId());
+            log.debug("NO ADMIN");
+            Miembro miembro = miembroService.findByOrganoIdAndUserIdAndFechaBajaIsNull(sesion.getOrgano().getId(),
+                userService.getUserWithAuthoritiesByLogin(SecurityUtils.getCurrentUserLogin()).get().getId());
             if (miembro == null || miembro.getCargo().getId() > 2)
                 return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("sesion", "forbidden", "You are not allowed to notify this session")).body(null);
         }

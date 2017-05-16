@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <!--
+        Added the constraints for entity Participante.
+    -->
+    <changeSet id="20170510205750-1" author="diego">
+
+        <dropForeignKeyConstraint baseTableName="participante" constraintName="fk_participante_sesion_id"/>
+
+        <addForeignKeyConstraint baseColumnNames="sesion_id"
+                                 baseTableName="participante"
+                                 constraintName="fk_participante_sesion_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="sesion"
+                                 onDelete="CASCADE"/>
+
+        <dropForeignKeyConstraint baseTableName="documento" constraintName="fk_documento_sesion_id"/>
+
+        <addForeignKeyConstraint baseColumnNames="sesion_id"
+                                 baseTableName="documento"
+                                 constraintName="fk_documento_sesion_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="sesion"
+                                 onDelete="CASCADE"/>
+
+    </changeSet>
+</databaseChangeLog>

@@ -12,6 +12,7 @@
             'query': {method: 'GET', isArray: true},
             'getAll': {method: 'GET', isArray: true, url:'api/users'},
             'getEvents': {method: 'GET', isArray: true, url:'api/users/events'},
+            'getOthersEvents': {method: 'GET', isArray: true, url:'api/users/othersEvents'},
             'resumen': {method: 'GET', isArray: true, url: 'api/users/:login/resumen'},
             'excel': {
                 method: 'GET',

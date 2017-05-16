@@ -50,12 +50,12 @@ public class Sesion implements Serializable {
     @NotNull
     private Organo organo;
 
-    @OneToMany(mappedBy = "sesion")
+    @OneToMany(mappedBy = "sesion", cascade = CascadeType.REMOVE)
     @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Participante> participantes = new HashSet<>();
 
-    @OneToMany(mappedBy = "sesion")
+    @OneToMany(mappedBy = "sesion", cascade = CascadeType.REMOVE)
     @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Documento> documentos = new HashSet<>();

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+   <changeSet author="diego (generated)" id="1494441882293-1">
+      <dropNotNullConstraint columnDataType="bigint" columnName="cargo_id" tableName="miembro"/>
+   </changeSet>
+   <changeSet author="diego (generated)" id="1494441882293-2">
+      <dropNotNullConstraint columnDataType="bigint"
+                             columnName="cargo_id"
+                             tableName="participante"/>
+   </changeSet>
+   <changeSet author="diego (generated)" id="1494441882293-3">
+      <dropDefaultValue columnDataType="datetime"
+                        columnName="created_date"
+                        tableName="jhi_user"/>
+   </changeSet>
+   <changeSet author="diego (generated)" id="1494441882293-4">
+      <dropNotNullConstraint columnDataType="bigint" columnName="grupo_id" tableName="organo"/>
+   </changeSet>
+   <changeSet author="diego (generated)" id="1494441882293-5">
+      <dropNotNullConstraint columnDataType="bigint" columnName="organo_id" tableName="miembro"/>
+   </changeSet>
+   <changeSet author="diego (generated)" id="1494441882293-6">
+      <dropNotNullConstraint columnDataType="bigint" columnName="organo_id" tableName="sesion"/>
+   </changeSet>
+   <changeSet author="diego (generated)" id="1494441882293-7">
+      <dropDefaultValue columnDataType="datetime"
+                        columnName="primera_convocatoria"
+                        tableName="sesion"/>
+   </changeSet>
+   <changeSet author="diego (generated)" id="1494441882293-8">
+      <dropNotNullConstraint columnDataType="bigint"
+                             columnName="sesion_id"
+                             tableName="documento"/>
+   </changeSet>
+   <changeSet author="diego (generated)" id="1494441882293-9">
+      <dropNotNullConstraint columnDataType="bigint"
+                             columnName="sesion_id"
+                             tableName="participante"/>
+   </changeSet>
+   <changeSet author="diego (generated)" id="1494441882293-10">
+      <dropNotNullConstraint columnDataType="bigint" columnName="user_id" tableName="miembro"/>
+   </changeSet>
+   <changeSet author="diego (generated)" id="1494441882293-11">
+      <dropNotNullConstraint columnDataType="bigint"
+                             columnName="user_id"
+                             tableName="participante"/>
+   </changeSet>
+</databaseChangeLog>

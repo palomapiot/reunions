@@ -15,6 +15,9 @@ public interface ParticipanteRepository extends JpaRepository<Participante,Long>
     @Query("select participante from Participante participante where participante.user.login = ?#{principal.username}")
     List<Participante> findByUserIsCurrentUser();
 
+    @Query("select participante from Participante participante where participante.user.login <> ?#{principal.username}")
+    List<Participante> findByUserIsNotCurrentUser();
+
     List<Participante> findBySesionId(Long sesionId);
 
     List<Participante> findByUserId(Long userId);

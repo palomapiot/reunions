@@ -132,4 +132,16 @@ public class ParticipanteService {
         List<Participante> result = participanteRepository.findByUserIsCurrentUser();
         return result;
     }
+
+    /**
+     * Search for the participantes corresponding not to the current user.
+     *
+     *  @return the list of entities
+     */
+    @Transactional(readOnly = true)
+    public List<Participante> findByUserIsNotCurrentUser() {
+        log.debug("Request to get Participantes without current user");
+        List<Participante> result = participanteRepository.findByUserIsNotCurrentUser();
+        return result;
+    }
 }
