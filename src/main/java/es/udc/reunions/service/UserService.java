@@ -147,16 +147,18 @@ public class UserService {
     }
 
     private void marcarAsistencia(Row fila, Asistencia asistencia) {
-        fila.getCell(7).setCellValue(fila.getCell(7).getNumericCellValue() + 1);
-        switch (asistencia) {
-            case asiste:
-                fila.getCell(8).setCellValue(fila.getCell(8).getNumericCellValue() + 1);
-                break;
-            case falta:
-                break;
-            case disculpa:
-                fila.getCell(9).setCellValue(fila.getCell(9).getNumericCellValue() + 1);
-                break;
+        if (asistencia != null) {
+            fila.getCell(7).setCellValue(fila.getCell(7).getNumericCellValue() + 1);
+            switch (asistencia) {
+                case asiste:
+                    fila.getCell(8).setCellValue(fila.getCell(8).getNumericCellValue() + 1);
+                    break;
+                case falta:
+                    break;
+                case disculpa:
+                    fila.getCell(9).setCellValue(fila.getCell(9).getNumericCellValue() + 1);
+                    break;
+            }
         }
     }
 
