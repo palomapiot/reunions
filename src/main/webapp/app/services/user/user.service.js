@@ -10,9 +10,11 @@
     function User ($resource) {
         var service = $resource('api/users/:login', {}, {
             'query': {method: 'GET', isArray: true},
+            'membresia': { method: 'GET', isArray: true, url: 'api/users/:login/membresia'},
             'getAll': {method: 'GET', isArray: true, url:'api/users'},
             'getEvents': {method: 'GET', isArray: true, url:'api/users/events'},
-            'getOthersEvents': {method: 'GET', isArray: true, url:'api/users/othersEvents'},
+            'participaciones': {method: 'GET', isArray: true, url:'api/users/:login/participaciones'},
+            //'getOthersEvents': {method: 'GET', isArray: true, url:'api/users/othersEvents'},
             'resumen': {method: 'GET', isArray: true, url: 'api/users/:login/resumen'},
             'excel': {
                 method: 'GET',

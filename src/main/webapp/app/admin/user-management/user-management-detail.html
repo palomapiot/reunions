@@ -9,25 +9,94 @@
         <dd>{{vm.user.lastName}}</dd>
         <dt><span data-translate="userManagement.email">Email</span></dt>
         <dd>{{vm.user.email}}</dd>
-        <dt><span data-translate="userManagement.activated">Activated</span></dt>
-        <dd>{{vm.user.activated}}</dd>
-        <dt><span data-translate="userManagement.langKey">Lang Key</span></dt>
-        <dd>{{vm.user.langKey}}</dd>
-        <dt><span data-translate="userManagement.createdBy">Created By</span></dt>
-        <dd>{{vm.user.createdBy}}</dd>
-        <dt><span data-translate="userManagement.createdDate">Created Date</span></dt>
-        <dd>{{vm.user.createdDate | date:'dd/MM/yy HH:mm' }}</dd>
-        <dt><span data-translate="userManagement.lastModifiedBy">Last Modified By</span></dt>
-        <dd>{{vm.user.lastModifiedBy}}</dd>
-        <dt><span data-translate="userManagement.lastModifiedDate">Last Modified Date</span></dt>
-        <dd>{{vm.user.lastModifiedDate | date:'dd/MM/yy HH:mm'}}</dd>
-        <dt><span data-translate="userManagement.profiles">Profiles</span></dt>
-        <dd>
-            <ul class="list-unstyled">
-                <li ng-repeat="authority in vm.user.authorities"><span>{{authority}}</span></li>
-            </ul>
-        </dd>
     </dl>
+    <br/>
+
+    <h3><span data-translate="userManagement.detail.organosActuales" id="organosActuales">Órganos actuales</span></h3>
+    <div class="container-fluid">
+        <div class="row">
+
+            <div class="col-xs-8 no-padding-left">
+            </div>
+
+            <div class="col-xs-4 no-padding-right">
+                <form name="searchForm" class="form-inline">
+                    <div class="input-group pull-right" >
+                        <input type="text" ng-model="qo" id="searchOrgano" class="form-control" placeholder="{{ 'userManagement.search' | translate }}">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="jh-table table table-striped">
+            <thead>
+            <tr jh-sort="vm.predicateOrganos" ascending="vm.reverseOrganos">
+                <th jh-sort-by="organo.nombre|noAccents"><span data-translate="userManagement.detail.organo">Órgano</span> <span class="glyphicon glyphicon-sort"></span></th>
+                <th jh-sort-by="cargo.nombre|noAccents"><span data-translate="userManagement.detail.cargo">Cargo</span> <span class="glyphicon glyphicon-sort"></span></th>
+                <th jh-sort-by="fechaAlta"><span data-translate="userManagement.detail.fechaAlta">Fecha Alta</span> <span class="glyphicon glyphicon-sort"></span></th>
+                <th jh-sort-by="observaciones|noAccents"><span data-translate="userManagement.detail.observaciones">Observaciones</span> <span class="glyphicon glyphicon-sort"></span></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr dir-paginate="miembro in vm.membresia | orderBy:vm.predicateOrganos:!vm.reverseOrganos | filter:qo:vm.qFn | itemsPerPage: 10" pagination-id="organos">
+                <td><a ui-sref="organo-detail({id:miembro.organo.id})">{{miembro.organo.nombre}}</a></td>
+                <td>{{miembro.cargo.nombre}}</td>
+                <td>{{miembro.fechaAlta | date:'mediumDate'}}</td>
+                <td>{{miembro.observaciones}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="text-center">
+        <dir-pagination-controls pagination-id="organos" on-page-change="vm.goUp('organosActuales')"></dir-pagination-controls>
+    </div>
+
+    <h3><span data-translate="userManagement.detail.participaciones" id="participaciones">Participaciones</span></h3>
+    <div class="container-fluid">
+        <div class="row">
+
+            <div class="col-xs-8 no-padding-left">
+            </div>
+
+            <div class="col-xs-4 no-padding-right">
+                <form name="searchForm" class="form-inline">
+                    <div class="input-group pull-right" >
+                        <input type="text" ng-model="qp" id="searchParticipacion" class="form-control" placeholder="{{ 'userManagement.search' | translate }}">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="jh-table table table-striped">
+            <thead>
+            <tr jh-sort="vm.predicateParticipaciones" ascending="vm.reverseParticipaciones">
+                <th jh-sort-by="sesion.organo.nombre|noAccents"><span data-translate="userManagement.detail.organo">Órgano</span> <span class="glyphicon glyphicon-sort"></span></th>
+                <th jh-sort-by="sesion.numero"><span data-translate="userManagement.detail.numero">Numero</span> <span class="glyphicon glyphicon-sort"></span></th>
+                <th jh-sort-by="sesion.primeraConvocatoria"><span data-translate="userManagement.detail.primeraConvocatoria">Primera Convocatoria</span> <span class="glyphicon glyphicon-sort"></span></th>
+                <th jh-sort-by="sesion.segundaConvocatoria"><span data-translate="userManagement.detail.segundaConvocatoria">Segunda Convocatoria</span> <span class="glyphicon glyphicon-sort"></span></th>
+                <th jh-sort-by="sesion.lugar|noAccents"><span data-translate="userManagement.detail.lugar">Lugar</span> <span class="glyphicon glyphicon-sort"></span></th>
+                <th jh-sort-by="cargo.nombre|noAccents"><span data-translate="userManagement.detail.cargo">Cargo</span> <span class="glyphicon glyphicon-sort"></span></th>
+                <th jh-sort-by="asistencia|noAccents"><span data-translate="userManagement.detail.asistencia">Asistencia</span> <span class="glyphicon glyphicon-sort"></span></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr dir-paginate="participante in vm.participaciones | orderBy:vm.predicateParticipaciones:!vm.reverseParticipaciones | filter:qp | itemsPerPage: 5" pagination-id="participaciones">
+                <td><a ui-sref="organo-detail({id:sesion.organo.id})">{{participante.sesion.organo.nombre}}</a></td>
+                <td><a ui-sref="sesion-detail({id:sesion.id})">{{participante.sesion.numero}}</a></td>
+                <td>{{participante.sesion.primeraConvocatoria | date:'medium'}}</td>
+                <td>{{participante.sesion.segundaConvocatoria | date:'medium'}}</td>
+                <td>{{participante.sesion.lugar}}</td>
+                <td>{{participante.cargo.nombre}}</td>
+                <td>{{participante.asistencia}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="text-center">
+        <dir-pagination-controls pagination-id="participaciones" on-page-change="vm.goUp('participaciones')"></dir-pagination-controls>
+    </div>
 
     <h3><span data-translate="userManagement.resumen" id="titulo">Cuadro resumen</span></h3>
     <div class="container-fluid">

@@ -1,6 +1,7 @@
 package es.udc.reunions.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import es.udc.reunions.config.Constants;
 import es.udc.reunions.domain.Miembro;
 import es.udc.reunions.domain.Participante;
 import es.udc.reunions.security.AuthoritiesConstants;
@@ -194,4 +195,19 @@ public class ParticipanteResource {
     }
 
 
+
+    /**
+     * GET  /user-management/user/:login/participacion : get participaciones from the "login" user.
+     *
+     * @param login the login of the user
+     * @return the ResponseEntity with status 200 (OK) and the list of participaciones in body
+     */
+    @GetMapping("/users/{login:" + Constants.LOGIN_REGEX + "}/participaciones")
+    @Timed
+    public ResponseEntity<List<Participante>> getParticipacionesByUserLogin( @PathVariable String login) {
+        log.debug("REST request to get participaciones from user : {}", login);
+
+        List<Participante> participaciones = participanteService.findByUserLogin(login);
+        return new ResponseEntity<>(participaciones, HttpStatus.OK);
+    }
 }

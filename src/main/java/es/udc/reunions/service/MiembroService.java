@@ -2,6 +2,7 @@ package es.udc.reunions.service;
 
 import es.udc.reunions.domain.Miembro;
 import es.udc.reunions.repository.MiembroRepository;
+import es.udc.reunions.repository.UserRepository;
 import es.udc.reunions.repository.search.MiembroSearchRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +27,9 @@ public class MiembroService {
 
     @Inject
     private MiembroRepository miembroRepository;
+
+    @Inject
+    private UserRepository userRepository;
 
     @Inject
     private MiembroSearchRepository miembroSearchRepository;
@@ -93,6 +97,20 @@ public class MiembroService {
     public List<Miembro> findByOrganoIdAndFechaBajaIsNotNull(Long organoId) {
         log.debug("Request to get all Miembros anteriores from Organo " + organoId);
         List<Miembro> result = miembroRepository.findByOrganoIdAndFechaBajaIsNotNull(organoId);
+        return result;
+    }
+
+    /**
+     *  Get all the actual membresia from an user
+     *
+     *  @param login the user id
+     *  @return the list of entities
+     */
+    @Transactional(readOnly = true)
+    public List<Miembro> findByUserLoginAndFechaBajaIsNull(String login) {
+        log.debug("Request to get all membresia actual from user " + login);
+        Long id = userRepository.findOneByLogin(login).get().getId();
+        List<Miembro> result = miembroRepository.findByUserIdAndFechaBajaIsNull(id);
         return result;
     }
 

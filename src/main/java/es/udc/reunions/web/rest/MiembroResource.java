@@ -1,6 +1,7 @@
 package es.udc.reunions.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import es.udc.reunions.config.Constants;
 import es.udc.reunions.domain.Miembro;
 import es.udc.reunions.security.AuthoritiesConstants;
 import es.udc.reunions.service.MiembroService;
@@ -146,6 +147,21 @@ public class MiembroResource {
         log.debug("REST request to get miembros anteriores from organo : {}", id);
 
         List<Miembro> miembros = miembroService.findByOrganoIdAndFechaBajaIsNotNull(id);
+        return new ResponseEntity<>(miembros, HttpStatus.OK);
+    }
+
+    /**
+     * GET  /user-management/user/:id/membresia : get membresia actual from the "id" user.
+     *
+     * @param login the login of the user
+     * @return the ResponseEntity with status 200 (OK) and the list of miembros in body
+     */
+    @GetMapping("/users/{login:" + Constants.LOGIN_REGEX + "}/membresia")
+    @Timed
+    public ResponseEntity<List<Miembro>> getMiembrosByUserLoginAndFechaBajaIsNull( @PathVariable String login) {
+        log.debug("REST request to get membresia from user : {}", login);
+
+        List<Miembro> miembros = miembroService.findByUserLoginAndFechaBajaIsNull(login);
         return new ResponseEntity<>(miembros, HttpStatus.OK);
     }
 

@@ -1,7 +1,6 @@
 package es.udc.reunions.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-import es.udc.reunions.config.JHipsterProperties;
 import es.udc.reunions.domain.Miembro;
 import es.udc.reunions.domain.Participante;
 import es.udc.reunions.domain.Sesion;
@@ -10,7 +9,6 @@ import es.udc.reunions.security.SecurityUtils;
 import es.udc.reunions.service.*;
 import es.udc.reunions.web.rest.util.HeaderUtil;
 import es.udc.reunions.web.rest.util.PaginationUtil;
-import org.apache.poi.util.TempFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -20,7 +18,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.web.header.Header;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
@@ -30,13 +27,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing Sesion.

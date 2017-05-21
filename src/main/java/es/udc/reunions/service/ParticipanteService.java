@@ -2,6 +2,7 @@ package es.udc.reunions.service;
 
 import es.udc.reunions.domain.Participante;
 import es.udc.reunions.repository.ParticipanteRepository;
+import es.udc.reunions.repository.UserRepository;
 import es.udc.reunions.repository.search.ParticipanteSearchRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +29,9 @@ public class ParticipanteService {
 
     @Inject
     private ParticipanteRepository participanteRepository;
+
+    @Inject
+    private UserRepository userRepository;
 
     @Inject
     private ParticipanteSearchRepository participanteSearchRepository;
@@ -142,6 +146,19 @@ public class ParticipanteService {
     public List<Participante> findByUserIsNotCurrentUser() {
         log.debug("Request to get Participantes without current user");
         List<Participante> result = participanteRepository.findByUserIsNotCurrentUser();
+        return result;
+    }
+
+    /**
+     * Search for the participantes corresponding to the login user
+     *
+     *  @return the list of entities
+     */
+    @Transactional(readOnly = true)
+    public List<Participante> findByUserLogin(String login) {
+        log.debug("Request to get Participantes for the user " + login);
+        List<Participante> result =
+            participanteRepository.findByUserId(userRepository.findOneByLogin(login).get().getId());
         return result;
     }
 }

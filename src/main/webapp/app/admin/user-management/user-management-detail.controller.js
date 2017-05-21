@@ -14,6 +14,8 @@
         vm.user = {};
         vm.exportar = exportar;
         vm.back = back;
+        vm.predicateParticipaciones = 'sesion.primeraConvocatoria';
+        vm.reverseParticipaciones = false;
         vm.goUp = function(id) {
                                   var old = $location.hash();
                                   $location.hash(id);
@@ -33,7 +35,9 @@
         }
 
         vm.load($stateParams.login);
-        vm.resumen = User.resumen({ login: $stateParams.login})
+        vm.resumen = User.resumen({ login: $stateParams.login});
+        vm.membresia = User.membresia({ login: $stateParams.login});
+        vm.participaciones = User.participaciones({ login: $stateParams.login});
 
         function load (login) {
             User.get({login: login}, function(result) {

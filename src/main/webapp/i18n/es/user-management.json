@@ -13,7 +13,18 @@
             "question": "¿Seguro que quieres eliminar el usuario {{ login }}?"
         },
         "detail": {
-            "title": "Usuario"
+            "title": "Usuario",
+            "organosActuales": "Órganos actuales",
+            "organo": "Órgano",
+            "cargo": "Cargo",
+            "fechaAlta": "Fecha alta",
+            "observaciones": "Observaciones",
+            "numero": "Número",
+            "primeraConvocatoria": "Primera convocatoria",
+            "segundaConvocatoria": "Segunda convocatoria",
+            "lugar": "Lugar",
+            "participaciones": "Participaciones",
+            "asistencia": "Asistencia"
         },
         "login": "Login",
         "firstName": "Nombre",
