@@ -7,6 +7,7 @@ import es.udc.reunions.domain.Sesion;
 import es.udc.reunions.domain.Cargo;
 import es.udc.reunions.domain.User;
 import es.udc.reunions.repository.ParticipanteRepository;
+import es.udc.reunions.service.MiembroService;
 import es.udc.reunions.service.ParticipanteService;
 import es.udc.reunions.repository.search.ParticipanteSearchRepository;
 
@@ -18,6 +19,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -67,6 +69,9 @@ public class ParticipanteResourceIntTest {
 
     @Inject
     private EntityManager em;
+    
+    @Inject
+    private MiembroService miembroService;
 
     private MockMvc restParticipanteMockMvc;
 
@@ -77,6 +82,7 @@ public class ParticipanteResourceIntTest {
         MockitoAnnotations.initMocks(this);
         ParticipanteResource participanteResource = new ParticipanteResource();
         ReflectionTestUtils.setField(participanteResource, "participanteService", participanteService);
+        ReflectionTestUtils.setField(participanteResource, "miembroService", miembroService);
         this.restParticipanteMockMvc = MockMvcBuilders.standaloneSetup(participanteResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setMessageConverters(jacksonMessageConverter).build();
@@ -118,6 +124,7 @@ public class ParticipanteResourceIntTest {
 
     @Test
     @Transactional
+    @WithMockUser(username="admin",authorities={"ROLE_ADMIN"}, password = "admin")
     public void createParticipante() throws Exception {
         int databaseSizeBeforeCreate = participanteRepository.findAll().size();
 
@@ -180,6 +187,7 @@ public class ParticipanteResourceIntTest {
 
     @Test
     @Transactional
+    @WithMockUser(username="admin",authorities={"ROLE_ADMIN"}, password = "admin")
     public void updateParticipante() throws Exception {
         // Initialize the database
         participanteService.save(participante);
@@ -211,6 +219,7 @@ public class ParticipanteResourceIntTest {
 
     @Test
     @Transactional
+    @WithMockUser(username="admin",authorities={"ROLE_ADMIN"}, password = "admin")
     public void deleteParticipante() throws Exception {
         // Initialize the database
         participanteService.save(participante);

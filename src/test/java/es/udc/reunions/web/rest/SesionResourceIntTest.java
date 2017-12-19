@@ -5,6 +5,8 @@ import es.udc.reunions.ReunionsApp;
 import es.udc.reunions.domain.Sesion;
 import es.udc.reunions.domain.Organo;
 import es.udc.reunions.repository.SesionRepository;
+import es.udc.reunions.repository.UserRepository;
+import es.udc.reunions.service.MiembroService;
 import es.udc.reunions.service.SesionService;
 import es.udc.reunions.repository.search.SesionSearchRepository;
 
@@ -13,9 +15,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import static org.hamcrest.Matchers.hasItem;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -30,6 +37,7 @@ import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -48,13 +56,13 @@ public class SesionResourceIntTest {
     private static final Long DEFAULT_NUMERO = 1L;
     private static final Long UPDATED_NUMERO = 2L;
 
-    private static final ZonedDateTime DEFAULT_PRIMERA_CONVOCATORIA = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneId.systemDefault());
+    private static final ZonedDateTime DEFAULT_PRIMERA_CONVOCATORIA = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
     private static final ZonedDateTime UPDATED_PRIMERA_CONVOCATORIA = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
-    private static final String DEFAULT_PRIMERA_CONVOCATORIA_STR = DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(DEFAULT_PRIMERA_CONVOCATORIA);
+    private static final String DEFAULT_PRIMERA_CONVOCATORIA_STR = DateTimeFormatter.ISO_INSTANT.format(DEFAULT_PRIMERA_CONVOCATORIA);
 
-    private static final ZonedDateTime DEFAULT_SEGUNDA_CONVOCATORIA = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneId.systemDefault());
+    private static final ZonedDateTime DEFAULT_SEGUNDA_CONVOCATORIA = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
     private static final ZonedDateTime UPDATED_SEGUNDA_CONVOCATORIA = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
-    private static final String DEFAULT_SEGUNDA_CONVOCATORIA_STR = DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(DEFAULT_SEGUNDA_CONVOCATORIA);
+    private static final String DEFAULT_SEGUNDA_CONVOCATORIA_STR = DateTimeFormatter.ISO_INSTANT.format(DEFAULT_SEGUNDA_CONVOCATORIA);
 
     private static final String DEFAULT_LUGAR = "AAAAA";
     private static final String UPDATED_LUGAR = "BBBBB";
@@ -67,6 +75,9 @@ public class SesionResourceIntTest {
 
     @Inject
     private SesionService sesionService;
+    
+    @Inject
+    private MiembroService miembroService;
 
     @Inject
     private SesionSearchRepository sesionSearchRepository;
@@ -89,6 +100,7 @@ public class SesionResourceIntTest {
         MockitoAnnotations.initMocks(this);
         SesionResource sesionResource = new SesionResource();
         ReflectionTestUtils.setField(sesionResource, "sesionService", sesionService);
+        ReflectionTestUtils.setField(sesionResource, "miembroService", miembroService);
         this.restSesionMockMvc = MockMvcBuilders.standaloneSetup(sesionResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setMessageConverters(jacksonMessageConverter).build();
@@ -121,13 +133,21 @@ public class SesionResourceIntTest {
         sesion = createEntity(em);
     }
 
+    
+    /** 
+     * 
+     * Añadido WithMockUser con rol ADMIN para que Spring Security detecte un usuario administrador (que puede crear
+     * sesiones). 
+     * Añadido el miembroService en el sesionResource (en el setup de los tests) -> CAUSABA NULL POINTER
+     * @throws Exception
+     */
     @Test
     @Transactional
+    @WithMockUser(username="admin",authorities={"ROLE_ADMIN"}, password = "admin")
     public void createSesion() throws Exception {
         int databaseSizeBeforeCreate = sesionRepository.findAll().size();
 
         // Create the Sesion
-
         restSesionMockMvc.perform(post("/api/sesions")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(sesion)))
@@ -248,6 +268,7 @@ public class SesionResourceIntTest {
 
     @Test
     @Transactional
+    @WithMockUser(username="admin",authorities={"ROLE_ADMIN"}, password = "admin")
     public void updateSesion() throws Exception {
         // Initialize the database
         sesionService.save(sesion);
@@ -282,31 +303,32 @@ public class SesionResourceIntTest {
         Sesion sesionEs = sesionSearchRepository.findOne(testSesion.getId());
         assertThat(sesionEs).isEqualToComparingFieldByField(testSesion);
     }
+  @Test
+  @Transactional
+  @WithMockUser(username="admin",authorities={"ROLE_ADMIN"}, password = "admin")
+  public void deleteSesion() throws Exception {
+      // Initialize the database
+      sesionService.save(sesion);
+
+      int databaseSizeBeforeDelete = sesionRepository.findAll().size();
+
+      // Get the sesion
+      restSesionMockMvc.perform(delete("/api/sesions/{id}", sesion.getId())
+              .accept(TestUtil.APPLICATION_JSON_UTF8))
+              .andExpect(status().isOk());
+
+      // Validate ElasticSearch is empty
+      boolean sesionExistsInEs = sesionSearchRepository.exists(sesion.getId());
+      assertThat(sesionExistsInEs).isFalse();
+
+      // Validate the database is empty
+      List<Sesion> sesions = sesionRepository.findAll();
+      assertThat(sesions).hasSize(databaseSizeBeforeDelete - 1);
+  }
 
     @Test
     @Transactional
-    public void deleteSesion() throws Exception {
-        // Initialize the database
-        sesionService.save(sesion);
-
-        int databaseSizeBeforeDelete = sesionRepository.findAll().size();
-
-        // Get the sesion
-        restSesionMockMvc.perform(delete("/api/sesions/{id}", sesion.getId())
-                .accept(TestUtil.APPLICATION_JSON_UTF8))
-                .andExpect(status().isOk());
-
-        // Validate ElasticSearch is empty
-        boolean sesionExistsInEs = sesionSearchRepository.exists(sesion.getId());
-        assertThat(sesionExistsInEs).isFalse();
-
-        // Validate the database is empty
-        List<Sesion> sesions = sesionRepository.findAll();
-        assertThat(sesions).hasSize(databaseSizeBeforeDelete - 1);
-    }
-
-    @Test
-    @Transactional
+    @WithMockUser(username="admin",authorities={"ROLE_ADMIN"}, password = "admin")
     public void searchSesion() throws Exception {
         // Initialize the database
         sesionService.save(sesion);
