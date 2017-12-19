@@ -142,4 +142,6 @@ public class UserServiceIntTest {
         token.setUserAgent("Test agent");
         persistentTokenRepository.saveAndFlush(token);
     }
+    
+    
 }

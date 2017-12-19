@@ -46,8 +46,9 @@ public class Miembro implements Serializable {
     @ManyToOne
     @NotNull
     private User user;
+    
 
-    public Long getId() {
+	public Long getId() {
         return id;
     }
 
