@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
 
+import java.nio.charset.Charset;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -57,9 +58,12 @@ public class ParticipanteServiceTest {
 	}
 
 	private User validUser(Long id) {
+		byte[] array = new byte[7]; // length is bounded by 7
+		new Random().nextBytes(array);
+		String generatedString = new String(array, Charset.forName("UTF-8"));
 		User user = new User();
 		user.setId(id);
-		user.setLogin("userLogin");
+		user.setLogin(generatedString);
 		user.setPassword("password");
 		user.setDni("11111111A");
 		user.setEmail("user@email.com");
