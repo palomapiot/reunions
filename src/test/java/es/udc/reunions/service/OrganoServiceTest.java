@@ -1,6 +1,7 @@
 package es.udc.reunions.service;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -14,6 +15,7 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.stubbing.Answer;
 import org.springframework.transaction.annotation.Transactional;
 
 import es.udc.reunions.domain.Grupo;
@@ -87,7 +89,11 @@ public class OrganoServiceTest {
 		Organo organo = createOrgano((long) 1, "nombre", "descripción", new Grupo(), new HashSet<>(), new HashSet<>());
 		List<Organo> list = new ArrayList<>();
 		list.add(organo);
-		Mockito.doNothing().when(organoRepositoryMock).delete(organo.getId());
+		doAnswer((Answer<?>) invocation -> {
+			list.remove(organo);
+
+			return null;
+		}).when(organoRepositoryMock).delete(organo.getId());
 		Mockito.doNothing().when(organoSearchRepositoryMock).delete(organo.getId());
 		when(organoRepositoryMock.findAll()).thenReturn(list);
 		organoService.delete(organo.getId());
@@ -95,17 +101,20 @@ public class OrganoServiceTest {
 		assertEquals(list, organoService.findAll());
 	}
 
-	/*
-	 * @Test
-	 * 
-	 * @Transactional public void searchTest(){ Organo organo = createOrgano((long)
-	 * 1, "nombre", "descripción", new Grupo(), new HashSet<>(), new HashSet<>());
-	 * List<Organo> list = new ArrayList<>(); list.add(organo); String string =
-	 * "descripción"; Page<Organo> page = new PageImpl<Organo>(list);
-	 * when(organoSearchRepositoryMock.search(queryStringQuery(string), new
-	 * PageRequest(0, 10))).thenReturn(page); Page<Organo> expectedPage =
-	 * organoService.search(string, new PageRequest(0, 10));
-	 * assertEquals(expectedPage, page); }
-	 */
+	// @Test
+	// @Transactional
+	// public void searchTest() {
+	// Organo organo = createOrgano((long) 1, "nombre", "descripción", new Grupo(),
+	// new HashSet<>(), new HashSet<>());
+	// List<Organo> list = new ArrayList<>();
+	// list.add(organo);
+	// String string = "descripción";
+	// Page<Organo> page = new PageImpl<Organo>(list);
+	// when(organoSearchRepositoryMock.search(any(QueryBuilder.class), new
+	// PageRequest(0, 10))).thenReturn(page);
+	// Page<Organo> expectedPage = organoService.search(string, new PageRequest(0,
+	// 10));
+	// assertEquals(expectedPage, page);
+	// }
 
 }

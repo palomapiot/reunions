@@ -259,14 +259,13 @@ public class MiembroServiceTest {
 	// expectedList.add(miembro2);
 	//
 	// Page<Miembro> expectedPage = new PageImpl<Miembro>(expectedList);
-	//
-	// when(miembroSearchRepositoryMock.search(queryStringQuery("query"), new
-	// PageRequest(0, 10)))
+	// PageRequest request = new PageRequest(0, 10);
+	// when(miembroSearchRepositoryMock.search(eq((QueryBuilder) any(Object.class)),
+	// request))
 	// .thenReturn(expectedPage);
 	//
 	// // Act
-	// Page<Miembro> pageResult = miembroService.search("query", new PageRequest(0,
-	// 10));
+	// Page<Miembro> pageResult = miembroService.search("query", request);
 	//
 	// // Assert
 	// assertThat(pageResult).isEqualTo(expectedPage);

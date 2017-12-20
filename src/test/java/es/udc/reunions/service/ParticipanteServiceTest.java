@@ -9,6 +9,7 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -126,8 +127,12 @@ public class ParticipanteServiceTest {
 	@Transactional
 	public void saveListTest() {
 		// Arrange
-		Participante participante1 = validParticipante(1L);
-		Participante participante2 = validParticipante(2L);
+		Random gen = new Random();
+		long randomLong = gen.nextLong();
+		long randomLong2 = gen.nextLong() + 1L;
+
+		Participante participante1 = validParticipante(randomLong);
+		Participante participante2 = validParticipante(randomLong2);
 		List<Participante> list = new ArrayList<Participante>();
 		list.add(participante1);
 		list.add(participante2);
@@ -148,9 +153,12 @@ public class ParticipanteServiceTest {
 	@Transactional
 	public void findAllTest() {
 		// Arrange
+		Random gen = new Random();
+		long randomLong = gen.nextLong();
+		long randomLong2 = gen.nextLong() + 1L;
 
-		Participante participante1 = validParticipante(1L);
-		Participante participante2 = validParticipante(2L);
+		Participante participante1 = validParticipante(randomLong);
+		Participante participante2 = validParticipante(randomLong2);
 
 		List<Participante> expectedList = new ArrayList<Participante>();
 		expectedList.add(participante1);
@@ -171,11 +179,13 @@ public class ParticipanteServiceTest {
 	@Transactional
 	public void findOneTest() {
 		// Arrange
+		Random gen = new Random();
+		long randomLong = gen.nextLong();
 
-		Participante participante1 = validParticipante(1L);
-		Participante expectedParticipante = validParticipante(1L);
+		Participante participante1 = validParticipante(randomLong);
+		Participante expectedParticipante = validParticipante(randomLong);
 
-		when(participanteRepositoryMock.findOne(1L)).thenReturn(expectedParticipante);
+		when(participanteRepositoryMock.findOne(randomLong)).thenReturn(expectedParticipante);
 
 		// Act
 		Participante result = participanteService.findOne(participante1.getId());
@@ -188,19 +198,21 @@ public class ParticipanteServiceTest {
 	@Transactional
 	public void findBySesionIdTest() {
 		// Arrange
+		Random gen = new Random();
+		long randomLong = gen.nextLong();
 
 		Participante participante1 = validParticipante(1L);
 		Participante participante2 = validParticipante(2L);
-		participante2.setSesion(validSesion(1L));
+		participante2.setSesion(validSesion(randomLong));
 
 		List<Participante> expectedList = new ArrayList<Participante>();
 		expectedList.add(participante1);
 		expectedList.add(participante2);
 
-		when(participanteRepositoryMock.findBySesionId(1L)).thenReturn(expectedList);
+		when(participanteRepositoryMock.findBySesionId(randomLong)).thenReturn(expectedList);
 
 		// Act
-		List<Participante> listResult = participanteService.findBySesionId(validSesion(1L).getId());
+		List<Participante> listResult = participanteService.findBySesionId(validSesion(randomLong).getId());
 
 		// Assert
 		assertThat(listResult).isEqualTo(expectedList);
@@ -210,7 +222,10 @@ public class ParticipanteServiceTest {
 	@Transactional
 	public void deleteTest() {
 		// Arrange
-		Participante participante1 = validParticipante(1L);
+		Random gen = new Random();
+		long randomLong = gen.nextLong();
+
+		Participante participante1 = validParticipante(randomLong);
 		List<Participante> list = new ArrayList<>();
 		list.add(participante1);
 
@@ -234,9 +249,12 @@ public class ParticipanteServiceTest {
 	@Transactional(readOnly = true)
 	public void findByUserLoginTest() {
 		// Arrange
+		Random gen = new Random();
+		long randomLong = gen.nextLong();
+		long randomLong2 = gen.nextLong() + 1L;
 
-		Participante participante1 = validParticipante(1L);
-		Participante participante2 = validParticipante(2L);
+		Participante participante1 = validParticipante(randomLong);
+		Participante participante2 = validParticipante(randomLong2);
 		User user1 = validUser(1L);
 		participante2.setUser(user1);
 
@@ -260,9 +278,12 @@ public class ParticipanteServiceTest {
 	@Transactional(readOnly = true)
 	public void findByUserIsNotCurrentUserTest() {
 		// Arrange
+		Random gen = new Random();
+		long randomLong = gen.nextLong();
+		long randomLong2 = gen.nextLong() + 1L;
 
-		Participante participante1 = validParticipante(1L);
-		Participante participante2 = validParticipante(2L);
+		Participante participante1 = validParticipante(randomLong);
+		Participante participante2 = validParticipante(randomLong2);
 		User user1 = validUser(1L);
 		participante2.setUser(user1);
 
@@ -285,9 +306,12 @@ public class ParticipanteServiceTest {
 	@Transactional(readOnly = true)
 	public void findByUserIsCurrentUserTest() {
 		// Arrange
+		Random gen = new Random();
+		long randomLong = gen.nextLong();
+		long randomLong2 = gen.nextLong() + 1L;
 
-		Participante participante1 = validParticipante(1L);
-		Participante participante2 = validParticipante(2L);
+		Participante participante1 = validParticipante(randomLong);
+		Participante participante2 = validParticipante(randomLong2);
 		User user1 = validUser(1L);
 		participante2.setUser(user1);
 
