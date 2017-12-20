@@ -48,7 +48,7 @@ public class MiembroServiceTest {
 	@Mock
 	private UserRepository userRepositoryMock;
 
-	public Cargo validCargo(Long id) {
+	private Cargo validCargo(Long id) {
 		Cargo cargo = new Cargo();
 		cargo.setId(id);
 		cargo.setNombre("Test");
@@ -56,7 +56,7 @@ public class MiembroServiceTest {
 		return cargo;
 	}
 
-	public User validUser(Long id) {
+	private User validUser(Long id) {
 		User user = new User();
 		user.setId(id);
 		user.setLogin("userLogin");
@@ -68,7 +68,7 @@ public class MiembroServiceTest {
 		return user;
 	}
 
-	public Grupo validGrupo(Long id) {
+	private Grupo validGrupo(Long id) {
 		Grupo grupo = new Grupo();
 		grupo.setId(id);
 		grupo.setNombre("Grupo" + id);
@@ -76,7 +76,7 @@ public class MiembroServiceTest {
 		return grupo;
 	}
 
-	public Organo validOrgano(Long id) {
+	private Organo validOrgano(Long id) {
 		Organo organo = new Organo();
 		organo.setId(id);
 		organo.setGrupo(validGrupo(id));
@@ -84,7 +84,7 @@ public class MiembroServiceTest {
 		return organo;
 	}
 
-	public Miembro validMiembro(Long id) {
+	private Miembro validMiembro(Long id) {
 		Miembro miembro = new Miembro();
 		miembro.setCargo(validCargo(id));
 		LocalDate date = new GregorianCalendar(1996, Calendar.JUNE, 28).getTime().toInstant()
