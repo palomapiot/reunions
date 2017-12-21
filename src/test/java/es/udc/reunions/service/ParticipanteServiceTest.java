@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -49,6 +50,8 @@ public class ParticipanteServiceTest {
 	@Mock
 	private UserRepository userRepositoryMock;
 
+	private int x = 25; // Lonitud cadenas aleatorias
+
 	private Cargo validCargo(Long id) {
 		Cargo cargo = new Cargo();
 		cargo.setId(id);
@@ -58,7 +61,8 @@ public class ParticipanteServiceTest {
 	}
 
 	private User validUser(Long id) {
-		byte[] array = new byte[7]; // length is bounded by 7
+		int randomNum = ThreadLocalRandom.current().nextInt(1, x + 1);
+		byte[] array = new byte[randomNum]; // length is bounded by randomNum
 		new Random().nextBytes(array);
 		String generatedString = new String(array, Charset.forName("UTF-8"));
 		User user = new User();
@@ -115,8 +119,11 @@ public class ParticipanteServiceTest {
 	@Transactional
 	public void saveTest() {
 		// Arrange
-		Participante participante = validParticipante(1L);
-		Participante expectedParticipante = validParticipante(1L);
+		Random gen = new Random();
+		long randomLong = gen.nextLong();
+
+		Participante participante = validParticipante(randomLong);
+		Participante expectedParticipante = validParticipante(randomLong);
 		when(participanteRepositoryMock.save(participante)).thenReturn(expectedParticipante);
 		when(participanteSearchRepositoryMock.save(participante)).thenReturn(expectedParticipante);
 

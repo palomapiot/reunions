@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
 
+import java.nio.charset.Charset;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -11,6 +12,8 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -48,6 +51,8 @@ public class MiembroServiceTest {
 	@Mock
 	private UserRepository userRepositoryMock;
 
+	private int x = 25; // Lonitud cadenas aleatorias
+
 	private Cargo validCargo(Long id) {
 		Cargo cargo = new Cargo();
 		cargo.setId(id);
@@ -57,9 +62,13 @@ public class MiembroServiceTest {
 	}
 
 	private User validUser(Long id) {
+		int randomNum = ThreadLocalRandom.current().nextInt(1, x + 1);
+		byte[] array = new byte[randomNum]; // length is bounded by randomNum
+		new Random().nextBytes(array);
+		String generatedString = new String(array, Charset.forName("UTF-8"));
 		User user = new User();
 		user.setId(id);
-		user.setLogin("userLogin");
+		user.setLogin(generatedString);
 		user.setPassword("password");
 		user.setDni("11111111A");
 		user.setEmail("user@email.com");
@@ -117,9 +126,12 @@ public class MiembroServiceTest {
 	@Transactional
 	public void findAllTest() {
 		// Arrange
+		Random gen = new Random();
+		long randomLong = gen.nextLong();
+		long randomLong2 = gen.nextLong() + 1L;
 
-		Miembro miembro1 = validMiembro(1L);
-		Miembro miembro2 = validMiembro(2L);
+		Miembro miembro1 = validMiembro(randomLong);
+		Miembro miembro2 = validMiembro(randomLong2);
 
 		List<Miembro> expectedList = new ArrayList<Miembro>();
 		expectedList.add(miembro1);
@@ -140,9 +152,12 @@ public class MiembroServiceTest {
 	@Transactional
 	public void findByOrganoIdAndFechaBajaIsNullTest() {
 		// Arrange
+		Random gen = new Random();
+		long randomLong = gen.nextLong();
+		long randomLong2 = gen.nextLong() + 1L;
 
-		Miembro miembro1 = validMiembro(1L);
-		Miembro miembro2 = validMiembro(2L);
+		Miembro miembro1 = validMiembro(randomLong);
+		Miembro miembro2 = validMiembro(randomLong2);
 		miembro2.setOrgano(validOrgano(1L));
 		List<Miembro> expectedList = new ArrayList<Miembro>();
 		expectedList.add(miembro1);
@@ -163,12 +178,16 @@ public class MiembroServiceTest {
 	@Transactional
 	public void findByOrganoIdAndUserIdAndFechaBajaIsNullTest() {
 		// Arrange
+		Random gen = new Random();
+		long randomLong = gen.nextLong();
+		long randomLong2 = gen.nextLong() + 1L;
 
-		User user1 = validUser(1L);
+		User user1 = validUser(randomLong);
 		Miembro miembro1 = validMiembro(1L);
-		Organo organo1 = validOrgano(1L);
+		Organo organo1 = validOrgano(randomLong2);
 
-		when(miembroRepositoryMock.findByOrganoIdAndUserIdAndFechaBajaIsNull(1L, 1L)).thenReturn(miembro1);
+		when(miembroRepositoryMock.findByOrganoIdAndUserIdAndFechaBajaIsNull(randomLong2, randomLong))
+				.thenReturn(miembro1);
 
 		// Act
 		Miembro result = miembroService.findByOrganoIdAndUserIdAndFechaBajaIsNull(organo1.getId(), user1.getId());
@@ -181,22 +200,29 @@ public class MiembroServiceTest {
 	@Transactional
 	public void findByOrganoIdAndFechaBajaIsNotNullTest() {
 		// Arrange
+		Random gen = new Random();
+		long randomLong = gen.nextLong();
+		long randomLong2 = gen.nextLong() + 1L;
 
-		Miembro miembro1 = validMiembro(1L);
-		Miembro miembro2 = validMiembro(2L);
+		Miembro miembro1 = validMiembro(randomLong);
+		Miembro miembro2 = validMiembro(randomLong2);
 		miembro1.setFechaBaja(new GregorianCalendar(2016, Calendar.JUNE, 28).getTime().toInstant()
 				.atZone(ZoneId.systemDefault()).toLocalDate());
 		miembro2.setFechaBaja(new GregorianCalendar(2016, Calendar.JUNE, 28).getTime().toInstant()
 				.atZone(ZoneId.systemDefault()).toLocalDate());
-		miembro2.setOrgano(validOrgano(1L));
 
-		Organo organo1 = validOrgano(1L);
+		Random genOrgano = new Random();
+		long randomLongOrgano = genOrgano.nextLong();
+
+		miembro2.setOrgano(validOrgano(randomLongOrgano));
+
+		Organo organo1 = validOrgano(randomLongOrgano);
 
 		List<Miembro> expectedList = new ArrayList<Miembro>();
 		expectedList.add(miembro1);
 		expectedList.add(miembro2);
 
-		when(miembroRepositoryMock.findByOrganoIdAndFechaBajaIsNotNull(1L)).thenReturn(expectedList);
+		when(miembroRepositoryMock.findByOrganoIdAndFechaBajaIsNotNull(randomLongOrgano)).thenReturn(expectedList);
 
 		// Act
 		List<Miembro> listResult = miembroService.findByOrganoIdAndFechaBajaIsNotNull(organo1.getId());
@@ -209,9 +235,17 @@ public class MiembroServiceTest {
 	@Transactional(readOnly = true)
 	public void findByUserLoginAndFechaBajaIsNullTest() {
 		// Arrange
-		Miembro miembro1 = validMiembro(1L);
-		Miembro miembro2 = validMiembro(2L);
-		User user1 = validUser(1L);
+		Random gen = new Random();
+		long randomLong = gen.nextLong();
+		long randomLong2 = gen.nextLong() + 1L;
+
+		Miembro miembro1 = validMiembro(randomLong);
+		Miembro miembro2 = validMiembro(randomLong2);
+
+		Random genUser = new Random();
+		long randomLongUser = genUser.nextLong();
+
+		User user1 = validUser(randomLongUser);
 		miembro2.setUser(user1);
 
 		List<Miembro> expectedList = new ArrayList<Miembro>();
@@ -221,7 +255,7 @@ public class MiembroServiceTest {
 		Optional<User> optionalUser = Optional.of(user1);
 
 		when(userRepositoryMock.findOneByLogin("userLogin")).thenReturn(optionalUser);
-		when(miembroRepositoryMock.findByUserIdAndFechaBajaIsNull(1L)).thenReturn(expectedList);
+		when(miembroRepositoryMock.findByUserIdAndFechaBajaIsNull(randomLongUser)).thenReturn(expectedList);
 
 		// Act
 		List<Miembro> listResult = miembroService.findByUserLoginAndFechaBajaIsNull("userLogin");
@@ -234,14 +268,15 @@ public class MiembroServiceTest {
 	@Test
 	@Transactional(readOnly = true)
 	public void findOneTest() {
-
 		// Arrange
-		Miembro miembro1 = validMiembro(1L);
+		Random gen = new Random();
+		long randomLong = gen.nextLong();
+		Miembro miembro1 = validMiembro(randomLong);
 
-		when(miembroRepositoryMock.findOne(1L)).thenReturn(miembro1);
+		when(miembroRepositoryMock.findOne(randomLong)).thenReturn(miembro1);
 
 		// Act
-		Miembro result = miembroService.findOne(1L);
+		Miembro result = miembroService.findOne(randomLong);
 
 		// Assert
 		assertThat(result).isEqualTo(miembro1);
@@ -275,7 +310,9 @@ public class MiembroServiceTest {
 	@Transactional
 	public void deleteTest() {
 		// Arrange
-		Miembro miembro1 = validMiembro(1L);
+		Random gen = new Random();
+		long randomLong = gen.nextLong();
+		Miembro miembro1 = validMiembro(randomLong);
 		List<Miembro> list = new ArrayList<>();
 		list.add(miembro1);
 
